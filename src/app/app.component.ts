@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
@@ -10,5 +10,8 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'algo-ai-vis';
+  @HostListener('window:orientationchange', [])
+  onOrientationChange(): void {
+    location.reload();
+  }
 }
