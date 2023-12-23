@@ -81,8 +81,18 @@ function considerNextStep(
 
     markExpandedAt(expandedGrid, posBeingExpanded.row, posBeingExpanded.col);
 
-    const expandComm = genExpansionCommentary(posBeingExpanded);
-    frames.push(genAnimationFrame(pathMap, visitedGrid, expandedGrid, posBeingExpanded, [], goalPosForThisRun, pathLengthMap, expandComm));
+    frames.push(
+        genAnimationFrame(
+            pathMap,
+            visitedGrid,
+            expandedGrid,
+            posBeingExpanded,
+            [],
+            goalPosForThisRun,
+            pathLengthMap,
+            genExpansionCommentary(posBeingExpanded)
+        )
+    );
 
     if (isSamePos(posBeingExpanded, goalPosForThisRun)) {
         return true;
@@ -96,7 +106,8 @@ function considerNextStep(
 
     validUnvisitedNeighbours.forEach(neighPos => {
         const { row: neighRow, col: neighCol } = neighPos;
-        const neighPathLength = assertDefined(pathLengthMap.get(posBeingExpanded)) + weightAt(weightGrid, neighRow, neighCol);
+        const posBeingExpandedPathLength = assertDefined(pathLengthMap.get(posBeingExpanded));
+        const neighPathLength = posBeingExpandedPathLength + weightAt(weightGrid, neighRow, neighCol);
         agenda.add(neighPos);
         markVisitedAt(visitedGrid, neighRow, neighCol);
         pathLengthMap.set(neighPos, neighPathLength);
@@ -105,7 +116,8 @@ function considerNextStep(
 
     validVisitedNeighbours.forEach(neighPos => {
         const { row: neighRow, col: neighCol } = neighPos;
-        const neighPathLength = assertDefined(pathLengthMap.get(posBeingExpanded)) + weightAt(weightGrid, neighRow, neighCol);
+        const posBeingExpandedPathLength = assertDefined(pathLengthMap.get(posBeingExpanded));
+        const neighPathLength = posBeingExpandedPathLength + weightAt(weightGrid, neighRow, neighCol);
 
         if (neighPathLength < assertDefined(pathLengthMap.get(neighPos))) {
             pathLengthMap.set(neighPos, neighPathLength);
@@ -113,8 +125,18 @@ function considerNextStep(
         }
     });
 
-    const neighComm = genAddingNeighboursCommentary(posBeingExpanded, validUnvisitedNeighbours);
-    frames.push(genAnimationFrame(pathMap, visitedGrid, expandedGrid, posBeingExpanded, validUnvisitedNeighbours, goalPosForThisRun, pathLengthMap, neighComm));
+    frames.push(
+        genAnimationFrame(
+            pathMap,
+            visitedGrid,
+            expandedGrid,
+            posBeingExpanded,
+            validUnvisitedNeighbours,
+            goalPosForThisRun,
+            pathLengthMap,
+            genAddingNeighboursCommentary(posBeingExpanded, validUnvisitedNeighbours)
+        )
+    );
 
     return false;
 }
