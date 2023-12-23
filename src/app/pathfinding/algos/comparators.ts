@@ -7,23 +7,23 @@ export function genRandomComparator(): Comparator<Pos> {
     return () => Math.random() - 0.51;
 }
 
-export function genDijkstraComparator(distsMap: ObjMap<Pos, number>): Comparator<Pos> {
+export function genDijkstraComparator(pathLengthMap: ObjMap<Pos, number>): Comparator<Pos> {
     return (pos1: Pos, pos2: Pos) => {
-        const pos1Dist = distsMap.get(pos1);
-        const pos2Dist = distsMap.get(pos2);
+        const pos1PathLength = pathLengthMap.get(pos1);
+        const pos2PathLength = pathLengthMap.get(pos2);
 
-        if (pos1Dist === undefined) {
+        if (pos1PathLength === undefined) {
             return -1;
-        } else if (pos2Dist === undefined) {
+        } else if (pos2PathLength === undefined) {
             return 1;
         } else {
-            return pos1Dist - pos2Dist;
+            return pos1PathLength - pos2PathLength;
         }
     };
 }
 
-export function genAstarComparator(distsMap: ObjMap<Pos, number>, goalPos: Pos): Comparator<Pos> {
-    const dijkstraComparator = genDijkstraComparator(distsMap);
+export function genAstarComparator(pathLengthMap: ObjMap<Pos, number>, goalPos: Pos): Comparator<Pos> {
+    const dijkstraComparator = genDijkstraComparator(pathLengthMap);
     const manhattanComparator = genManhattanComparator(goalPos);
 
     return (pos1: Pos, pos2: Pos) =>
