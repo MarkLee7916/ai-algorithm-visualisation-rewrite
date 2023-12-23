@@ -6,8 +6,8 @@ import { unidirectionalBFS } from "./unidirectional-breadth-first-search";
 
 describe('Unidirectional BFS', () => {
     describe('barrier only case where path is found', () => {
-        const { startPos, goalPos, gridBarriers, neighbourVisitOrder, expectedPositionsInPath, expectedExpandedPositions, expectedVisitedPositions } = barriersOnlyPathFound;
-        const frames = unidirectionalBFS(startPos, goalPos, [], gridBarriers, neighbourVisitOrder);
+        const { startPos, goalPos, barrierGrid, neighbourVisitOrder, expectedPositionsInPath, expectedExpandedPositions, expectedVisitedPositions } = barriersOnlyPathFound;
+        const frames = unidirectionalBFS(startPos, goalPos, [], barrierGrid, neighbourVisitOrder);
         const finalFrame = frames[frames.length - 1];
 
         it('calculates correct expanded count', () => {
