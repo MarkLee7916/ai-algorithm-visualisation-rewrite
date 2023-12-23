@@ -1,4 +1,4 @@
-import { tileAt, initGrid, setTileAt } from "./grid";
+import { tileAt, initGrid, setTileAt, countOfValuesInGridMatchingPredicate } from "./grid";
 
 export type VisitedGrid = boolean[][];
 
@@ -12,4 +12,8 @@ export function hasBeenVisitedAt(grid: VisitedGrid, row: number, col: number) {
 
 export function markVisitedAt(grid: VisitedGrid, row: number, col: number) {
     setTileAt(grid, row, col, true);
+}
+
+export function countOfTilesThatHaveBeenVisited(grid: VisitedGrid) {
+    return countOfValuesInGridMatchingPredicate(grid, () => true);
 }

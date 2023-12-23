@@ -1,4 +1,4 @@
-import { PathLengthGrid, initPathLengthGrid } from "../grid/path-length-grid";
+import { LENGTH_NOT_CALCULATED_YET, PathLengthGrid, initPathLengthGrid } from "../grid/path-length-grid";
 import { AnimationFrameGrid, initAnimationFrameGrid } from "../grid/animation-frame-grid";
 
 export type AnimationFrame = {
@@ -17,6 +17,6 @@ export function initBlankAnimationFrame(gridHeight: number, gridWidth: number): 
         pathLengthGrid: initPathLengthGrid(gridHeight, gridWidth),
         countOfTilesExpanded: 0,
         countOfTilesVisited: 0,
-        finalPathLength: 0,
+        finalPathLength: LENGTH_NOT_CALCULATED_YET,
     };
 }
