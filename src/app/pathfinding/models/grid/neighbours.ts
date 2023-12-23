@@ -25,29 +25,29 @@ export const DEFAULT_NEIGHBOUR_VISIT_ORDER = [
     Neighbour.Bottom
 ];
 
-export const DIAGONAL_NEIGHBOURS = new Set<Neighbour>([
+export const DIAGONAL_NEIGHBOURS = [
     Neighbour.BottomLeft,
     Neighbour.TopLeft,
     Neighbour.TopRight,
     Neighbour.BottomRight,
-]);
+];
 
-export const NON_DIAGONAL_NEIGHBOURS = new Set<Neighbour>([
+export const NON_DIAGONAL_NEIGHBOURS = [
     Neighbour.Left,
     Neighbour.Top,
     Neighbour.Right,
     Neighbour.Bottom
-]);
+];
 
 export const neighbourToPosTransformation = new UncheckedObjMap<Neighbour, NeighbourPosTransformation>([
-    [Neighbour.BottomLeft, { vertical: -1, horizontal: -1 }],
-    [Neighbour.Left, { vertical: -1, horizontal: 0 }],
-    [Neighbour.TopLeft, { vertical: -1, horizontal: 1 }],
-    [Neighbour.Top, { vertical: 0, horizontal: -1 }],
-    [Neighbour.TopRight, { vertical: 0, horizontal: 1 }],
-    [Neighbour.Right, { vertical: 1, horizontal: -1 }],
-    [Neighbour.BottomRight, { vertical: 1, horizontal: 0 }],
-    [Neighbour.Bottom, { vertical: 1, horizontal: 1 }]
+    [Neighbour.TopLeft, { vertical: -1, horizontal: -1 }],
+    [Neighbour.Top, { vertical: -1, horizontal: 0 }],
+    [Neighbour.TopRight, { vertical: -1, horizontal: 1 }],
+    [Neighbour.Left, { vertical: 0, horizontal: -1 }],
+    [Neighbour.Right, { vertical: 0, horizontal: 1 }],
+    [Neighbour.BottomLeft, { vertical: 1, horizontal: -1 }],
+    [Neighbour.Bottom, { vertical: 1, horizontal: 0 }],
+    [Neighbour.BottomRight, { vertical: 1, horizontal: 1 }],
 ]);
 
 export function genNeighbouringPositions(pos: Pos, neighbours: Neighbour[]) {
