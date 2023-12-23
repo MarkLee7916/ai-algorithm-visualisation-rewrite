@@ -49,10 +49,11 @@ export function genericUnidirectionalSearch(
 
         if (isFound) {
             addFoundCommentaryToFinalAnimationFrame(frames);
-            break;
+            return frames;
         }
     }
 
+    frames.push(genAnimationFrame(pathMap, visitedGrid, expandedGrid, null, [], goalPos, pathLengthMap, 'No path found!'));
     return frames;
 }
 
