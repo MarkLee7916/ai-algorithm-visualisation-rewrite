@@ -15,5 +15,5 @@ export function markExpandedAt(grid: ExpandedGrid, row: number, col: number) {
 }
 
 export function countOfTilesThatHaveBeenExpanded(grid: ExpandedGrid) {
-    return countOfValuesInGridMatchingPredicate(grid, () => true);
+    return countOfValuesInGridMatchingPredicate(grid, value => value);
 }

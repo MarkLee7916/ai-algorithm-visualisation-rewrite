@@ -48,12 +48,18 @@ export function genericUnidirectionalSearch(
         );
 
         if (isFound) {
-            // TODO: add logic for final path here?
+            addFoundCommentaryToFinalAnimationFrame(frames);
             break;
         }
     }
 
     return frames;
+}
+
+function addFoundCommentaryToFinalAnimationFrame(frames: AnimationFrame[]) {
+    const finalFrame = frames[frames.length - 1];
+
+    finalFrame.commentary = "Path found!";
 }
 
 function considerNextStep(
@@ -125,7 +131,6 @@ function genAnimationFrame(
     const gridHeight = height(visitedGrid);
     const gridWidth = width(visitedGrid);
     const frame = initBlankAnimationFrame(gridHeight, gridWidth);
-    const finalPathLength = pathLengthMap.get(goalPosForThisRun);
     const pathList = convertPathMapToList(pathMap, posBeingExpanded)
 
     frame.commentary = commentary;
@@ -134,7 +139,7 @@ function genAnimationFrame(
     frame.countOfTilesVisited = countOfTilesThatHaveBeenVisited(visitedGrid);
 
     if (hasPos(pathList, goalPosForThisRun)) {
-        frame.finalPathLength = assertDefined(finalPathLength);
+        frame.finalPathLength = assertDefined(pathLengthMap.get(goalPosForThisRun));
     }
 
     for (let row = 0; row < gridHeight; row++) {
@@ -181,7 +186,7 @@ function convertPathLengthMapToGrid(height: number, width: number, pathLengthMap
         for (let col = 0; col < width; col++) {
             const pathLength = pathLengthMap.get({ row, col });
 
-            if (pathLength !== undefined) {
+            if (pathLength) {
                 setPathLengthAt(pathLengthGrid, row, col, pathLength);
             }
         }

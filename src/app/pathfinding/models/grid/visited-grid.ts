@@ -15,5 +15,5 @@ export function markVisitedAt(grid: VisitedGrid, row: number, col: number) {
 }
 
 export function countOfTilesThatHaveBeenVisited(grid: VisitedGrid) {
-    return countOfValuesInGridMatchingPredicate(grid, () => true);
+    return countOfValuesInGridMatchingPredicate(grid, value => value);
 }
