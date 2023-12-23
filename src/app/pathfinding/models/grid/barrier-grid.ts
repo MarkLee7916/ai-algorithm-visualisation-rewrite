@@ -1,4 +1,4 @@
-import { getItemAt, initGrid, setItemAt } from "./grid";
+import { tileAt, initGrid, setTileAt } from "./grid";
 
 export type BarrierGrid = boolean[][];
 
@@ -11,13 +11,13 @@ export function initBarrierGrid(height: number, width: number) {
 }
 
 export function hasBarrierAt(grid: BarrierGrid, row: number, col: number) {
-    return getItemAt(grid, row, col);
+    return tileAt(grid, row, col);
 }
 
 export function removeBarrierAt(grid: BarrierGrid, row: number, col: number) {
-    setItemAt(grid, row, col, NO_BARRIER);
+    setTileAt(grid, row, col, NO_BARRIER);
 }
 
 export function addBarrierAt(grid: BarrierGrid, row: number, col: number) {
-    setItemAt(grid, row, col, BARRIER);
+    setTileAt(grid, row, col, BARRIER);
 }

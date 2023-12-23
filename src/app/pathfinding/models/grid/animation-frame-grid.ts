@@ -1,4 +1,4 @@
-import { getItemAt, initGrid, setItemAt } from "./grid";
+import { tileAt, initGrid, setTileAt } from "./grid";
 
 export const enum TileAnimationFrame {
     Expanded,
@@ -18,10 +18,10 @@ export function initAnimationFrameGrid(height: number, width: number) {
 }
 
 export function frameAt(grid: AnimationFrameGrid, row: number, col: number) {
-    return getItemAt(grid, row, col);
+    return tileAt(grid, row, col);
 }
 
 export function setFrameAt(grid: AnimationFrameGrid, row: number, col: number, frame: TileAnimationFrame) {
-    setItemAt(grid, row, col, frame);
+    setTileAt(grid, row, col, frame);
 }
 

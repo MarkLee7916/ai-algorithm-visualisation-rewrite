@@ -6,11 +6,11 @@ export function width<T>(grid: T[][]) {
     return grid[0].length;
 }
 
-export function getItemAt<T>(grid: T[][], row: number, col: number) {
+export function tileAt<T>(grid: T[][], row: number, col: number) {
     return grid[row][col];
 }
 
-export function setItemAt<T>(grid: T[][], row: number, col: number, value: T) {
+export function setTileAt<T>(grid: T[][], row: number, col: number, value: T) {
     grid[row][col] = value;
 }
 

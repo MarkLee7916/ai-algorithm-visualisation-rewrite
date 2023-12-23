@@ -1,4 +1,4 @@
-import { getItemAt, initGrid, setItemAt } from "./grid";
+import { tileAt, initGrid, setTileAt } from "./grid";
 
 export type PathLengthGrid = number[][];
 
@@ -9,9 +9,9 @@ export function initPathLengthGrid(height: number, width: number) {
 }
 
 export function pathLengthAt(grid: PathLengthGrid, row: number, col: number) {
-    return getItemAt(grid, row, col);
+    return tileAt(grid, row, col);
 }
 
 export function setPathLengthAt(grid: PathLengthGrid, row: number, col: number, length: number) {
-    setItemAt(grid, row, col, length);
+    setTileAt(grid, row, col, length);
 }
