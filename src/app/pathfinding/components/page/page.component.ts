@@ -6,7 +6,7 @@ import { AnimationIndexAction } from "../../models/actions/actions";
 import { PathfindingAlgoOption, ObstaclePlacedOnTileOption, NeighboursAllowedOption, DataDisplayedOnTileOption, MazeGenAlgoOption } from "../../models/dropdown/dropdown-enums";
 import { WeightGrid } from "../../models/grid/weight-grid";
 import { BarrierGrid } from "../../models/grid/barrier-grid";
-import { Pos } from "../../models/grid/pos";
+import { Pos, isSamePos } from "../../models/grid/pos";
 
 @Component({
     selector: 'app-page',
@@ -15,8 +15,7 @@ import { Pos } from "../../models/grid/pos";
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageComponent {
-    // These will only trigger when we receive an event from the DOM, including child components
-    eventSubjects = {
+    updatesFromDom = {
         animationIndexAction$: new Subject<AnimationIndexAction>(),
         isAnimationRunning$: new BehaviorSubject<boolean>(false),
         animationDelay$: new BehaviorSubject<number>(1000),
@@ -26,11 +25,28 @@ export class PageComponent {
         mazeGenAlgo$: new Subject<MazeGenAlgoOption>(),
         dataDisplayedOnTile$: new Subject<DataDisplayedOnTileOption>(),
         neighboursAllowed$: new Subject<NeighboursAllowedOption>(),
+        startPos$: new Subject<Pos>(),
+        goalPos$: new Subject<Pos>()
     }
 
-    animate$: Observable<AnimationIndexAction> = this.eventSubjects.isAnimationRunning$.pipe(
+    problemStatementChanges$: Observable<ProblemStatement> = combineLatest([
+        this.updatesFromDom.neighbourVisitOrdering$,
+        this.updatesFromDom.neighboursAllowed$,
+        this.updatesFromDom.pathfindingAlgo$,
+    ]).pipe(
+        distinctUntilChanged()
+    );
+
+    isAnimationRunning$ = merge(
+        this.updatesFromDom.isAnimationRunning$,
+        this.problemStatementChanges$.pipe(
+            map(() => false)
+        )
+    );
+
+    animate$: Observable<AnimationIndexAction> = this.isAnimationRunning$.pipe(
         filter(isAnimationRunning => isAnimationRunning),
-        withLatestFrom(this.eventSubjects.animationDelay$),
+        withLatestFrom(this.updatesFromDom.animationDelay$),
         switchMap(([, animationDelay]) =>
             interval(animationDelay).pipe(
                 map((): AnimationIndexAction => ({ kind: 'Increment' }))
@@ -38,19 +54,11 @@ export class PageComponent {
         )
     );
 
-    problemStatementChanges$: Observable<ProblemStatement> = combineLatest([
-        this.eventSubjects.neighbourVisitOrdering$,
-        this.eventSubjects.neighboursAllowed$,
-        this.eventSubjects.pathfindingAlgo$,
-    ]).pipe(
-        distinctUntilChanged()
-    )
-
     // Animation index updates when either an event requests it or the problem statement changes
     animationIndex$: Observable<number> =
         merge(
             this.animate$,
-            this.eventSubjects.animationIndexAction$,
+            this.updatesFromDom.animationIndexAction$,
             this.problemStatementChanges$.pipe(
                 map((): AnimationIndexAction => ({ kind: 'Reset' }))
             )
@@ -77,11 +85,7 @@ export class PageComponent {
                 filter(animationIndex => animationIndex > 0),
                 map(() => {
                     const [
-                        NeighbourOrdering,
-                        NeighboursAllowedOption,
-                        MazeGenAlgoOption,
-                        PathfindingAlgoOption,
-                        DataDisplayedOnTileOption
+
                     ] = problemStatement;
 
                     // Calculate animation frames here
@@ -89,7 +93,7 @@ export class PageComponent {
                 }),
                 take(1)
             )),
-        )
+        );
 
     currentAnimationFrame$: Observable<AnimationFrame> =
         combineLatest([this.animationFrames$, this.animationIndex$], (frames, index) => {
@@ -100,7 +104,12 @@ export class PageComponent {
             } else {
                 return frames[index];
             }
-        })
+        });
+
+    // startPos should be filtered out of stream if goalPos is the same
+    // goalPos should be filtered out of stream if startPos is the same
+    // Circular dependency, how to handle?
+
 }
 
 type ProblemStatement = [
