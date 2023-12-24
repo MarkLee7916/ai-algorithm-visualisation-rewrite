@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
-import { Observable, switchMap, filter, map, take } from "rxjs";
+import { Observable, switchMap, filter, map, take, tap } from "rxjs";
 import { AnimationFrame, initBlankAnimationFrame } from "../models/animation/animation-frame";
-import { DomUpdatesService } from "./dom-updates.service";
 import { ProblemStatementChangesService } from "./problem-statement-changes.service";
 import { AnimationIndexService } from "./animation-index.service";
+import { BridgeService } from "./bridge";
 
 @Injectable({
     providedIn: 'root'
@@ -12,6 +12,7 @@ export class AnimationFramesService {
     constructor(
         private problemStatementChanges: ProblemStatementChangesService,
         private animationIndex: AnimationIndexService,
+        private bridgeToAnimationIndex: BridgeService<AnimationFrame[]>,
     ) { }
 
     getStream() {
@@ -31,7 +32,8 @@ export class AnimationFramesService {
                     // Calculate animation frames here
                     return [initBlankAnimationFrame(2, 2)];
                 }),
-                take(1)
-            )),
+                take(1),
+                tap(frames => this.bridgeToAnimationIndex.next(frames))
+            ))
         );
 }

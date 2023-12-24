@@ -18,15 +18,8 @@ export class CurrentAnimationFrameService {
         return this.currentAnimationFrame$;
     }
 
-    // Stream the current animation frame, handling the logic of the index being out of bounds
     private currentAnimationFrame$: Observable<AnimationFrame> =
-        combineLatest([this.animationFrames.getStream(), this.animationIndex.getStream()], (frames, index) => {
-            if (index < 0) {
-                return frames[0];
-            } else if (index >= frames.length) {
-                return frames[frames.length - 1];
-            } else {
-                return frames[index];
-            }
-        });
+        combineLatest([this.animationFrames.getStream(), this.animationIndex.getStream()],
+            (frames, index) => frames[index]
+        );
 }

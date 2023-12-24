@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
-import { Observable, merge, map, scan } from "rxjs";
+import { Observable, merge, map, scan, withLatestFrom, tap } from "rxjs";
 import { AnimationIndexAction } from "../models/actions/actions";
-import { AnimationRunningService } from "./animation-running.service";
 import { DomUpdatesService } from "./dom-updates.service";
 import { ProblemStatementChangesService } from "./problem-statement-changes.service";
 import { AnimateService } from "./animate-service";
+import { BridgeService } from "./bridge";
+import { AnimationFrame } from "../models/animation/animation-frame";
 
 @Injectable({
     providedIn: 'root'
@@ -14,6 +15,8 @@ export class AnimationIndexService {
         private domUpdates: DomUpdatesService,
         private problemStatementChanges: ProblemStatementChangesService,
         private animate: AnimateService,
+        private bridgeFromAnimationFrames: BridgeService<AnimationFrame[]>,
+        private bridgeToAnimationRunning: BridgeService<boolean>
     ) { }
 
     getStream() {
@@ -42,5 +45,20 @@ export class AnimationIndexService {
                     throw new Error('Unexpected action kind');
                 }
             }, 0),
+            withLatestFrom(this.bridgeFromAnimationFrames.getStream()),
+            tap(([index, frames]) => {
+                if (index >= frames.length) {
+                    this.bridgeToAnimationRunning.next(false)
+                }
+            }),
+            map(([index, frames]) => {
+                if (index < 0) {
+                    return 0;
+                } else if (index >= frames.length) {
+                    return frames.length - 1
+                } else {
+                    return index;
+                }
+            })
         );
 }
