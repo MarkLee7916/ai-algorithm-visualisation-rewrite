@@ -1,8 +1,12 @@
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
-import { Observable, Subject, combineLatest, distinctUntilChanged, filter, interval, map, merge, scan, switchMap, take, throwError, withLatestFrom } from "rxjs";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChanged, filter, interval, map, merge, scan, switchMap, take, throwError, withLatestFrom } from "rxjs";
 import { AnimationFrame, initBlankAnimationFrame } from "../../models/animation/animation-frame";
-import { Neighbour } from "../../models/grid/neighbours";
+import { DEFAULT_NEIGHBOUR_VISIT_ORDER, NeighbourOrdering } from "../../models/grid/neighbours";
 import { AnimationIndexAction } from "../../models/actions/actions";
+import { PathfindingAlgoOption, ObstaclePlacedOnTileOption, NeighboursAllowedOption, DataDisplayedOnTileOption, MazeGenAlgoOption } from "../../models/dropdown/dropdown-enums";
+import { WeightGrid } from "../../models/grid/weight-grid";
+import { BarrierGrid } from "../../models/grid/barrier-grid";
+import { Pos } from "../../models/grid/pos";
 
 @Component({
     selector: 'app-page',
@@ -14,9 +18,14 @@ export class PageComponent {
     // These will only trigger when we receive an event from the DOM, including child components
     eventSubjects = {
         animationIndexAction$: new Subject<AnimationIndexAction>(),
-        isAnimationRunning$: new Subject<boolean>,
-        animationDelay$: new Subject<number>(),
-        neighbourVisitOrdering$: new Subject<Neighbour[]>()
+        isAnimationRunning$: new BehaviorSubject<boolean>(false),
+        animationDelay$: new BehaviorSubject<number>(1000),
+        neighbourVisitOrdering$: new BehaviorSubject<NeighbourOrdering>(DEFAULT_NEIGHBOUR_VISIT_ORDER),
+        pathfindingAlgo$: new Subject<PathfindingAlgoOption>(),
+        obstaclePlacedOnTile$: new Subject<ObstaclePlacedOnTileOption>(),
+        mazeGenAlgo$: new Subject<MazeGenAlgoOption>(),
+        dataDisplayedOnTile$: new Subject<DataDisplayedOnTileOption>(),
+        neighboursAllowed$: new Subject<NeighboursAllowedOption>(),
     }
 
     animate$: Observable<AnimationIndexAction> = this.eventSubjects.isAnimationRunning$.pipe(
@@ -29,9 +38,11 @@ export class PageComponent {
         )
     );
 
-    problemStatementChanges$: Observable<ProblemStatement> = combineLatest(
-        this.eventSubjects.neighbourVisitOrdering$
-    ).pipe(
+    problemStatementChanges$: Observable<ProblemStatement> = combineLatest([
+        this.eventSubjects.neighbourVisitOrdering$,
+        this.eventSubjects.neighboursAllowed$,
+        this.eventSubjects.pathfindingAlgo$,
+    ]).pipe(
         distinctUntilChanged()
     )
 
@@ -65,6 +76,14 @@ export class PageComponent {
             switchMap(problemStatement => this.animationIndex$.pipe(
                 filter(animationIndex => animationIndex > 0),
                 map(() => {
+                    const [
+                        NeighbourOrdering,
+                        NeighboursAllowedOption,
+                        MazeGenAlgoOption,
+                        PathfindingAlgoOption,
+                        DataDisplayedOnTileOption
+                    ] = problemStatement;
+
                     // Calculate animation frames here
                     return [initBlankAnimationFrame(2, 2)];
                 }),
@@ -72,15 +91,24 @@ export class PageComponent {
             )),
         )
 
-    currentAnimationFrame$ = combineLatest(this.animationFrames$, this.animationIndex$, (frames, index) => {
-        if (index < 0) {
-            return 0;
-        } else if (index >= frames.length) {
-            return frames.length - 1;
-        } else {
-            return index;
-        }
-    })
+    currentAnimationFrame$: Observable<AnimationFrame> =
+        combineLatest([this.animationFrames$, this.animationIndex$], (frames, index) => {
+            if (index < 0) {
+                return frames[0];
+            } else if (index >= frames.length) {
+                return frames[frames.length - 1];
+            } else {
+                return frames[index];
+            }
+        })
 }
 
-type ProblemStatement = [Neighbour[]];
+type ProblemStatement = [
+    NeighbourOrdering,
+    NeighboursAllowedOption,
+    PathfindingAlgoOption,
+    WeightGrid,
+    BarrierGrid,
+    Pos,
+    Pos
+];
