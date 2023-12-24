@@ -6,7 +6,7 @@ import { TileAnimationFrame, setFrameAt } from "../models/grid/animation-frame-g
 import { BarrierGrid, hasBarrierAt } from "../models/grid/barrier-grid";
 import { ExpandedGrid, countOfTilesThatHaveBeenExpanded, hasBeenExpandedAt, initExpandedGrid, markExpandedAt } from "../models/grid/expanded-grid";
 import { height, width } from "../models/grid/grid";
-import { Neighbour, genNeighbouringPositions } from "../models/grid/neighbours";
+import { NeighbourOrdering, genNeighbouringPositions } from "../models/grid/neighbours";
 import { initPathLengthGrid, setPathLengthAt } from "../models/grid/path-length-grid";
 import { Pos, formatPosAsCoord, hasPos, isOnGrid, isSamePos } from "../models/grid/pos";
 import { VisitedGrid, countOfTilesThatHaveBeenVisited, hasBeenVisitedAt, initVisitedGrid, markVisitedAt } from "../models/grid/visited-grid";
@@ -18,7 +18,7 @@ export function genericUnidirectionalSearch(
     agenda: Agenda<Pos>,
     weightGrid: WeightGrid,
     barrierGrid: BarrierGrid,
-    neighbourOrdering: Neighbour[],
+    neighbourOrdering: NeighbourOrdering,
     pathLengthMap: ObjMap<Pos, number>
 ): AnimationFrame[] {
     const gridHeight = height(weightGrid);
@@ -72,7 +72,7 @@ function considerNextStep(
     weightGrid: WeightGrid,
     barrierGrid: BarrierGrid,
     pathLengthMap: ObjMap<Pos, number>,
-    neighbourOrdering: Neighbour[],
+    neighbourOrdering: NeighbourOrdering,
     frames: AnimationFrame[]
 ) {
     const gridHeight = height(weightGrid);

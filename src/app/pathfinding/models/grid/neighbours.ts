@@ -1,6 +1,8 @@
 import { UncheckedObjMap } from "../../../shared/models/uncheckedObjMap";
 import { Pos } from "./pos";
 
+export type NeighbourOrdering = Neighbour[];
+
 export enum Neighbour {
     BottomLeft,
     Left,
@@ -50,7 +52,7 @@ export const neighbourToPosTransformation = new UncheckedObjMap<Neighbour, Neigh
     [Neighbour.BottomRight, { vertical: 1, horizontal: 1 }],
 ]);
 
-export function genNeighbouringPositions(pos: Pos, neighbours: Neighbour[]) {
+export function genNeighbouringPositions(pos: Pos, neighbours: NeighbourOrdering) {
     return neighbours.map(neighbour => {
         const { vertical, horizontal } = neighbourToPosTransformation.get(neighbour);
 
