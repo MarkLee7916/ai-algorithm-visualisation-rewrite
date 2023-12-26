@@ -14,8 +14,8 @@ import { AnimationFrame } from "./models/animation/animation-frame";
     PathfindingRoutingModule,
   ],
   providers: [
-    { provide: 'bridgeFromAnimationFramesToAnimationindex', useClass: BridgeService<AnimationFrame[]> },
-    { provide: 'bridgeFromAnimationIndexToAnimationRunning', useClass: BridgeService<number> },
+    { provide: 'bridgeFromAnimationFrames', useClass: BridgeService<AnimationFrame[]> },
+    { provide: 'bridgeFromAnimationIndex', useClass: BridgeService<number> },
   ]
 })
 export class PathfindingModule { }

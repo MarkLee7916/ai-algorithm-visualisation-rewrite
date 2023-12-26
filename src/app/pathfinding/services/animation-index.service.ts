@@ -15,22 +15,24 @@ export class AnimationIndexService {
         private domUpdates: DomUpdatesService,
         private problemStatementChanges: ProblemStatementChangesService,
         private animate: AnimateService,
-        @Inject('bridgeFromAnimationFramesToAnimationindex') private bridgeFromAnimationFrames: BridgeService<AnimationFrame[]>,
-        @Inject('bridgeFromAnimationIndexToAnimationRunning') private bridgeToAnimationRunning: BridgeService<number>
+        @Inject('bridgeFromAnimationFrames') private bridgeFromAnimationFrames: BridgeService<AnimationFrame[]>,
+        @Inject('bridgeFromAnimationIndex') private bridgeToAnotherStream: BridgeService<number>
     ) { }
 
     getStream() {
         return this.animationIndex$;
     }
 
+    private resetAnimationIndexAsProblemStatementChanged$ = this.problemStatementChanges.getStream().pipe(
+        map((): AnimationIndexAction => ({ kind: 'Reset' }))
+    );
+
     // Animation index updates when either an event requests it or the problem statement changes
     private animationIndex$: Observable<number> =
         merge(
             this.animate.getStream(),
-            this.domUpdates.animationIndexAction$,
-            this.problemStatementChanges.getStream().pipe(
-                map((): AnimationIndexAction => ({ kind: 'Reset' }))
-            )
+            this.domUpdates.newAnimationIndexAction$,
+            this.resetAnimationIndexAsProblemStatementChanged$
         ).pipe(
             scan((currentIndex, action) => {
                 if (action.kind === 'Increment') {
@@ -55,6 +57,6 @@ export class AnimationIndexService {
                     return index;
                 }
             }),
-            tap(index => this.bridgeToAnimationRunning.next(index)),
+            tap(index => this.bridgeToAnotherStream.next(index)),
         );
 }

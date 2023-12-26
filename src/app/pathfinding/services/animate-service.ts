@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, interval } from 'rxjs';
+import { Observable, combineLatest, interval } from 'rxjs';
 import { DomUpdatesService } from './dom-updates.service';
 import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { AnimationIndexAction } from '../models/actions/actions';
@@ -22,9 +22,11 @@ export class AnimateService {
         When animation running is set to true, repeatedly emit an increment action with a delay specified by animationDelay$ until 
         it's set to false again
     */
-    private animate$: Observable<AnimationIndexAction> = this.animationRunning.getStream().pipe(
-        filter(isAnimationRunning => isAnimationRunning),
-        withLatestFrom(this.domUpdates.animationDelay$),
+    private animate$: Observable<AnimationIndexAction> = combineLatest([
+        this.animationRunning.getStream(),
+        this.domUpdates.setAnimationDelay$
+    ]).pipe(
+        filter(([isAnimationRunning,]) => isAnimationRunning),
         switchMap(([, animationDelay]) =>
             interval(animationDelay).pipe(
                 map((): AnimationIndexAction => ({ kind: 'Increment' }))

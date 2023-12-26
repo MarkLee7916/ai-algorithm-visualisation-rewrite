@@ -12,7 +12,7 @@ export class AnimationFramesService {
     constructor(
         private problemStatementChanges: ProblemStatementChangesService,
         private animationIndex: AnimationIndexService,
-        @Inject('bridgeFromAnimationFramesToAnimationindex') private bridgeToAnimationIndex: BridgeService<AnimationFrame[]>,
+        @Inject('bridgeFromAnimationFrames') private bridgeToAnotherStream: BridgeService<AnimationFrame[]>,
     ) { }
 
     getStream() {
@@ -33,7 +33,7 @@ export class AnimationFramesService {
                     return [initBlankAnimationFrame(2, 2)];
                 }),
                 take(1),
-                tap(frames => this.bridgeToAnimationIndex.next(frames))
+                tap(frames => this.bridgeToAnotherStream.next(frames))
             ))
         );
 }

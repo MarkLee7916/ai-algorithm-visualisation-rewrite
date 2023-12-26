@@ -21,9 +21,9 @@ export class ProblemStatementChangesService {
     }
 
     private problemStatementChanges$: Observable<ProblemStatement> = combineLatest([
-        this.domUpdates.neighbourVisitOrdering$,
-        this.domUpdates.neighboursAllowed$,
-        this.domUpdates.pathfindingAlgo$,
+        this.domUpdates.setNeighbourVisitOrdering$,
+        this.domUpdates.changeTypeOfNeighboursAllowed$,
+        this.domUpdates.setPathfindingAlgo$,
     ]).pipe(
         distinctUntilChanged()
     );

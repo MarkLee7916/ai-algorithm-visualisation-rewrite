@@ -9,15 +9,15 @@ import { Pos } from '../models/grid/pos';
     providedIn: 'root'
 })
 export class DomUpdatesService {
-    animationIndexAction$ = new Subject<AnimationIndexAction>();
-    isAnimationRunning$ = new BehaviorSubject<boolean>(false);
-    animationDelay$ = new BehaviorSubject<number>(1000);
-    neighbourVisitOrdering$ = new BehaviorSubject<NeighbourOrdering>(DEFAULT_NEIGHBOUR_VISIT_ORDER);
-    pathfindingAlgo$ = new Subject<PathfindingAlgoOption>();
-    obstaclePlacedOnTile$ = new Subject<ObstaclePlacedOnTileOption>();
-    mazeGenAlgo$ = new Subject<MazeGenAlgoOption>();
-    dataDisplayedOnTile$ = new Subject<DataDisplayedOnTileOption>();
-    neighboursAllowed$ = new Subject<NeighboursAllowedOption>();
-    startPos$ = new Subject<Pos>();
-    goalPos$ = new Subject<Pos>();
+    newAnimationIndexAction$ = new Subject<AnimationIndexAction>();
+    setAnimationRunning$ = new BehaviorSubject<boolean>(false);
+    setAnimationDelay$ = new BehaviorSubject<number>(1000);
+    setNeighbourVisitOrdering$ = new BehaviorSubject<NeighbourOrdering>(DEFAULT_NEIGHBOUR_VISIT_ORDER);
+    setPathfindingAlgo$ = new Subject<PathfindingAlgoOption>();
+    setObstaclePlacedOnTile$ = new Subject<ObstaclePlacedOnTileOption>();
+    setMazeGenAlgo$ = new Subject<MazeGenAlgoOption>();
+    changeTypeOfDataDisplayedOnTile$ = new Subject<DataDisplayedOnTileOption>();
+    changeTypeOfNeighboursAllowed$ = new Subject<NeighboursAllowedOption>();
+    setStartPos$ = new Subject<Pos>();
+    setGoalPos$ = new Subject<Pos>();
 }
