@@ -8,9 +8,10 @@ import { ExpandedGrid, countOfTilesThatHaveBeenExpanded, hasBeenExpandedAt, init
 import { height, width } from "../models/grid/grid";
 import { NeighbourOrdering, genNeighbouringPositions } from "../models/grid/neighbours";
 import { initPathLengthGrid, setPathLengthAt } from "../models/grid/path-length-grid";
-import { Pos, formatPosAsCoord, hasPos, isOnGrid, isSamePos } from "../models/grid/pos";
+import { Pos, formatPosAsCoord, hasPos, isOnGrid } from "../models/grid/pos";
 import { VisitedGrid, countOfTilesThatHaveBeenVisited, hasBeenVisitedAt, initVisitedGrid, markVisitedAt } from "../models/grid/visited-grid";
 import { WeightGrid, weightAt } from "../models/grid/weight-grid";
+import * as _ from "lodash";
 
 export function genericUnidirectionalSearch(
     startPos: Pos,
@@ -94,7 +95,7 @@ function considerNextStep(
         )
     );
 
-    if (isSamePos(posBeingExpanded, goalPosForThisRun)) {
+    if (_.isEqual(posBeingExpanded, goalPosForThisRun)) {
         return true;
     }
 
@@ -171,7 +172,7 @@ function genAnimationFrame(
 
             if (hasPos(pathList, pos)) {
                 setFrameAt(frame.grid, row, col, TileAnimationFrame.FinalPath);
-            } else if (posBeingExpanded && isSamePos(posBeingExpanded, pos)) {
+            } else if (posBeingExpanded && _.isEqual(posBeingExpanded, pos)) {
                 setFrameAt(frame.grid, row, col, TileAnimationFrame.BeingExpanded);
             } else if (hasPos(positionsBeingAddedToAgenda, pos)) {
                 setFrameAt(frame.grid, row, col, TileAnimationFrame.BeingAddedToAgenda);

@@ -1,4 +1,4 @@
-import { hasPos, formatPosAsCoord, isOnGrid, isSamePos } from "./pos";
+import { hasPos, formatPosAsCoord, isOnGrid } from "./pos";
 
 describe('hasPos', () => {
     it('returns correct result', () => {
@@ -41,14 +41,5 @@ describe('isOnGrid', () => {
         expect(isOnGrid(gridHeight, gridWidth, { row: 0, col: gridWidth })).toBeFalse();
         expect(isOnGrid(gridHeight, gridWidth, { row: 0, col: 0 })).toBeTrue();
         expect(isOnGrid(gridHeight, gridWidth, { row: gridHeight - 1, col: gridWidth - 1 })).toBeTrue();
-    });
-});
-
-describe('isSamePos', () => {
-    it('returns the correct result', () => {
-        expect(isSamePos({ row: 0, col: -1 }, { row: 0, col: -1 })).toBeTrue();
-        expect(isSamePos({ row: 0, col: -1 }, { row: 0, col: 0 })).toBeFalse();
-        expect(isSamePos({ row: 0, col: -1 }, { row: 1, col: -1 })).toBeFalse();
-        expect(isSamePos({ row: 0, col: -1 }, { row: 1, col: -1 })).toBeFalse();
     });
 });
