@@ -32,8 +32,8 @@ export class AnimationFramesService {
                     // Calculate animation frames here
                     return [initBlankAnimationFrame(2, 2)];
                 }),
-                tap(frames => this.bridgeToAnotherStream.next(frames)),
                 take(1)
-            ))
+            )),
+            tap(frames => this.bridgeToAnotherStream.next(frames))
         );
 }
