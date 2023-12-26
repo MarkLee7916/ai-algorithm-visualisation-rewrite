@@ -28,8 +28,8 @@ export enum TypeOfNeighboursAllowedOption {
 
 export enum TypeOfDataDisplayedOnTileOption {
     Weights = 'Display Weight',
-    Dists = 'Display Start Distance',
-    Heuristics = 'Display Heuristic Distance',
+    PathLengthsFromStart = 'Display Start Distance',
+    HeuristicDists = 'Display Heuristic Distance',
 }
 
 export const DEFAULT_OBSTACLE_PLACED_ON_TILE = ObstaclePlacedOnTileOption.Barrier;
