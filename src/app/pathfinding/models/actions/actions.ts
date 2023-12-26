@@ -1,3 +1,5 @@
+import { WeightGrid } from "../grid/weight-grid"
+
 export type AnimationIndexAction =
     { kind: 'Increment' } |
     { kind: 'Decrement' } |
@@ -5,7 +7,9 @@ export type AnimationIndexAction =
     { kind: 'SetValue', valueToSetTo: number }
 
 export type WeightGridAction =
-    { kind: 'AddWeight', row: number, col: number } |
-    { kind: 'ResetWeight', row: number, col: number } |
-    { kind: 'ResetWholeGrid' }
+    { kind: 'AddWeightAt', row: number, col: number, weight: number } |
+    { kind: 'ToggleRandomWeightAt', row: number, col: number } |
+    { kind: 'AdaptToNewDimensions', height: number, width: number } |
+    { kind: 'ResetGrid' } |
+    { kind: 'NewGrid', grid: WeightGrid }
 

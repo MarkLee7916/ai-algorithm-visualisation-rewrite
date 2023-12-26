@@ -20,4 +20,6 @@ export class DomUpdatesService {
     setTypeOfTypeOfNeighboursAllowed$ = new BehaviorSubject<TypeOfNeighboursAllowedOption>(DEFAULT_TYPE_OF_NEIGHBOURS_ALLOWED);
     setStartPos$ = new Subject<Pos>();
     setGoalPos$ = new Subject<Pos>();
+    clearBarrierAndWeightGrids$ = new Subject<void>;
+    activateTile$ = new Subject<Pos>();
 }
