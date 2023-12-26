@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 import { Observable, merge, map, scan, withLatestFrom, tap } from "rxjs";
 import { AnimationIndexAction } from "../models/actions/actions";
 import { DomUpdatesService } from "./dom-updates.service";
@@ -15,8 +15,8 @@ export class AnimationIndexService {
         private domUpdates: DomUpdatesService,
         private problemStatementChanges: ProblemStatementChangesService,
         private animate: AnimateService,
-        private bridgeFromAnimationFrames: BridgeService<AnimationFrame[]>,
-        private bridgeToAnimationRunning: BridgeService<boolean>
+        @Inject('bridgeFromAnimationFramesToAnimationindex') private bridgeFromAnimationFrames: BridgeService<AnimationFrame[]>,
+        @Inject('bridgeFromAnimationIndexToAnimationRunning') private bridgeToAnimationRunning: BridgeService<number>
     ) { }
 
     getStream() {
@@ -46,11 +46,6 @@ export class AnimationIndexService {
                 }
             }, 0),
             withLatestFrom(this.bridgeFromAnimationFrames.getStream()),
-            tap(([index, frames]) => {
-                if (index >= frames.length) {
-                    this.bridgeToAnimationRunning.next(false)
-                }
-            }),
             map(([index, frames]) => {
                 if (index < 0) {
                     return 0;
@@ -59,6 +54,7 @@ export class AnimationIndexService {
                 } else {
                     return index;
                 }
-            })
+            }),
+            tap(index => this.bridgeToAnimationRunning.next(index)),
         );
 }

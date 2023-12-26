@@ -1,9 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
 
-@Injectable({
-    providedIn: 'root'
-})
+// Bridges streams to allow handling of cyclic dependencies
+@Injectable()
 export class BridgeService<T> {
     next(data: T) {
         this.bridgeSubject$.next(data);

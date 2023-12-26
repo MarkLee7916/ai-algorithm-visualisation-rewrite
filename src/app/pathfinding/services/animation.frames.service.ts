@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 import { Observable, switchMap, filter, map, take, tap } from "rxjs";
 import { AnimationFrame, initBlankAnimationFrame } from "../models/animation/animation-frame";
 import { ProblemStatementChangesService } from "./problem-statement-changes.service";
@@ -12,7 +12,7 @@ export class AnimationFramesService {
     constructor(
         private problemStatementChanges: ProblemStatementChangesService,
         private animationIndex: AnimationIndexService,
-        private bridgeToAnimationIndex: BridgeService<AnimationFrame[]>,
+        @Inject('bridgeFromAnimationFramesToAnimationindex') private bridgeToAnimationIndex: BridgeService<AnimationFrame[]>,
     ) { }
 
     getStream() {
