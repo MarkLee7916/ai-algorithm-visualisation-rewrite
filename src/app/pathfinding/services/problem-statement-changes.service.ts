@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { DomUpdatesService } from './dom-updates.service';
 import { distinctUntilChanged, } from 'rxjs/operators';
 import { Observable, combineLatest } from 'rxjs';
-import { NeighboursAllowedOption, PathfindingAlgoOption } from '../models/dropdown/dropdown-enums';
+import { TypeOfNeighboursAllowedOption, PathfindingAlgoOption } from '../models/dropdown/dropdown-enums';
 import { BarrierGrid } from '../models/grid/barrier-grid';
 import { NeighbourOrdering } from '../models/grid/neighbours';
 import { Pos } from '../models/grid/pos';
@@ -22,7 +22,7 @@ export class ProblemStatementChangesService {
 
     private problemStatementChanges$: Observable<ProblemStatement> = combineLatest([
         this.domUpdates.setNeighbourVisitOrdering$,
-        this.domUpdates.changeTypeOfNeighboursAllowed$,
+        this.domUpdates.setTypeOfTypeOfNeighboursAllowed$,
         this.domUpdates.setPathfindingAlgo$,
     ]).pipe(
         distinctUntilChanged()
@@ -31,7 +31,7 @@ export class ProblemStatementChangesService {
 
 export type ProblemStatement = [
     NeighbourOrdering,
-    NeighboursAllowedOption,
+    TypeOfNeighboursAllowedOption,
     PathfindingAlgoOption,
     WeightGrid,
     BarrierGrid,

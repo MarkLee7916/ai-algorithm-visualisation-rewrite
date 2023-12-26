@@ -20,13 +20,13 @@ export enum PathfindingAlgoOption {
     Random = 'Random Search',
 }
 
-export enum NeighboursAllowedOption {
+export enum TypeOfNeighboursAllowedOption {
     NonDiagonals = 'Non Diagonals Only',
     Diagonals = 'Diagonals Only',
     AllDirections = 'All Directions',
 }
 
-export enum DataDisplayedOnTileOption {
+export enum TypeOfDataDisplayedOnTileOption {
     Weights = 'Display Weight',
     Dists = 'Display Start Distance',
     Heuristics = 'Display Heuristic Distance',
@@ -38,6 +38,6 @@ export const DEFAULT_MAZE_GEN_ALGO = MazeGenAlgoOption.Random;
 
 export const DEFAULT_PATHFINDING_ALGO = PathfindingAlgoOption.BFS;
 
-export const DEFAULT_NEIGHBOURS_ALLOWED = NeighboursAllowedOption.NonDiagonals;
+export const DEFAULT_TYPE_OF_NEIGHBOURS_ALLOWED = TypeOfNeighboursAllowedOption.NonDiagonals;
 
-export const DEFAULT_DATA_DISPLAYED_ON_TILE = DataDisplayedOnTileOption.Weights;
+export const DEFAULT_TYPE_OF_DATA_DISPLAYED_ON_TILE = TypeOfDataDisplayedOnTileOption.Weights;
