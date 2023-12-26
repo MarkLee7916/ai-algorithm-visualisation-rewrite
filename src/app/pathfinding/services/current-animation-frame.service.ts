@@ -3,7 +3,7 @@ import { Observable, combineLatest } from "rxjs";
 import { AnimationFrame } from "../models/animation/animation-frame";
 import { DomUpdatesService } from "./dom-updates.service";
 import { AnimationIndexService } from "./animation-index.service";
-import { AnimationFramesService } from "./animation.frames.service";
+import { AnimationFramesService } from "./animation-frames.service";
 
 @Injectable({
     providedIn: 'root'

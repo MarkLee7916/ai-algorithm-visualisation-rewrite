@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
-import { AnimateService } from "../../services/animate-service";
+import { AnimateService } from "../../services/animate.service";
 import { AnimationIndexService } from "../../services/animation-index.service";
 import { AnimationRunningService } from "../../services/animation-running.service";
-import { AnimationFramesService } from "../../services/animation.frames.service";
+import { AnimationFramesService } from "../../services/animation-frames.service";
 import { CurrentAnimationFrameService } from "../../services/current-animation-frame.service";
 import { DomUpdatesService } from "../../services/dom-updates.service";
 import { ProblemStatementChangesService } from "../../services/problem-statement-changes.service";

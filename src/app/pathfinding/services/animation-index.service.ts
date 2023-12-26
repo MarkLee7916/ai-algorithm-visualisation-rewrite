@@ -3,7 +3,7 @@ import { Observable, merge, map, scan, withLatestFrom, tap } from "rxjs";
 import { AnimationIndexAction } from "../models/actions/actions";
 import { DomUpdatesService } from "./dom-updates.service";
 import { ProblemStatementChangesService } from "./problem-statement-changes.service";
-import { AnimateService } from "./animate-service";
+import { AnimateService } from "./animate.service";
 import { BridgeService } from "./bridge";
 import { AnimationFrame } from "../models/animation/animation-frame";
 
