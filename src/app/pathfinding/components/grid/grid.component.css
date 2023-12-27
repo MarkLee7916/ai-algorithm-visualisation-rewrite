@@ -1,0 +1,12 @@
+.grid {
+    border-collapse: collapse;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: fit-content;
+}
+
+.row {
+    display: flex;
+    justify-content: space-around;
+}
