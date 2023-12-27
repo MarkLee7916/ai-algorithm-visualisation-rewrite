@@ -1,0 +1,23 @@
+<div class="grid" cellspacing="0" cellpadding="0">
+    <div class="row" *ngFor="let row of range(0, gridHeight);">
+        <div *ngFor="let col of range(0, gridWidth);">
+            <ng-container *ngIf="{row: row, col: col} as pos">
+                <app-tile 
+                    [isStart]="isEqual(pos, startPos)" 
+                    [isGoal]="isEqual(pos, goalPos)" 
+                    [isBarrier]="hasBarrierAt(barrierGrid, row, col)" 
+                    [weight]="weightAt(weightGrid, row, col)" 
+                    [pathLengthFromStart]="pathLengthAt(animationFrame.pathLengthGrid, row, col)" 
+                    [heuristicDistFromGoal]="distAt(heuristicDistFromGoalGrid, row, col)" 
+                    [typeOfDataToDisplay]="typeOfDataDisplayedOnTile" 
+                    [willDisplayTooltipOnMouseOver]="willDisplayTooltipOnMouseOver" 
+                    [animationFrame]="frameAt(animationFrame.grid, row, col)" 
+                    (drag)="drag.emit({event: $event, pos})" 
+                    (drop)="drop.emit({event: $event, pos})" 
+                    (activate)="activate.emit(pos)" 
+                >
+                </app-tile>
+            </ng-container>
+        </div>
+    </div>
+</div>
