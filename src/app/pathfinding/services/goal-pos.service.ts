@@ -14,7 +14,9 @@ export class GoalPosService {
         private domUpdates: DomUpdatesService,
         @Inject(bridgeFromStartPos) private startPos: BridgeService<Pos>,
         @Inject(bridgeFromGoalPos) private bridgeToOtherStreams: BridgeService<Pos>,
-    ) { }
+    ) {
+        this.getStream().subscribe()
+    }
 
     getStream() {
         return this.goalPos$;

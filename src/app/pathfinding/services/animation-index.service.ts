@@ -17,7 +17,9 @@ export class AnimationIndexService {
         @Inject(bridgeFromAnimate) private animate: BridgeService<AnimationIndexAction>,
         @Inject(bridgeFromAnimationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
         @Inject(bridgeFromAnimationIndex) private bridgeToOtherStreams: BridgeService<number>
-    ) { }
+    ) {
+        this.getStream().subscribe()
+    }
 
     getStream() {
         return this.animationIndex$;

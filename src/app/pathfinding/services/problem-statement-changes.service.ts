@@ -20,7 +20,9 @@ export class ProblemStatementChangesService {
         @Inject(bridgeFromStartPos) private startPos: BridgeService<Pos>,
         @Inject(bridgeFromGoalPos) private goalPos: BridgeService<Pos>,
         @Inject(bridgeFromProblemStatementChanges) private bridgeToOtherStreams: BridgeService<ProblemStatement>,
-    ) { }
+    ) {
+        this.getStream().subscribe()
+    }
 
     getStream() {
         return this.problemStatementChanges$;

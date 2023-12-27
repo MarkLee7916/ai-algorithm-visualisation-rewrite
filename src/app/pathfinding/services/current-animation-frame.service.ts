@@ -12,7 +12,9 @@ export class CurrentAnimationFrameService {
         @Inject(bridgeFromAnimationIndex) private animationIndex: BridgeService<number>,
         @Inject(bridgeFromAnimationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
         @Inject(bridgeFromCurrentAnimationFrame) private bridgeToOtherStreams: BridgeService<AnimationFrame>,
-    ) { }
+    ) {
+        this.getStream().subscribe()
+    }
 
     getStream() {
         return this.currentAnimationFrame$;

@@ -17,7 +17,9 @@ export class BarrierGridService {
         private domUpdates: DomUpdatesService,
         @Inject(bridgeFromGridDimensions) private gridDimensions: BridgeService<GridDimensions>,
         @Inject(bridgeFromBarrierGrid) private bridgeToOtherStreams: BridgeService<BarrierGrid>
-    ) { }
+    ) {
+        this.getStream().subscribe()
+    }
 
     private clearBarrierGrid$: Observable<BarrierGridAction> = this.domUpdates.clearBarrierAndWeightGrids$.pipe(
         map(() => ({ kind: 'ResetGrid' }))

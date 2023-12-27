@@ -13,7 +13,13 @@ export class HeuristicDistGridService {
     constructor(
         @Inject(bridgeFromGridDimensions) private gridDimensions: BridgeService<GridDimensions>,
         @Inject(bridgeFromGoalPos) private goalPos: BridgeService<Pos>
-    ) { }
+    ) {
+        this.getStream().subscribe()
+    }
+
+    getStream() {
+        return this.heuristicDistGrid$;
+    }
 
     heuristicDistGrid$ = combineLatest([this.gridDimensions.getStream(), this.goalPos.getStream()],
         ({ height, width }, goalPos) => createHeuristicDistFromGoalGrid(height, width, goalPos)

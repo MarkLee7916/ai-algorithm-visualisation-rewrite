@@ -14,7 +14,9 @@ export class AnimateService {
         private domUpdates: DomUpdatesService,
         @Inject(bridgeFromAnimationRunning) private animationRunning: BridgeService<boolean>,
         @Inject(bridgeFromAnimate) private bridgeToOtherStreams: BridgeService<AnimationIndexAction>,
-    ) { }
+    ) {
+        this.getStream().subscribe()
+    }
 
     getStream() {
         return this.animate$;

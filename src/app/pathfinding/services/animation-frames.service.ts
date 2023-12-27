@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@angular/core";
-import { Observable, switchMap, filter, map, take, tap } from "rxjs";
-import { AnimationFrame } from "../models/animation/animation-frame";
+import { Observable, switchMap, filter, map, take, tap, startWith } from "rxjs";
+import { AnimationFrame, initBlankAnimationFrame } from "../models/animation/animation-frame";
 import { BridgeService } from "./bridge";
 import { bridgeFromProblemStatementChanges, bridgeFromAnimationIndex, bridgeFromAnimationFrames } from "../pathfinding.tokens";
 import { ProblemStatement } from "../models/problem-statement/problem-statement";
@@ -14,7 +14,9 @@ export class AnimationFramesService {
         @Inject(bridgeFromProblemStatementChanges) private problemStatementChanges: BridgeService<ProblemStatement>,
         @Inject(bridgeFromAnimationIndex) private animationIndex: BridgeService<number>,
         @Inject(bridgeFromAnimationFrames) private bridgeToOtherStreams: BridgeService<AnimationFrame[]>,
-    ) { }
+    ) {
+        this.getStream().subscribe()
+    }
 
     getStream() {
         return this.animationFrames$;
@@ -34,6 +36,7 @@ export class AnimationFramesService {
                 }),
                 take(1)
             )),
+            startWith([initBlankAnimationFrame(10, 10)]),
             tap(frames => this.bridgeToOtherStreams.next(frames))
         );
 }

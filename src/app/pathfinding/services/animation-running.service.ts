@@ -16,7 +16,9 @@ export class AnimationRunningService {
         @Inject(bridgeFromAnimationIndex) private animationIndex: BridgeService<number>,
         @Inject(bridgeFromAnimationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
         @Inject(bridgeFromAnimationRunning) private bridgeToOtherStreams: BridgeService<boolean>,
-    ) { }
+    ) {
+        this.getStream().subscribe()
+    }
 
     getStream() {
         return this.isAnimationRunning$;

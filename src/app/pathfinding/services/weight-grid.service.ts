@@ -17,7 +17,9 @@ export class WeightGridService {
         private domUpdates: DomUpdatesService,
         @Inject(bridgeFromGridDimensions) private gridDimensions: BridgeService<GridDimensions>,
         @Inject(bridgeFromWeightGrid) private bridgeToOtherStreams: BridgeService<WeightGrid>
-    ) { }
+    ) {
+        this.getStream().subscribe()
+    }
 
     private clearWeightGrid$: Observable<WeightGridAction> = this.domUpdates.clearBarrierAndWeightGrids$.pipe(
         map(() => ({ kind: 'ResetGrid' }))

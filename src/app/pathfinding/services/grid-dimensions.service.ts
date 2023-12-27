@@ -8,7 +8,9 @@ import { bridgeFromGridDimensions } from "../pathfinding.tokens";
     providedIn: 'root'
 })
 export class GridDimensionsService {
-    constructor(@Inject(bridgeFromGridDimensions) private bridgeToOtherStreams: BridgeService<GridDimensions>) { }
+    constructor(@Inject(bridgeFromGridDimensions) private bridgeToOtherStreams: BridgeService<GridDimensions>) {
+        this.getStream().subscribe()
+    }
 
     // TODO: Calculate from screen dimensions and have action for dual grids
     private dimensions$: Observable<GridDimensions> = of({
