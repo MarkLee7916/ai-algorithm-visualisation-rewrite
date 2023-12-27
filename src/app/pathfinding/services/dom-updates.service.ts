@@ -17,7 +17,7 @@ export class DomUpdatesService {
     setObstaclePlacedOnTile$ = new BehaviorSubject<ObstaclePlacedOnTileOption>(DEFAULT_OBSTACLE_PLACED_ON_TILE);
     setMazeGenAlgo$ = new BehaviorSubject<MazeGenAlgoOption>(DEFAULT_MAZE_GEN_ALGO);
     setTypeOfTypeOfDataDisplayedOnTile$ = new BehaviorSubject<TypeOfDataDisplayedOnTileOption>(DEFAULT_TYPE_OF_DATA_DISPLAYED_ON_TILE);
-    setTypeOfTypeOfNeighboursAllowed$ = new BehaviorSubject<TypeOfNeighboursAllowedOption>(DEFAULT_TYPE_OF_NEIGHBOURS_ALLOWED);
+    setTypeOfNeighboursAllowed$ = new BehaviorSubject<TypeOfNeighboursAllowedOption>(DEFAULT_TYPE_OF_NEIGHBOURS_ALLOWED);
     setStartPos$ = new Subject<Pos>();
     setGoalPos$ = new Subject<Pos>();
     clearBarrierAndWeightGrids$ = new Subject<void>;

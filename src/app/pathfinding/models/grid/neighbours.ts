@@ -3,6 +3,20 @@ import { Pos } from "./pos";
 
 export type NeighbourOrdering = Neighbour[];
 
+export type FilterNeighboursImpl = (neighbours: NeighbourOrdering) => NeighbourOrdering
+
+export function keepAllNeighbours(neighbours: NeighbourOrdering): Neighbour[] {
+    return neighbours.slice();
+}
+
+export function keepDiagonalNeigbours(neighbours: NeighbourOrdering): Neighbour[] {
+    return neighbours.filter(neighbour => DIAGONAL_NEIGHBOURS.includes(neighbour));
+}
+
+export function keepNonDiagonalNeigbours(neighbours: NeighbourOrdering): Neighbour[] {
+    return neighbours.filter(neighbour => NON_DIAGONAL_NEIGHBOURS.includes(neighbour));
+}
+
 export enum Neighbour {
     BottomLeft,
     Left,
