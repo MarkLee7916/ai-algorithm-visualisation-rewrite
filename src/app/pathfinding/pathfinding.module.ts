@@ -8,12 +8,13 @@ import { AnimationFrame } from "./models/animation/animation-frame";
 import { AnimationIndexAction } from "./models/actions/actions";
 import { GridDimensions } from "./models/grid/grid";
 import { WeightGrid } from "./models/grid/weight-grid";
-import { bridgeFromAnimate, bridgeFromAnimationFrames, bridgeFromAnimationIndex, bridgeFromAnimationRunning, bridgeFromBarrierGrid, bridgeFromCurrentAnimationFrame, bridgeFromGoalPos, bridgeFromGridDimensions, bridgeFromProblemStatementChanges, bridgeFromStartPos, bridgeFromWeightGrid } from "./pathfinding.tokens";
+import { bridgeFromAnimate, bridgeFromAnimationFrames, bridgeFromAnimationIndex, bridgeFromAnimationRunning, bridgeFromBarrierGrid, bridgeFromCurrentAnimationFrame, bridgeFromGoalPos, bridgeFromGridDimensions, bridgeFromProblemStatementChanges, bridgeFromStartPos, bridgeFromWeightGrid, heuristicDistGrid } from "./pathfinding.tokens";
 import { ProblemStatement } from "./models/problem-statement/problem-statement";
 import { BarrierGrid } from "./models/grid/barrier-grid";
 import { Pos } from "./models/grid/pos";
 import { TileComponent } from "./components/tile/tile.component";
 import { GridComponent } from "./components/grid/grid.component";
+import { HeuristicDistFromGoalGrid } from "./models/grid/heuristic-dist-from-goal-grid";
 
 @NgModule({
   declarations: [PageComponent, GridComponent, TileComponent],
@@ -34,6 +35,7 @@ import { GridComponent } from "./components/grid/grid.component";
     { provide: bridgeFromBarrierGrid, useClass: BridgeService<BarrierGrid> },
     { provide: bridgeFromStartPos, useClass: BridgeService<Pos> },
     { provide: bridgeFromGoalPos, useClass: BridgeService<Pos> },
+    { provide: heuristicDistGrid, useClass: BridgeService<HeuristicDistFromGoalGrid> },
   ]
 })
 export class PathfindingModule { }
