@@ -1,6 +1,6 @@
 <!--TODO, handle willDisplayTooltipOnMouseOver logic-->
 <!--TODO, handle outputs-->
-<div *ngIf="haveAllStreamsEmitted">
+<div class="page">
     <app-grid
         [weightGrid]="(weightGridService.getStream() | async)!" 
         [barrierGrid]="(barrierGridService.getStream() | async)!" 
@@ -10,6 +10,9 @@
         [willDisplayTooltipOnMouseOver]="false" 
         [animationFrame]="(currentAnimationFrameService.getStream() | async)!" 
         [heuristicDistFromGoalGrid]="(heuristicDistGridService.getStream() | async)!"
+        (activate)="domUpdatesService.activateTile$.next($event)"
     >
     </app-grid>
+
+    <button (click)="domUpdatesService.setAnimationRunning$.next(true)">Button</button>
 </div>

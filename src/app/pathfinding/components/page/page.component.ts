@@ -21,8 +21,9 @@ import { combineLatest } from "rxjs";
     styleUrls: ['./page.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageComponent implements OnInit {
+export class PageComponent {
     constructor(
+        // TODO: find a better way of including all the services in the compilation 
         public weightGridService: WeightGridService,
         public barrierGridService: BarrierGridService,
         public startPosService: StartPosService,
@@ -38,24 +39,6 @@ export class PageComponent implements OnInit {
         public mousePressService: MousePressService,
         public problemStatementChangesService: ProblemStatementChangesService
     ) { }
-
-    haveAllStreamsEmitted = false;
-
-    ngOnInit(): void {
-        combineLatest([
-            this.weightGridService.getStream(),
-            this.barrierGridService.getStream(),
-            this.startPosService.getStream(),
-            this.goalPosService.getStream(),
-            this.domUpdatesService.setTypeOfTypeOfDataDisplayedOnTile$,
-            this.currentAnimationFrameService.getStream(),
-            this.heuristicDistGridService.getStream()
-        ]).subscribe(() => {
-            this.haveAllStreamsEmitted = true;
-        });
-    }
-
-
 }
 
 
