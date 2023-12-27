@@ -24,7 +24,7 @@ export class GoalPosService {
         return this.goalPos$;
     }
 
-    // TODO: rewrite to use movePositionWithinBoundsOfGrid()
+    // TODO: rewrite to use movePositionWithinBoundsOfGrid(), with a way of initialising with the default goal pos
     private resetFromGridDimensionsChange$ = this.gridDimensions.getStream().pipe(
         map(({ height, width }) => genDefaultGoalPos(height, width))
     );

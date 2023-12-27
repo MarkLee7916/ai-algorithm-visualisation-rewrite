@@ -60,6 +60,7 @@ export class WeightGridService {
             } else {
                 throw new Error('Unexpected action kind');
             }
+            // TODO: find a way to not have to do this
         }, initWeightGrid(10, 10)),
         tap(grid => this.bridgeToOtherStreams.next(grid))
     )

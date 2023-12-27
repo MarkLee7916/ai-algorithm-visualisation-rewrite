@@ -37,6 +37,7 @@ export class ProblemStatementChangesService {
         this.startPos.getStream(),
         this.goalPos.getStream()
     ]).pipe(
+        // TODO: distinctUntilChanged() does reference rather than object comparison, use the key based one instead
         distinctUntilChanged(),
         tap(problemStatement => this.bridgeToOtherStreams.next(problemStatement))
     );

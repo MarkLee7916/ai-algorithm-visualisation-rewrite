@@ -36,8 +36,8 @@ export class AnimationFramesService {
                 }),
                 take(1)
             )),
-            // TODO: properly derive this value from the grid dimensions stream
-            startWith([initBlankAnimationFrame(20, 20)]),
+            // TODO: figure out a way to calculate animation frames from problem statement changes when the app starts 
+            startWith([initBlankAnimationFrame(10, 10), initBlankAnimationFrame(10, 10)]),
             tap(frames => this.bridgeToOtherStreams.next(frames))
         );
 }

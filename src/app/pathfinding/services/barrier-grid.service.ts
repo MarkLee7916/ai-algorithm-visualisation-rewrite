@@ -55,6 +55,7 @@ export class BarrierGridService {
             } else {
                 throw new Error('Unexpected action kind');
             }
+            // TODO: find out a way to not have to do this
         }, initBarrierGrid(10, 10)),
         tap(grid => this.bridgeToOtherStreams.next(grid))
     )
