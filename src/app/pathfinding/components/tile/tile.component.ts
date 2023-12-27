@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, Input, SimpleChanges, EventEmitter,
 import { TypeOfDataDisplayedOnTileOption } from "../../models/dropdown/dropdown-enums";
 import { UncheckedObjMap } from "../../../shared/models/uncheckedObjMap";
 import { TileAnimationFrame } from "../../models/grid/animation-frame-grid";
-import { Subject, combineLatest, filter, map, merge, withLatestFrom } from "rxjs";
+import { ReplaySubject, Subject, combineLatest, filter, map, merge, withLatestFrom } from "rxjs";
 import { MousePressService } from "../../services/mouse-press.service";
 
 @Component({
@@ -13,19 +13,19 @@ import { MousePressService } from "../../services/mouse-press.service";
 })
 export class TileComponent {
     domUpdates = {
-        setStart$: new Subject<boolean>(),
-        setGoal$: new Subject<boolean>(),
-        setIsBarrier$: new Subject<boolean>(),
-        setWeight$: new Subject<number>(),
-        setPathLengthFromStart$: new Subject<number>(),
-        setHeuristicDistFromGoal$: new Subject<number>(),
-        setTypeOfDataToDisplay$: new Subject<TypeOfDataDisplayedOnTileOption>(),
-        setWillDisplayTooltipOnMouseOver$: new Subject<boolean>(),
-        setAnimationFrame$: new Subject<TileAnimationFrame>(),
-        setIsMouseOver$: new Subject<boolean>,
-        startDrag$: new Subject<Event>,
-        startDrop$: new Subject<Event>,
-        startMouseDown$: new Subject<void>()
+        setStart$: new ReplaySubject<boolean>(1),
+        setGoal$: new ReplaySubject<boolean>(1),
+        setIsBarrier$: new ReplaySubject<boolean>(1),
+        setWeight$: new ReplaySubject<number>(1),
+        setPathLengthFromStart$: new ReplaySubject<number>(1),
+        setHeuristicDistFromGoal$: new ReplaySubject<number>(1),
+        setTypeOfDataToDisplay$: new ReplaySubject<TypeOfDataDisplayedOnTileOption>(1),
+        setWillDisplayTooltipOnMouseOver$: new ReplaySubject<boolean>(1),
+        setAnimationFrame$: new ReplaySubject<TileAnimationFrame>(1),
+        setIsMouseOver$: new ReplaySubject<boolean>,
+        startDrag$: new ReplaySubject<Event>,
+        startDrop$: new ReplaySubject<Event>,
+        startMouseDown$: new ReplaySubject<void>(1)
     };
 
     @Input() set isStart(value: boolean) {
