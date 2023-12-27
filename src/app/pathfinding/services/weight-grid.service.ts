@@ -1,12 +1,13 @@
-import { Injectable } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 import { DomUpdatesService } from "./dom-updates.service";
-import { Observable, filter, map, merge, scan, withLatestFrom } from "rxjs";
+import { Observable, filter, map, merge, scan, tap, withLatestFrom } from "rxjs";
 import { WeightGridAction } from "../models/actions/actions";
 import { DEFAULT_WEIGHT, WeightGrid, initWeightGrid, setWeightAt, toggleRandomWeightAt } from "../models/grid/weight-grid";
 import { ObstaclePlacedOnTileOption } from "../models/dropdown/dropdown-enums";
-import { GridDimensionsService } from "./grid-dimensions.service";
 import * as _ from "lodash";
-import { adaptToNewDimensions, height, width } from "../models/grid/grid";
+import { GridDimensions, adaptToNewDimensions, height, width } from "../models/grid/grid";
+import { BridgeService } from "./bridge";
+import { bridgeFromGridDimensions, bridgeFromWeightGrid } from "../pathfinding.tokens";
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +15,8 @@ import { adaptToNewDimensions, height, width } from "../models/grid/grid";
 export class WeightGridService {
     constructor(
         private domUpdates: DomUpdatesService,
-        private gridDimensions: GridDimensionsService
+        @Inject(bridgeFromGridDimensions) private gridDimensions: BridgeService<GridDimensions>,
+        @Inject(bridgeFromWeightGrid) private bridgeToOtherStreams: BridgeService<WeightGrid>
     ) { }
 
     private clearWeightGrid$: Observable<WeightGridAction> = this.domUpdates.clearBarrierAndWeightGrids$.pipe(
@@ -56,7 +58,8 @@ export class WeightGridService {
             } else {
                 throw new Error('Unexpected action kind');
             }
-        }, initWeightGrid(1, 1))
+        }, initWeightGrid(1, 1)),
+        tap(grid => this.bridgeToOtherStreams.next(grid))
     )
 
     getStream() {

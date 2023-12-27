@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable, combineLatest, interval } from 'rxjs';
 import { DomUpdatesService } from './dom-updates.service';
-import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { AnimationIndexAction } from '../models/actions/actions';
-import { AnimationRunningService } from './animation-running.service';
+import { BridgeService } from './bridge';
+import { bridgeFromAnimationRunning, bridgeFromAnimate } from '../pathfinding.tokens';
 
 @Injectable({
     providedIn: 'root'
@@ -11,7 +12,8 @@ import { AnimationRunningService } from './animation-running.service';
 export class AnimateService {
     constructor(
         private domUpdates: DomUpdatesService,
-        private animationRunning: AnimationRunningService,
+        @Inject(bridgeFromAnimationRunning) private animationRunning: BridgeService<boolean>,
+        @Inject(bridgeFromAnimate) private bridgeToOtherStreams: BridgeService<AnimationIndexAction>,
     ) { }
 
     getStream() {
@@ -31,6 +33,7 @@ export class AnimateService {
             interval(animationDelay).pipe(
                 map((): AnimationIndexAction => ({ kind: 'Increment' }))
             )
-        )
+        ),
+        tap(action => this.bridgeToOtherStreams.next(action))
     );
 }

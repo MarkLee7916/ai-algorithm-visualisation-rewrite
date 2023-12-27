@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@angular/core';
-import { combineLatest, filter, map, merge } from 'rxjs';
+import { combineLatest, filter, map, merge, tap } from 'rxjs';
 import { DomUpdatesService } from './dom-updates.service';
-import { ProblemStatementChangesService } from './problem-statement-changes.service';
 import { BridgeService } from './bridge';
 import { AnimationFrame } from '../models/animation/animation-frame';
+import { bridgeFromAnimationIndex, bridgeFromAnimationFrames, bridgeFromAnimationRunning, bridgeFromProblemStatementChanges } from '../pathfinding.tokens';
+import { ProblemStatement } from '../models/problem-statement/problem-statement';
 
 @Injectable({
     providedIn: 'root'
@@ -11,9 +12,10 @@ import { AnimationFrame } from '../models/animation/animation-frame';
 export class AnimationRunningService {
     constructor(
         private domUpdates: DomUpdatesService,
-        private problemStatementChanges: ProblemStatementChangesService,
-        @Inject('bridgeFromAnimationIndex') private bridgeFromAnimationIndex: BridgeService<number>,
-        @Inject('bridgeFromAnimationFrames') private bridgeFromAnimationFrames: BridgeService<AnimationFrame[]>
+        @Inject(bridgeFromProblemStatementChanges) private problemStatementChanges: BridgeService<ProblemStatement>,
+        @Inject(bridgeFromAnimationIndex) private animationIndex: BridgeService<number>,
+        @Inject(bridgeFromAnimationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
+        @Inject(bridgeFromAnimationRunning) private bridgeToOtherStreams: BridgeService<boolean>,
     ) { }
 
     getStream() {
@@ -25,8 +27,8 @@ export class AnimationRunningService {
     );
 
     private stopIfAtFinalFrame$ = combineLatest([
-        this.bridgeFromAnimationIndex.getStream(),
-        this.bridgeFromAnimationFrames.getStream()
+        this.animationIndex.getStream(),
+        this.animationFrames.getStream()
     ]).pipe(
         filter(([index, frames]) => index === frames.length - 1),
         map(() => false)
@@ -37,5 +39,7 @@ export class AnimationRunningService {
         this.domUpdates.setAnimationRunning$,
         this.stopIfAtFinalFrame$,
         this.stopIfNeedToUpdateFrames$
+    ).pipe(
+        tap(isRunning => this.bridgeToOtherStreams.next(isRunning))
     );
 }

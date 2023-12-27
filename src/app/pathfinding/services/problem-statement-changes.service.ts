@@ -1,12 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { DomUpdatesService } from './dom-updates.service';
-import { distinctUntilChanged, } from 'rxjs/operators';
+import { distinctUntilChanged, map, tap, } from 'rxjs/operators';
 import { Observable, combineLatest } from 'rxjs';
-import { TypeOfNeighboursAllowedOption, PathfindingAlgoOption } from '../models/dropdown/dropdown-enums';
-import { BarrierGrid } from '../models/grid/barrier-grid';
-import { NeighbourOrdering } from '../models/grid/neighbours';
-import { Pos } from '../models/grid/pos';
-import { WeightGrid } from '../models/grid/weight-grid';
+import { BridgeService } from './bridge';
+import { bridgeFromProblemStatementChanges } from '../pathfinding.tokens';
+import { ProblemStatement } from '../models/problem-statement/problem-statement';
 
 @Injectable({
     providedIn: 'root'
@@ -14,6 +12,7 @@ import { WeightGrid } from '../models/grid/weight-grid';
 export class ProblemStatementChangesService {
     constructor(
         private domUpdates: DomUpdatesService,
+        @Inject(bridgeFromProblemStatementChanges) private bridgeToOtherStreams: BridgeService<ProblemStatement>,
     ) { }
 
     getStream() {
@@ -25,16 +24,8 @@ export class ProblemStatementChangesService {
         this.domUpdates.setTypeOfTypeOfNeighboursAllowed$,
         this.domUpdates.setPathfindingAlgo$,
     ]).pipe(
-        distinctUntilChanged()
+        map(() => [] as unknown as ProblemStatement),
+        distinctUntilChanged(),
+        tap(problemStatement => this.bridgeToOtherStreams.next(problemStatement))
     );
 }
-
-export type ProblemStatement = [
-    NeighbourOrdering,
-    TypeOfNeighboursAllowedOption,
-    PathfindingAlgoOption,
-    WeightGrid,
-    BarrierGrid,
-    Pos,
-    Pos
-];

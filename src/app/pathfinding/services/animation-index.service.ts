@@ -2,10 +2,10 @@ import { Inject, Injectable } from "@angular/core";
 import { Observable, merge, map, scan, withLatestFrom, tap } from "rxjs";
 import { AnimationIndexAction } from "../models/actions/actions";
 import { DomUpdatesService } from "./dom-updates.service";
-import { ProblemStatementChangesService } from "./problem-statement-changes.service";
-import { AnimateService } from "./animate.service";
 import { BridgeService } from "./bridge";
 import { AnimationFrame } from "../models/animation/animation-frame";
+import { bridgeFromProblemStatementChanges, bridgeFromAnimate, bridgeFromAnimationFrames, bridgeFromAnimationIndex } from "../pathfinding.tokens";
+import { ProblemStatement } from "../models/problem-statement/problem-statement";
 
 @Injectable({
     providedIn: 'root'
@@ -13,10 +13,10 @@ import { AnimationFrame } from "../models/animation/animation-frame";
 export class AnimationIndexService {
     constructor(
         private domUpdates: DomUpdatesService,
-        private problemStatementChanges: ProblemStatementChangesService,
-        private animate: AnimateService,
-        @Inject('bridgeFromAnimationFrames') private bridgeFromAnimationFrames: BridgeService<AnimationFrame[]>,
-        @Inject('bridgeFromAnimationIndex') private bridgeToAnotherStream: BridgeService<number>
+        @Inject(bridgeFromProblemStatementChanges) private problemStatementChanges: BridgeService<ProblemStatement>,
+        @Inject(bridgeFromAnimate) private animate: BridgeService<AnimationIndexAction>,
+        @Inject(bridgeFromAnimationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
+        @Inject(bridgeFromAnimationIndex) private bridgeToOtherStreams: BridgeService<number>
     ) { }
 
     getStream() {
@@ -47,7 +47,7 @@ export class AnimationIndexService {
                     throw new Error('Unexpected action kind');
                 }
             }, 0),
-            withLatestFrom(this.bridgeFromAnimationFrames.getStream()),
+            withLatestFrom(this.animationFrames.getStream()),
             map(([index, frames]) => {
                 if (index < 0) {
                     return 0;
@@ -57,6 +57,6 @@ export class AnimationIndexService {
                     return index;
                 }
             }),
-            tap(index => this.bridgeToAnotherStream.next(index)),
+            tap(index => this.bridgeToOtherStreams.next(index)),
         );
 }

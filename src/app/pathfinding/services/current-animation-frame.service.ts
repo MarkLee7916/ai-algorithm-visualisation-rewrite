@@ -1,17 +1,17 @@
-import { Injectable } from "@angular/core";
-import { Observable, combineLatest } from "rxjs";
+import { Inject, Injectable } from "@angular/core";
+import { Observable, combineLatest, tap } from "rxjs";
 import { AnimationFrame } from "../models/animation/animation-frame";
-import { DomUpdatesService } from "./dom-updates.service";
-import { AnimationIndexService } from "./animation-index.service";
-import { AnimationFramesService } from "./animation-frames.service";
+import { BridgeService } from "./bridge";
+import { bridgeFromAnimationIndex, bridgeFromAnimationFrames, bridgeFromCurrentAnimationFrame } from "../pathfinding.tokens";
 
 @Injectable({
     providedIn: 'root'
 })
 export class CurrentAnimationFrameService {
     constructor(
-        private animationIndex: AnimationIndexService,
-        private animationFrames: AnimationFramesService,
+        @Inject(bridgeFromAnimationIndex) private animationIndex: BridgeService<number>,
+        @Inject(bridgeFromAnimationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
+        @Inject(bridgeFromCurrentAnimationFrame) private bridgeToOtherStreams: BridgeService<AnimationFrame>,
     ) { }
 
     getStream() {
@@ -21,5 +21,7 @@ export class CurrentAnimationFrameService {
     private currentAnimationFrame$: Observable<AnimationFrame> =
         combineLatest([this.animationFrames.getStream(), this.animationIndex.getStream()],
             (frames, index) => frames[index]
+        ).pipe(
+            tap(frame => this.bridgeToOtherStreams.next(frame))
         );
 }
