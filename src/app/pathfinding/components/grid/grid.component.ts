@@ -40,8 +40,8 @@ export class GridComponent implements OnChanges {
     computeManhattanDist = computeManhattanDist;
     distAt = distAt;
 
-    gridHeight = height(this.weightGrid);
-    gridWidth = width(this.weightGrid);
+    gridHeight!: number;
+    gridWidth!: number;
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['weightGrid']) {
