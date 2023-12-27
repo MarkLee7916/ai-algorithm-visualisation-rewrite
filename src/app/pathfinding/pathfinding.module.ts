@@ -8,9 +8,10 @@ import { AnimationFrame } from "./models/animation/animation-frame";
 import { AnimationIndexAction } from "./models/actions/actions";
 import { GridDimensions } from "./models/grid/grid";
 import { WeightGrid } from "./models/grid/weight-grid";
-import { bridgeFromAnimate, bridgeFromAnimationFrames, bridgeFromAnimationIndex, bridgeFromAnimationRunning, bridgeFromBarrierGrid, bridgeFromCurrentAnimationFrame, bridgeFromGridDimensions, bridgeFromProblemStatementChanges, bridgeFromWeightGrid } from "./pathfinding.tokens";
+import { bridgeFromAnimate, bridgeFromAnimationFrames, bridgeFromAnimationIndex, bridgeFromAnimationRunning, bridgeFromBarrierGrid, bridgeFromCurrentAnimationFrame, bridgeFromGoalPos, bridgeFromGridDimensions, bridgeFromProblemStatementChanges, bridgeFromStartPos, bridgeFromWeightGrid } from "./pathfinding.tokens";
 import { ProblemStatement } from "./models/problem-statement/problem-statement";
 import { BarrierGrid } from "./models/grid/barrier-grid";
+import { Pos } from "./models/grid/pos";
 
 @NgModule({
   declarations: [PageComponent],
@@ -29,6 +30,8 @@ import { BarrierGrid } from "./models/grid/barrier-grid";
     { provide: bridgeFromProblemStatementChanges, useClass: BridgeService<ProblemStatement> },
     { provide: bridgeFromWeightGrid, useClass: BridgeService<WeightGrid> },
     { provide: bridgeFromBarrierGrid, useClass: BridgeService<BarrierGrid> },
+    { provide: bridgeFromStartPos, useClass: BridgeService<Pos> },
+    { provide: bridgeFromGoalPos, useClass: BridgeService<Pos> },
   ]
 })
 export class PathfindingModule { }

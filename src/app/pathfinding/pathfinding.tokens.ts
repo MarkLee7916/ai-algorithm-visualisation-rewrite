@@ -6,6 +6,7 @@ import { WeightGrid } from "./models/grid/weight-grid";
 import { BridgeService } from "./services/bridge";
 import { ProblemStatement } from "./models/problem-statement/problem-statement";
 import { BarrierGrid } from "./models/grid/barrier-grid";
+import { Pos } from "./models/grid/pos";
 
 export const bridgeFromAnimate = new InjectionToken<BridgeService<AnimationIndexAction>>('bridgeFromAnimate');
 export const bridgeFromAnimationFrames = new InjectionToken<BridgeService<AnimationFrame[]>>('bridgeFromAnimationFrames');
@@ -16,3 +17,5 @@ export const bridgeFromGridDimensions = new InjectionToken<BridgeService<GridDim
 export const bridgeFromProblemStatementChanges = new InjectionToken<BridgeService<ProblemStatement>>('bridgeFromProblemStatementChanges');
 export const bridgeFromWeightGrid = new InjectionToken<BridgeService<WeightGrid>>('bridgeFromWeightGrid');
 export const bridgeFromBarrierGrid = new InjectionToken<BridgeService<BarrierGrid>>('bridgeFromBarrierGrid');
+export const bridgeFromStartPos = new InjectionToken<BridgeService<Pos>>('bridgeFromStartPos');
+export const bridgeFromGoalPos = new InjectionToken<BridgeService<Pos>>('bridgeFromGoalPos');
