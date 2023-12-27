@@ -1,0 +1,34 @@
+<div 
+  [class.pulse-highlight]="shouldTileBeHighlighted$ | async"
+  [class.black-border]="shouldTileBeHighlighted$ | async"
+  [draggable]="true"
+  [style.backgroundColor]="backgroundColor$ | async"
+  (drag)="$event.preventDefault()"
+  (dragend)="$event.preventDefault()"
+  (dragenter)="$event.preventDefault()"
+  (dragleave)="$event.preventDefault()"
+  (dragover)="$event.preventDefault()"
+  (dragstart)="domUpdates.startDrag$.next($event)"
+  (drop)="domUpdates.startDrop$.next($event)"
+  (mouseenter)="domUpdates.setIsMouseOver$.next(true)"
+  (mouseleave)="domUpdates.setIsMouseOver$.next(false)"
+  (mousedown)="domUpdates.startMouseDown$.next()"
+>
+
+  <p *ngIf="(domUpdates.setStart$ | async)" id="start-arrow">⇒</p>
+
+  <p *ngIf="(domUpdates.setGoal$ | async)" id="goal-arrow">🎯</p>
+
+  <p
+    *ngIf="(domUpdates.setStart$ | async) === false && (domUpdates.setGoal$ | async) === false"
+    [style.color]="textColor$ | async"
+  >
+    {{ textToDisplay$ | async }}
+  </p>
+</div>
+
+<div class="tile-tooltip" *ngIf="shouldDisplayTooltip$ | async">
+  <p>Calculated Distance From Start: {{ pathLengthFromStart$ | async }}</p>
+  <p>Estimated Distance To Goal: {{ domUpdates.setHeuristicDistFromGoal$ | async }}</p>
+  <p>Cost of passing through: {{ domUpdates.setWeight$ | async }}</p>
+</div>

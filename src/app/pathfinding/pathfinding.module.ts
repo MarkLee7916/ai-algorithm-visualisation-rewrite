@@ -12,9 +12,10 @@ import { bridgeFromAnimate, bridgeFromAnimationFrames, bridgeFromAnimationIndex,
 import { ProblemStatement } from "./models/problem-statement/problem-statement";
 import { BarrierGrid } from "./models/grid/barrier-grid";
 import { Pos } from "./models/grid/pos";
+import { TileComponent } from "./components/tile/tile.component";
 
 @NgModule({
-  declarations: [PageComponent],
+  declarations: [PageComponent, TileComponent],
   imports: [
     CommonModule,
     BrowserModule,
