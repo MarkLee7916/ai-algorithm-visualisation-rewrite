@@ -21,3 +21,7 @@ export function removeBarrierAt(grid: BarrierGrid, row: number, col: number) {
 export function addBarrierAt(grid: BarrierGrid, row: number, col: number) {
     setTileAt(grid, row, col, BARRIER);
 }
+
+export function toggleBarrierAt(grid: BarrierGrid, row: number, col: number) {
+    setTileAt(grid, row, col, tileAt(grid, row, col) === BARRIER ? NO_BARRIER : BARRIER);
+}

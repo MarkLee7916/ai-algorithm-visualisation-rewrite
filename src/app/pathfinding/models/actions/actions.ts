@@ -1,3 +1,4 @@
+import { BarrierGrid } from "../grid/barrier-grid"
 import { WeightGrid } from "../grid/weight-grid"
 
 export type AnimationIndexAction =
@@ -12,4 +13,11 @@ export type WeightGridAction =
     { kind: 'AdaptToNewDimensions', height: number, width: number } |
     { kind: 'ResetGrid' } |
     { kind: 'NewGrid', grid: WeightGrid }
+
+export type BarrierGridAction =
+    { kind: 'ToggleBarrierAt', row: number, col: number } |
+    { kind: 'AdaptToNewDimensions', height: number, width: number } |
+    { kind: 'ResetGrid' } |
+    { kind: 'NewGrid', grid: BarrierGrid }
+
 

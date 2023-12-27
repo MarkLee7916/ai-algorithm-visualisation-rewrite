@@ -5,6 +5,7 @@ import { GridDimensions } from "./models/grid/grid";
 import { WeightGrid } from "./models/grid/weight-grid";
 import { BridgeService } from "./services/bridge";
 import { ProblemStatement } from "./models/problem-statement/problem-statement";
+import { BarrierGrid } from "./models/grid/barrier-grid";
 
 export const bridgeFromAnimate = new InjectionToken<BridgeService<AnimationIndexAction>>('bridgeFromAnimate');
 export const bridgeFromAnimationFrames = new InjectionToken<BridgeService<AnimationFrame[]>>('bridgeFromAnimationFrames');
@@ -14,3 +15,4 @@ export const bridgeFromCurrentAnimationFrame = new InjectionToken<BridgeService<
 export const bridgeFromGridDimensions = new InjectionToken<BridgeService<GridDimensions>>('bridgeFromGridDimensions');
 export const bridgeFromProblemStatementChanges = new InjectionToken<BridgeService<ProblemStatement>>('bridgeFromProblemStatementChanges');
 export const bridgeFromWeightGrid = new InjectionToken<BridgeService<WeightGrid>>('bridgeFromWeightGrid');
+export const bridgeFromBarrierGrid = new InjectionToken<BridgeService<BarrierGrid>>('bridgeFromBarrierGrid');
