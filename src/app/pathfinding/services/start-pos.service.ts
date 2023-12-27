@@ -3,7 +3,7 @@ import { Pos } from "../models/grid/pos";
 import { bridgeFromGoalPos, bridgeFromStartPos } from "../pathfinding.tokens";
 import { BridgeService } from "./bridge";
 import { DomUpdatesService } from "./dom-updates.service";
-import { filter, tap, withLatestFrom } from "rxjs";
+import { filter, map, tap, withLatestFrom } from "rxjs";
 import { isEqual } from "lodash";
 
 @Injectable({
@@ -23,6 +23,7 @@ export class StartPosService {
     private startPos$ = this.domUpdates.setStartPos$.pipe(
         withLatestFrom(this.goalPos.getStream()),
         filter(([startPos, goalPos]) => !isEqual(startPos, goalPos)),
-        tap(([pos,]) => this.bridgeToOtherStreams.next(pos))
+        map(([pos,]) => pos),
+        tap(pos => this.bridgeToOtherStreams.next(pos))
     )
 }
