@@ -9,7 +9,7 @@ import { Pos } from '../models/grid/pos';
     providedIn: 'root'
 })
 export class DomUpdatesService {
-    newAnimationIndexAction$ = new Subject<AnimationIndexAction>();
+    newAnimationIndexAction$ = new BehaviorSubject<AnimationIndexAction>({ kind: 'Reset' });
     setAnimationRunning$ = new BehaviorSubject<boolean>(false);
     setAnimationDelay$ = new BehaviorSubject<number>(1000);
     setNeighbourVisitOrdering$ = new BehaviorSubject<NeighbourOrdering>(DEFAULT_NEIGHBOUR_VISIT_ORDER);

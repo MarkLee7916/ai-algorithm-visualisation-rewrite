@@ -36,7 +36,8 @@ export class AnimationFramesService {
                 }),
                 take(1)
             )),
-            startWith([initBlankAnimationFrame(10, 10)]),
+            // TODO: properly derive this value from the grid dimensions stream
+            startWith([initBlankAnimationFrame(20, 20)]),
             tap(frames => this.bridgeToOtherStreams.next(frames))
         );
 }

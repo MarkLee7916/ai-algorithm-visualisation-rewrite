@@ -1,9 +1,9 @@
 import { Injectable, Inject } from "@angular/core";
-import { Pos } from "../models/grid/pos";
+import { Pos, genDefaultStartPos } from "../models/grid/pos";
 import { bridgeFromGoalPos, bridgeFromStartPos } from "../pathfinding.tokens";
 import { BridgeService } from "./bridge";
 import { DomUpdatesService } from "./dom-updates.service";
-import { filter, map, tap, withLatestFrom } from "rxjs";
+import { filter, map, startWith, tap, withLatestFrom } from "rxjs";
 import { isEqual } from "lodash";
 
 @Injectable({
@@ -26,6 +26,7 @@ export class StartPosService {
         withLatestFrom(this.goalPos.getStream()),
         filter(([startPos, goalPos]) => !isEqual(startPos, goalPos)),
         map(([pos,]) => pos),
+        startWith(genDefaultStartPos()),
         tap(pos => this.bridgeToOtherStreams.next(pos))
     )
 }
