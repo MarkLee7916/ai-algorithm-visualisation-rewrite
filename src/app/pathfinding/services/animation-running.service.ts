@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { combineLatest, filter, map, merge, tap } from 'rxjs';
+import { combineLatest, distinctUntilChanged, filter, map, merge, tap } from 'rxjs';
 import { DomUpdatesService } from './dom-updates.service';
 import { BridgeService } from './bridge';
 import { AnimationFrame } from '../models/animation/animation-frame';
@@ -42,6 +42,7 @@ export class AnimationRunningService {
         this.stopIfAtFinalFrame$,
         this.stopIfNeedToUpdateFrames$
     ).pipe(
+        distinctUntilChanged(),
         tap(isRunning => this.bridgeToOtherStreams.next(isRunning))
     );
 }

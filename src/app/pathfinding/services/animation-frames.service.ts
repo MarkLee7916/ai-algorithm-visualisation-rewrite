@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@angular/core";
-import { Observable, switchMap, filter, map, take, tap, startWith } from "rxjs";
+import { Observable, switchMap, filter, map, take, tap, startWith, skip } from "rxjs";
 import { AnimationFrame, initBlankAnimationFrame } from "../models/animation/animation-frame";
 import { BridgeService } from "./bridge";
 import { bridgeFromProblemStatementChanges, bridgeFromAnimationIndex, bridgeFromAnimationFrames } from "../pathfinding.tokens";
@@ -26,6 +26,7 @@ export class AnimationFramesService {
     private animationFrames$: Observable<AnimationFrame[]> =
         this.problemStatementChanges.getStream().pipe(
             switchMap(problemStatement => this.animationIndex.getStream().pipe(
+                skip(1),
                 filter(animationIndex => animationIndex > 0),
                 map(() => {
                     const [neighbourOrdering, typeOfNeighboursAllowed, pathfindingAlgo, weightGrid, barrierGrid, startPos, goalPos] = problemStatement;

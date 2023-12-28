@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@angular/core";
-import { Observable, merge, map, scan, withLatestFrom, tap, filter } from "rxjs";
+import { Observable, merge, map, scan, withLatestFrom, tap, filter, distinctUntilChanged } from "rxjs";
 import { AnimationIndexAction } from "../models/actions/actions";
 import { DomUpdatesService } from "./dom-updates.service";
 import { BridgeService } from "./bridge";
@@ -69,6 +69,7 @@ export class AnimationIndexService {
                     return index;
                 }
             }),
+            distinctUntilChanged(),
             tap(index => this.bridgeToOtherStreams.next(index)),
         );
 }
