@@ -5,7 +5,8 @@ export type AnimationIndexAction =
     { kind: 'Increment' } |
     { kind: 'Decrement' } |
     { kind: 'Reset' } |
-    { kind: 'SetValue', valueToSetTo: number }
+    { kind: 'SetValue', valueToSetTo: number } |
+    { kind: 'ResetIfIndexAt', indexToResetAt: number }
 
 export type WeightGridAction =
     { kind: 'AddWeightAt', row: number, col: number, weight: number } |
