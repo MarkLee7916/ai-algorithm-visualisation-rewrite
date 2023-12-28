@@ -14,8 +14,8 @@ export class GridDimensionsService {
 
     // TODO: Calculate from screen dimensions and have action for dual grids
     private dimensions$: Observable<GridDimensions> = of({
-        height: 20,
-        width: 20
+        height: 10,
+        width: 10
     }).pipe(
         tap(dimensions => this.bridgeToOtherStreams.next(dimensions))
     );

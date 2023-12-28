@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { Observable, combineLatest, interval } from 'rxjs';
 import { DomUpdatesService } from './dom-updates.service';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, takeWhile, tap } from 'rxjs/operators';
 import { AnimationIndexAction } from '../models/actions/actions';
 import { BridgeService } from './bridge';
 import { bridgeFromAnimationRunning, bridgeFromAnimate } from '../pathfinding.tokens';
@@ -30,10 +30,10 @@ export class AnimateService {
         this.animationRunning.getStream(),
         this.domUpdates.setAnimationDelay$
     ]).pipe(
-        filter(([isAnimationRunning,]) => isAnimationRunning),
-        switchMap(([, animationDelay]) =>
+        switchMap(([isAnimationRunning, animationDelay]) =>
             interval(animationDelay).pipe(
-                map((): AnimationIndexAction => ({ kind: 'Increment' }))
+                map((): AnimationIndexAction => ({ kind: 'Increment' })),
+                takeWhile(() => isAnimationRunning)
             )
         ),
         tap(action => this.bridgeToOtherStreams.next(action))
