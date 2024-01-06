@@ -61,8 +61,7 @@ export class WeightGridService implements StateService<WeightGrid> {
             } else {
                 throw new Error('Unexpected action kind');
             }
-            // TODO: find a way to not have to do this
-        }, initWeightGrid(30, 30))
+        }, initWeightGrid(1, 1))
     )
 
     getStream() {

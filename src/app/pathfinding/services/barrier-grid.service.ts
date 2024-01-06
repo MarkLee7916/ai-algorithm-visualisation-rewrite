@@ -51,13 +51,11 @@ export class BarrierGridService implements StateService<BarrierGrid> {
             } else if (action.kind === 'NewGrid') {
                 return _.cloneDeep(action.grid);
             } else if (action.kind === 'AdaptToNewDimensions') {
-                const copy = _.cloneDeep(currentGrid);
-                return adaptToNewDimensions(copy, NO_BARRIER, action.height, action.width);
+                return adaptToNewDimensions(currentGrid, NO_BARRIER, action.height, action.width);
             } else {
                 throw new Error('Unexpected action kind');
             }
-            // TODO: find out a way to not have to do this
-        }, initBarrierGrid(30, 30))
+        }, initBarrierGrid(1, 1))
     )
 
     getStream() {
