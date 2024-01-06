@@ -10,6 +10,7 @@ import { pathLengthAt } from "../../models/grid/path-length-grid";
 import { frameAt } from "../../models/grid/animation-frame-grid";
 import { computeManhattanDist } from "../../algos/comparators";
 import { HeuristicDistFromGoalGrid, distAt } from "../../models/grid/heuristic-dist-from-goal-grid";
+import { TileEvent } from "../../models/grid/tile-event";
 
 @Component({
     selector: 'app-grid',
@@ -49,9 +50,4 @@ export class GridComponent implements OnChanges {
             this.gridWidth = width(this.weightGrid);
         }
     }
-}
-
-export type TileEvent = {
-    event: Event,
-    pos: Pos
 }

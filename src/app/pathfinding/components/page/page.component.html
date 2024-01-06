@@ -11,6 +11,8 @@
         [animationFrame]="(currentAnimationFrameService.getStream() | async)!" 
         [heuristicDistFromGoalGrid]="(heuristicDistGridService.getStream() | async)!"
         (activate)="domUpdatesService.activateTile$.next($event)"
+        (drag)="domUpdatesService.drag$.next($event)" 
+        (drop)="domUpdatesService.drop$.next($event)" 
     >
     </app-grid>
 

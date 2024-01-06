@@ -4,6 +4,7 @@ import { AnimationIndexAction } from '../models/actions/actions';
 import { PathfindingAlgoOption, ObstaclePlacedOnTileOption, MazeGenAlgoOption, TypeOfDataDisplayedOnTileOption, TypeOfNeighboursAllowedOption, DEFAULT_PATHFINDING_ALGO, DEFAULT_OBSTACLE_PLACED_ON_TILE, DEFAULT_MAZE_GEN_ALGO, DEFAULT_TYPE_OF_DATA_DISPLAYED_ON_TILE, DEFAULT_TYPE_OF_NEIGHBOURS_ALLOWED } from '../models/dropdown/dropdown-enums';
 import { NeighbourOrdering, DEFAULT_NEIGHBOUR_VISIT_ORDER } from '../models/grid/neighbours';
 import { Pos } from '../models/grid/pos';
+import { TileEvent } from '../models/grid/tile-event';
 
 @Injectable({
     providedIn: 'root'
@@ -23,4 +24,6 @@ export class DomUpdatesService {
     setGoalPos$ = new ReplaySubject<Pos>(1);
     clearBarrierAndWeightGrids$ = new ReplaySubject<void>();
     activateTile$ = new ReplaySubject<Pos>();
+    drag$ = new ReplaySubject<TileEvent>();
+    drop$ = new ReplaySubject<TileEvent>();
 }
