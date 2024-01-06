@@ -1,5 +1,3 @@
-import * as _ from "lodash";
-
 export type Pos = { row: number; col: number };
 
 export function genDefaultStartPos() {
@@ -11,7 +9,11 @@ export function genDefaultGoalPos(height: number, width: number) {
 }
 
 export function hasPos(posList: Pos[], posToCheckFor: Pos) {
-    return posList.some((pos) => _.isEqual(pos, posToCheckFor));
+    return posList.some((pos) => isSamePos(pos, posToCheckFor));
+}
+
+export function isSamePos(pos1: Pos, pos2: Pos) {
+    return pos1.row === pos2.row && pos1.col === pos2.col;
 }
 
 export function formatPosAsCoord({ row, col }: Pos): string {
