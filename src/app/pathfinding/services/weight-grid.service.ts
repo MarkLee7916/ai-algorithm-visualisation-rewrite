@@ -8,17 +8,18 @@ import * as _ from "lodash";
 import { GridDimensions, adaptToNewDimensions, height, width } from "../models/grid/grid";
 import { BridgeService } from "./bridge";
 import { bridgeFromGridDimensions, bridgeFromWeightGrid } from "../pathfinding.tokens";
+import { StateService } from "./state.service";
 
 @Injectable({
     providedIn: 'root'
 })
-export class WeightGridService {
+export class WeightGridService implements StateService<WeightGrid> {
     constructor(
         private domUpdates: DomUpdatesService,
         @Inject(bridgeFromGridDimensions) private gridDimensions: BridgeService<GridDimensions>,
-        @Inject(bridgeFromWeightGrid) private bridgeToOtherStreams: BridgeService<WeightGrid>
+        @Inject(bridgeFromWeightGrid) bridgeToOtherStreams: BridgeService<WeightGrid>
     ) {
-        this.getStream().subscribe()
+        bridgeToOtherStreams.link(this.getStream());
     }
 
     private clearWeightGrid$: Observable<WeightGridAction> = this.domUpdates.clearBarrierAndWeightGrids$.pipe(
@@ -61,8 +62,7 @@ export class WeightGridService {
                 throw new Error('Unexpected action kind');
             }
             // TODO: find a way to not have to do this
-        }, initWeightGrid(10, 10)),
-        tap(grid => this.bridgeToOtherStreams.next(grid))
+        }, initWeightGrid(30, 30))
     )
 
     getStream() {

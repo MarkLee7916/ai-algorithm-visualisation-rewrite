@@ -6,18 +6,19 @@ import { bridgeFromProblemStatementChanges, bridgeFromAnimationIndex, bridgeFrom
 import { ProblemStatement } from "../models/problem-statement/problem-statement";
 import { typeOfNeighboursAllowedOptionToImpl, pathfindingAlgoOptionToImpl } from "../models/dropdown/dropdown-enum-mappings";
 import { GridDimensions } from "../models/grid/grid";
+import { StateService } from "./state.service";
 
 @Injectable({
     providedIn: 'root'
 })
-export class AnimationFramesService {
+export class AnimationFramesService implements StateService<AnimationFrame[]> {
     constructor(
         @Inject(bridgeFromProblemStatementChanges) private problemStatementChanges: BridgeService<ProblemStatement>,
         @Inject(bridgeFromAnimationIndex) private animationIndex: BridgeService<number>,
         @Inject(bridgeFromAnimationFrames) private bridgeToOtherStreams: BridgeService<AnimationFrame[]>,
         @Inject(bridgeFromGridDimensions) private gridDimensions: BridgeService<GridDimensions>,
     ) {
-        this.getStream().subscribe()
+        bridgeToOtherStreams.link(this.getStream());
     }
 
     getStream() {
@@ -45,7 +46,5 @@ export class AnimationFramesService {
     );
 
     // Animation frames update when animation index changes and the problem statement has changed from last time
-    private animationFrames$: Observable<AnimationFrame[]> = merge(this.calculateFrames$, this.resetFramesFromGridDimensionChanges$).pipe(
-        tap(frames => this.bridgeToOtherStreams.next(frames))
-    )
+    private animationFrames$: Observable<AnimationFrame[]> = merge(this.calculateFrames$, this.resetFramesFromGridDimensionChanges$);
 }

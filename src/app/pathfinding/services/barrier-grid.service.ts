@@ -8,17 +8,18 @@ import { BarrierGridAction } from "../models/actions/actions";
 import { Observable, filter, map, merge, scan, tap, withLatestFrom } from "rxjs";
 import { ObstaclePlacedOnTileOption } from "../models/dropdown/dropdown-enums";
 import * as _ from "lodash";
+import { StateService } from "./state.service";
 
 @Injectable({
     providedIn: 'root'
 })
-export class BarrierGridService {
+export class BarrierGridService implements StateService<BarrierGrid> {
     constructor(
         private domUpdates: DomUpdatesService,
         @Inject(bridgeFromGridDimensions) private gridDimensions: BridgeService<GridDimensions>,
-        @Inject(bridgeFromBarrierGrid) private bridgeToOtherStreams: BridgeService<BarrierGrid>
+        @Inject(bridgeFromBarrierGrid) bridgeToOtherStreams: BridgeService<BarrierGrid>
     ) {
-        this.getStream().subscribe()
+        bridgeToOtherStreams.link(this.getStream());
     }
 
     private clearBarrierGrid$: Observable<BarrierGridAction> = this.domUpdates.clearBarrierAndWeightGrids$.pipe(
@@ -56,8 +57,7 @@ export class BarrierGridService {
                 throw new Error('Unexpected action kind');
             }
             // TODO: find out a way to not have to do this
-        }, initBarrierGrid(10, 10)),
-        tap(grid => this.bridgeToOtherStreams.next(grid))
+        }, initBarrierGrid(30, 30))
     )
 
     getStream() {

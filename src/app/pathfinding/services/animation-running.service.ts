@@ -5,19 +5,20 @@ import { BridgeService } from './bridge';
 import { AnimationFrame } from '../models/animation/animation-frame';
 import { bridgeFromAnimationIndex, bridgeFromAnimationFrames, bridgeFromAnimationRunning, bridgeFromProblemStatementChanges } from '../pathfinding.tokens';
 import { ProblemStatement } from '../models/problem-statement/problem-statement';
+import { StateService } from './state.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class AnimationRunningService {
+export class AnimationRunningService implements StateService<boolean> {
     constructor(
         private domUpdates: DomUpdatesService,
         @Inject(bridgeFromProblemStatementChanges) private problemStatementChanges: BridgeService<ProblemStatement>,
         @Inject(bridgeFromAnimationIndex) private animationIndex: BridgeService<number>,
         @Inject(bridgeFromAnimationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
-        @Inject(bridgeFromAnimationRunning) private bridgeToOtherStreams: BridgeService<boolean>,
+        @Inject(bridgeFromAnimationRunning) bridgeToOtherStreams: BridgeService<boolean>,
     ) {
-        this.getStream().subscribe()
+        bridgeToOtherStreams.link(this.getStream());
     }
 
     getStream() {
@@ -42,7 +43,6 @@ export class AnimationRunningService {
         this.stopIfAtFinalFrame$,
         this.stopIfNeedToUpdateFrames$
     ).pipe(
-        distinctUntilChanged(),
-        tap(isRunning => this.bridgeToOtherStreams.next(isRunning))
+        distinctUntilChanged()
     );
 }

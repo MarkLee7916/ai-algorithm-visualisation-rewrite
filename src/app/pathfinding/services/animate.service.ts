@@ -5,17 +5,18 @@ import { map, switchMap, takeWhile, tap } from 'rxjs/operators';
 import { AnimationIndexAction } from '../models/actions/actions';
 import { BridgeService } from './bridge';
 import { bridgeFromAnimationRunning, bridgeFromAnimate } from '../pathfinding.tokens';
+import { StateService } from './state.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class AnimateService {
+export class AnimateService implements StateService<AnimationIndexAction> {
     constructor(
         private domUpdates: DomUpdatesService,
         @Inject(bridgeFromAnimationRunning) private animationRunning: BridgeService<boolean>,
-        @Inject(bridgeFromAnimate) private bridgeToOtherStreams: BridgeService<AnimationIndexAction>,
+        @Inject(bridgeFromAnimate) bridgeToOtherStreams: BridgeService<AnimationIndexAction>,
     ) {
-        this.getStream().subscribe()
+        bridgeToOtherStreams.link(this.getStream());
     }
 
     getStream() {
@@ -35,7 +36,6 @@ export class AnimateService {
                 map((): AnimationIndexAction => ({ kind: 'Increment' })),
                 takeWhile(() => isAnimationRunning)
             )
-        ),
-        tap(action => this.bridgeToOtherStreams.next(action))
+        )
     );
 }

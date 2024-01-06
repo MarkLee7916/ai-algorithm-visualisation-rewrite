@@ -8,20 +8,21 @@ import { ProblemStatement } from '../models/problem-statement/problem-statement'
 import { WeightGrid } from '../models/grid/weight-grid';
 import { BarrierGrid } from '../models/grid/barrier-grid';
 import { Pos } from '../models/grid/pos';
+import { StateService } from './state.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ProblemStatementChangesService {
+export class ProblemStatementChangesService implements StateService<ProblemStatement> {
     constructor(
         private domUpdates: DomUpdatesService,
         @Inject(bridgeFromBarrierGrid) private barrierGrid: BridgeService<BarrierGrid>,
         @Inject(bridgeFromWeightGrid) private weightGrid: BridgeService<WeightGrid>,
         @Inject(bridgeFromStartPos) private startPos: BridgeService<Pos>,
         @Inject(bridgeFromGoalPos) private goalPos: BridgeService<Pos>,
-        @Inject(bridgeFromProblemStatementChanges) private bridgeToOtherStreams: BridgeService<ProblemStatement>,
+        @Inject(bridgeFromProblemStatementChanges) bridgeToOtherStreams: BridgeService<ProblemStatement>,
     ) {
-        this.getStream().subscribe()
+        bridgeToOtherStreams.link(this.getStream());
     }
 
     getStream() {
@@ -36,7 +37,5 @@ export class ProblemStatementChangesService {
         this.barrierGrid.getStream(),
         this.startPos.getStream(),
         this.goalPos.getStream()
-    ]).pipe(
-        tap(problemStatement => this.bridgeToOtherStreams.next(problemStatement))
-    );
+    ]);
 }

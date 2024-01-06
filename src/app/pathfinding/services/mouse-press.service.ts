@@ -11,5 +11,5 @@ export class MousePressService {
 
     private isMouseDown$ = merge(fromEvent(document, 'mousedown'), fromEvent(document, 'mouseup')).pipe(
         map((event: Event) => (event as MouseEvent).buttons === 1)
-    )
+    );
 }

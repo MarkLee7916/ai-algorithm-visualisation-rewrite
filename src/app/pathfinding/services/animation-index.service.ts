@@ -6,20 +6,21 @@ import { BridgeService } from "./bridge";
 import { AnimationFrame } from "../models/animation/animation-frame";
 import { bridgeFromProblemStatementChanges, bridgeFromAnimate, bridgeFromAnimationFrames, bridgeFromAnimationIndex, bridgeFromAnimationRunning } from "../pathfinding.tokens";
 import { ProblemStatement } from "../models/problem-statement/problem-statement";
+import { StateService } from "./state.service";
 
 @Injectable({
     providedIn: 'root'
 })
-export class AnimationIndexService {
+export class AnimationIndexService implements StateService<number> {
     constructor(
         private domUpdates: DomUpdatesService,
         @Inject(bridgeFromProblemStatementChanges) private problemStatementChanges: BridgeService<ProblemStatement>,
         @Inject(bridgeFromAnimate) private animate: BridgeService<AnimationIndexAction>,
         @Inject(bridgeFromAnimationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
         @Inject(bridgeFromAnimationRunning) private animationRunning: BridgeService<boolean>,
-        @Inject(bridgeFromAnimationIndex) private bridgeToOtherStreams: BridgeService<number>
+        @Inject(bridgeFromAnimationIndex) bridgeToOtherStreams: BridgeService<number>
     ) {
-        this.getStream().subscribe();
+        bridgeToOtherStreams.link(this.getStream());
     }
 
     getStream() {
@@ -69,7 +70,6 @@ export class AnimationIndexService {
                     return index;
                 }
             }),
-            distinctUntilChanged(),
-            tap(index => this.bridgeToOtherStreams.next(index)),
+            distinctUntilChanged()
         );
 }

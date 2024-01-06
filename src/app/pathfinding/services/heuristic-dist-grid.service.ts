@@ -3,8 +3,9 @@ import { bridgeFromGoalPos, bridgeFromGridDimensions } from "../pathfinding.toke
 import { GridDimensions } from "../models/grid/grid";
 import { BridgeService } from "./bridge";
 import { combineLatest } from "rxjs";
-import { createHeuristicDistFromGoalGrid } from "../models/grid/heuristic-dist-from-goal-grid";
+import { HeuristicDistFromGoalGrid, createHeuristicDistFromGoalGrid } from "../models/grid/heuristic-dist-from-goal-grid";
 import { Pos } from "../models/grid/pos";
+import { StateService } from "./state.service";
 
 @Injectable({
     providedIn: 'root'
@@ -12,9 +13,9 @@ import { Pos } from "../models/grid/pos";
 export class HeuristicDistGridService {
     constructor(
         @Inject(bridgeFromGridDimensions) private gridDimensions: BridgeService<GridDimensions>,
-        @Inject(bridgeFromGoalPos) private goalPos: BridgeService<Pos>
+        @Inject(bridgeFromGoalPos) private goalPos: BridgeService<Pos>,
     ) {
-        this.getStream().subscribe()
+
     }
 
     getStream() {
