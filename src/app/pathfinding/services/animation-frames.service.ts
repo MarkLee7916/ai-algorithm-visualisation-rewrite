@@ -39,6 +39,7 @@ export class AnimationFramesService {
         ))
     );
 
+    // TODO: find something better than repeating this three times
     private resetFramesFromGridDimensionChanges$ = this.gridDimensions.getStream().pipe(
         map(({ height, width }) => [initBlankAnimationFrame(height, width), initBlankAnimationFrame(height, width), initBlankAnimationFrame(height, width)])
     );

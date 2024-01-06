@@ -25,6 +25,7 @@ export class StartPosService {
         withLatestFrom(this.goalPos.getStream()),
         filter(([startPos, goalPos]) => !isSamePos(startPos, goalPos)),
         map(([pos,]) => pos),
+        // TODO: recalculate when grid dimensions change using movePositionWithinBoundsOfGrid(), don't use startWith
         startWith(genDefaultStartPos()),
         tap(pos => this.bridgeToOtherStreams.next(pos))
     )
