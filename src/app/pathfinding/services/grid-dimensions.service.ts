@@ -1,5 +1,5 @@
-import { Observable, of, tap } from "rxjs";
-import { GridDimensions } from "../models/grid/grid";
+import { Observable, debounceTime, fromEvent, map, of, startWith, tap } from "rxjs";
+import { GridDimensions, calculateGridDimensionsFromScreenDimensions } from "../models/grid/grid";
 import { Inject, Injectable } from "@angular/core";
 import { BridgeService } from "./bridge";
 import { bridgeFromGridDimensions } from "../pathfinding.tokens";
@@ -12,11 +12,15 @@ export class GridDimensionsService {
         this.getStream().subscribe()
     }
 
-    // TODO: Calculate from screen dimensions and have action for dual grids
-    private dimensions$: Observable<GridDimensions> = of({
-        height: 10,
-        width: 10
-    }).pipe(
+    private windowResize$ = fromEvent(window, 'resize').pipe(
+        debounceTime(1000),
+        startWith(null)
+    );
+
+    // TODO: Pipe from changes in dual grids and changes in screen size
+
+    private dimensions$: Observable<GridDimensions> = this.windowResize$.pipe(
+        map(() => calculateGridDimensionsFromScreenDimensions()),
         tap(dimensions => this.bridgeToOtherStreams.next(dimensions))
     );
 

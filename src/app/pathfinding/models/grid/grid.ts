@@ -5,6 +5,13 @@ export type GridDimensions = {
     width: number
 }
 
+export function calculateGridDimensionsFromScreenDimensions() {
+    return {
+        height: Math.round(window.innerHeight / 40),
+        width: Math.round(window.innerWidth / 40)
+    }
+}
+
 export function height<T>(grid: T[][]) {
     return grid.length;
 }
