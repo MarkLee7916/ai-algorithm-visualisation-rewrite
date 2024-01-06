@@ -3,7 +3,7 @@ import { DomUpdatesService } from './dom-updates.service';
 import { distinctUntilChanged, tap } from 'rxjs/operators';
 import { Observable, combineLatest } from 'rxjs';
 import { BridgeService } from './bridge';
-import { bridgeFromBarrierGrid, bridgeFromGoalPos, bridgeFromProblemStatementChanges, bridgeFromStartPos, bridgeFromWeightGrid } from '../pathfinding.tokens';
+import { barrierGrid, goalPos, problemStatementChanges, startPos, weightGrid } from '../pathfinding.tokens';
 import { ProblemStatement } from '../models/problem-statement/problem-statement';
 import { WeightGrid } from '../models/grid/weight-grid';
 import { BarrierGrid } from '../models/grid/barrier-grid';
@@ -16,11 +16,11 @@ import { StateService } from './state.service';
 export class ProblemStatementChangesService implements StateService<ProblemStatement> {
     constructor(
         private domUpdates: DomUpdatesService,
-        @Inject(bridgeFromBarrierGrid) private barrierGrid: BridgeService<BarrierGrid>,
-        @Inject(bridgeFromWeightGrid) private weightGrid: BridgeService<WeightGrid>,
-        @Inject(bridgeFromStartPos) private startPos: BridgeService<Pos>,
-        @Inject(bridgeFromGoalPos) private goalPos: BridgeService<Pos>,
-        @Inject(bridgeFromProblemStatementChanges) bridgeToOtherStreams: BridgeService<ProblemStatement>,
+        @Inject(barrierGrid) private barrierGrid: BridgeService<BarrierGrid>,
+        @Inject(weightGrid) private weightGrid: BridgeService<WeightGrid>,
+        @Inject(startPos) private startPos: BridgeService<Pos>,
+        @Inject(goalPos) private goalPos: BridgeService<Pos>,
+        @Inject(problemStatementChanges) bridgeToOtherStreams: BridgeService<ProblemStatement>,
     ) {
         bridgeToOtherStreams.link(this.getStream());
     }

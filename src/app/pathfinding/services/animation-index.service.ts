@@ -4,7 +4,7 @@ import { AnimationIndexAction } from "../models/actions/actions";
 import { DomUpdatesService } from "./dom-updates.service";
 import { BridgeService } from "./bridge";
 import { AnimationFrame } from "../models/animation/animation-frame";
-import { bridgeFromProblemStatementChanges, bridgeFromAnimate, bridgeFromAnimationFrames, bridgeFromAnimationIndex, bridgeFromAnimationRunning } from "../pathfinding.tokens";
+import { problemStatementChanges, animate, animationFrames, animationIndex, animationRunning } from "../pathfinding.tokens";
 import { ProblemStatement } from "../models/problem-statement/problem-statement";
 import { StateService } from "./state.service";
 
@@ -14,11 +14,11 @@ import { StateService } from "./state.service";
 export class AnimationIndexService implements StateService<number> {
     constructor(
         private domUpdates: DomUpdatesService,
-        @Inject(bridgeFromProblemStatementChanges) private problemStatementChanges: BridgeService<ProblemStatement>,
-        @Inject(bridgeFromAnimate) private animate: BridgeService<AnimationIndexAction>,
-        @Inject(bridgeFromAnimationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
-        @Inject(bridgeFromAnimationRunning) private animationRunning: BridgeService<boolean>,
-        @Inject(bridgeFromAnimationIndex) bridgeToOtherStreams: BridgeService<number>
+        @Inject(problemStatementChanges) private problemStatementChanges: BridgeService<ProblemStatement>,
+        @Inject(animate) private animate: BridgeService<AnimationIndexAction>,
+        @Inject(animationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
+        @Inject(animationRunning) private animationRunning: BridgeService<boolean>,
+        @Inject(animationIndex) bridgeToOtherStreams: BridgeService<number>
     ) {
         bridgeToOtherStreams.link(this.getStream());
     }

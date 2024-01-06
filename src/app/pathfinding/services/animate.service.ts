@@ -4,7 +4,7 @@ import { DomUpdatesService } from './dom-updates.service';
 import { map, switchMap, takeWhile, tap } from 'rxjs/operators';
 import { AnimationIndexAction } from '../models/actions/actions';
 import { BridgeService } from './bridge';
-import { bridgeFromAnimationRunning, bridgeFromAnimate } from '../pathfinding.tokens';
+import { animationRunning, animate } from '../pathfinding.tokens';
 import { StateService } from './state.service';
 
 @Injectable({
@@ -13,8 +13,8 @@ import { StateService } from './state.service';
 export class AnimateService implements StateService<AnimationIndexAction> {
     constructor(
         private domUpdates: DomUpdatesService,
-        @Inject(bridgeFromAnimationRunning) private animationRunning: BridgeService<boolean>,
-        @Inject(bridgeFromAnimate) bridgeToOtherStreams: BridgeService<AnimationIndexAction>,
+        @Inject(animationRunning) private animationRunning: BridgeService<boolean>,
+        @Inject(animate) bridgeToOtherStreams: BridgeService<AnimationIndexAction>,
     ) {
         bridgeToOtherStreams.link(this.getStream());
     }

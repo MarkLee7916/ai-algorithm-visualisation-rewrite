@@ -8,7 +8,7 @@ import { AnimationFrame } from "./models/animation/animation-frame";
 import { AnimationIndexAction } from "./models/actions/actions";
 import { GridDimensions } from "./models/grid/grid";
 import { WeightGrid } from "./models/grid/weight-grid";
-import { bridgeFromAnimate, bridgeFromAnimationFrames, bridgeFromAnimationIndex, bridgeFromAnimationRunning, bridgeFromBarrierGrid, bridgeFromCurrentAnimationFrame, bridgeFromGoalPos, bridgeFromGridDimensions, bridgeFromProblemStatementChanges, bridgeFromStartPos, bridgeFromWeightGrid, heuristicDistGrid } from "./pathfinding.tokens";
+import { animate, animationFrames, animationIndex, animationRunning, barrierGrid, currentAnimationFrame, goalPos, gridDimensions, problemStatementChanges, startPos, weightGrid, heuristicDistGrid } from "./pathfinding.tokens";
 import { ProblemStatement } from "./models/problem-statement/problem-statement";
 import { BarrierGrid } from "./models/grid/barrier-grid";
 import { Pos } from "./models/grid/pos";
@@ -24,17 +24,17 @@ import { HeuristicDistFromGoalGrid } from "./models/grid/heuristic-dist-from-goa
     PathfindingRoutingModule,
   ],
   providers: [
-    { provide: bridgeFromAnimate, useClass: BridgeService<AnimationIndexAction> },
-    { provide: bridgeFromAnimationFrames, useClass: BridgeService<AnimationFrame[]> },
-    { provide: bridgeFromAnimationIndex, useClass: BridgeService<number> },
-    { provide: bridgeFromAnimationRunning, useClass: BridgeService<boolean> },
-    { provide: bridgeFromCurrentAnimationFrame, useClass: BridgeService<AnimationFrame> },
-    { provide: bridgeFromGridDimensions, useClass: BridgeService<GridDimensions> },
-    { provide: bridgeFromProblemStatementChanges, useClass: BridgeService<ProblemStatement> },
-    { provide: bridgeFromWeightGrid, useClass: BridgeService<WeightGrid> },
-    { provide: bridgeFromBarrierGrid, useClass: BridgeService<BarrierGrid> },
-    { provide: bridgeFromStartPos, useClass: BridgeService<Pos> },
-    { provide: bridgeFromGoalPos, useClass: BridgeService<Pos> },
+    { provide: animate, useClass: BridgeService<AnimationIndexAction> },
+    { provide: animationFrames, useClass: BridgeService<AnimationFrame[]> },
+    { provide: animationIndex, useClass: BridgeService<number> },
+    { provide: animationRunning, useClass: BridgeService<boolean> },
+    { provide: currentAnimationFrame, useClass: BridgeService<AnimationFrame> },
+    { provide: gridDimensions, useClass: BridgeService<GridDimensions> },
+    { provide: problemStatementChanges, useClass: BridgeService<ProblemStatement> },
+    { provide: weightGrid, useClass: BridgeService<WeightGrid> },
+    { provide: barrierGrid, useClass: BridgeService<BarrierGrid> },
+    { provide: startPos, useClass: BridgeService<Pos> },
+    { provide: goalPos, useClass: BridgeService<Pos> },
     { provide: heuristicDistGrid, useClass: BridgeService<HeuristicDistFromGoalGrid> },
   ]
 })

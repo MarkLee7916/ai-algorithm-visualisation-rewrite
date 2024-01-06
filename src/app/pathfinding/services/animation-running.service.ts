@@ -3,7 +3,7 @@ import { combineLatest, distinctUntilChanged, filter, map, merge, tap } from 'rx
 import { DomUpdatesService } from './dom-updates.service';
 import { BridgeService } from './bridge';
 import { AnimationFrame } from '../models/animation/animation-frame';
-import { bridgeFromAnimationIndex, bridgeFromAnimationFrames, bridgeFromAnimationRunning, bridgeFromProblemStatementChanges } from '../pathfinding.tokens';
+import { animationIndex, animationFrames, animationRunning, problemStatementChanges } from '../pathfinding.tokens';
 import { ProblemStatement } from '../models/problem-statement/problem-statement';
 import { StateService } from './state.service';
 
@@ -13,10 +13,10 @@ import { StateService } from './state.service';
 export class AnimationRunningService implements StateService<boolean> {
     constructor(
         private domUpdates: DomUpdatesService,
-        @Inject(bridgeFromProblemStatementChanges) private problemStatementChanges: BridgeService<ProblemStatement>,
-        @Inject(bridgeFromAnimationIndex) private animationIndex: BridgeService<number>,
-        @Inject(bridgeFromAnimationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
-        @Inject(bridgeFromAnimationRunning) bridgeToOtherStreams: BridgeService<boolean>,
+        @Inject(problemStatementChanges) private problemStatementChanges: BridgeService<ProblemStatement>,
+        @Inject(animationIndex) private animationIndex: BridgeService<number>,
+        @Inject(animationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
+        @Inject(animationRunning) bridgeToOtherStreams: BridgeService<boolean>,
     ) {
         bridgeToOtherStreams.link(this.getStream());
     }

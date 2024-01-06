@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@angular/core";
 import { Observable, switchMap, filter, map, take, tap, startWith, skip, merge } from "rxjs";
 import { AnimationFrame, initBlankAnimationFrame } from "../models/animation/animation-frame";
 import { BridgeService } from "./bridge";
-import { bridgeFromProblemStatementChanges, bridgeFromAnimationIndex, bridgeFromAnimationFrames, bridgeFromGridDimensions } from "../pathfinding.tokens";
+import { problemStatementChanges, animationIndex, animationFrames, gridDimensions } from "../pathfinding.tokens";
 import { ProblemStatement } from "../models/problem-statement/problem-statement";
 import { typeOfNeighboursAllowedOptionToImpl, pathfindingAlgoOptionToImpl } from "../models/dropdown/dropdown-enum-mappings";
 import { GridDimensions } from "../models/grid/grid";
@@ -13,10 +13,10 @@ import { StateService } from "./state.service";
 })
 export class AnimationFramesService implements StateService<AnimationFrame[]> {
     constructor(
-        @Inject(bridgeFromProblemStatementChanges) private problemStatementChanges: BridgeService<ProblemStatement>,
-        @Inject(bridgeFromAnimationIndex) private animationIndex: BridgeService<number>,
-        @Inject(bridgeFromAnimationFrames) private bridgeToOtherStreams: BridgeService<AnimationFrame[]>,
-        @Inject(bridgeFromGridDimensions) private gridDimensions: BridgeService<GridDimensions>,
+        @Inject(problemStatementChanges) private problemStatementChanges: BridgeService<ProblemStatement>,
+        @Inject(animationIndex) private animationIndex: BridgeService<number>,
+        @Inject(animationFrames) private bridgeToOtherStreams: BridgeService<AnimationFrame[]>,
+        @Inject(gridDimensions) private gridDimensions: BridgeService<GridDimensions>,
     ) {
         bridgeToOtherStreams.link(this.getStream());
     }

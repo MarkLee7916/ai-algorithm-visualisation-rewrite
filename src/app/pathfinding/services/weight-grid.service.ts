@@ -7,7 +7,7 @@ import { ObstaclePlacedOnTileOption } from "../models/dropdown/dropdown-enums";
 import * as _ from "lodash";
 import { GridDimensions, adaptToNewDimensions, height, width } from "../models/grid/grid";
 import { BridgeService } from "./bridge";
-import { bridgeFromGridDimensions, bridgeFromWeightGrid } from "../pathfinding.tokens";
+import { gridDimensions, weightGrid } from "../pathfinding.tokens";
 import { StateService } from "./state.service";
 
 @Injectable({
@@ -16,8 +16,8 @@ import { StateService } from "./state.service";
 export class WeightGridService implements StateService<WeightGrid> {
     constructor(
         private domUpdates: DomUpdatesService,
-        @Inject(bridgeFromGridDimensions) private gridDimensions: BridgeService<GridDimensions>,
-        @Inject(bridgeFromWeightGrid) bridgeToOtherStreams: BridgeService<WeightGrid>
+        @Inject(gridDimensions) private gridDimensions: BridgeService<GridDimensions>,
+        @Inject(weightGrid) bridgeToOtherStreams: BridgeService<WeightGrid>
     ) {
         bridgeToOtherStreams.link(this.getStream());
     }

@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@angular/core";
 import { Observable, combineLatest, tap } from "rxjs";
 import { AnimationFrame } from "../models/animation/animation-frame";
 import { BridgeService } from "./bridge";
-import { bridgeFromAnimationIndex, bridgeFromAnimationFrames, bridgeFromCurrentAnimationFrame } from "../pathfinding.tokens";
+import { animationIndex, animationFrames, currentAnimationFrame } from "../pathfinding.tokens";
 import { StateService } from "./state.service";
 
 @Injectable({
@@ -10,9 +10,9 @@ import { StateService } from "./state.service";
 })
 export class CurrentAnimationFrameService implements StateService<AnimationFrame> {
     constructor(
-        @Inject(bridgeFromAnimationIndex) private animationIndex: BridgeService<number>,
-        @Inject(bridgeFromAnimationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
-        @Inject(bridgeFromCurrentAnimationFrame) bridgeToOtherStreams: BridgeService<AnimationFrame>,
+        @Inject(animationIndex) private animationIndex: BridgeService<number>,
+        @Inject(animationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
+        @Inject(currentAnimationFrame) bridgeToOtherStreams: BridgeService<AnimationFrame>,
     ) {
         bridgeToOtherStreams.link(this.getStream());
     }

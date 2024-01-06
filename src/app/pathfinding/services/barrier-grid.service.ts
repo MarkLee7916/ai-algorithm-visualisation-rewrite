@@ -1,7 +1,7 @@
 import { Injectable, Inject } from "@angular/core";
 import { BarrierGrid, NO_BARRIER, initBarrierGrid, toggleBarrierAt } from "../models/grid/barrier-grid";
 import { GridDimensions, adaptToNewDimensions, height, width } from "../models/grid/grid";
-import { bridgeFromBarrierGrid, bridgeFromGridDimensions } from "../pathfinding.tokens";
+import { barrierGrid, gridDimensions } from "../pathfinding.tokens";
 import { BridgeService } from "./bridge";
 import { DomUpdatesService } from "./dom-updates.service";
 import { BarrierGridAction } from "../models/actions/actions";
@@ -16,8 +16,8 @@ import { StateService } from "./state.service";
 export class BarrierGridService implements StateService<BarrierGrid> {
     constructor(
         private domUpdates: DomUpdatesService,
-        @Inject(bridgeFromGridDimensions) private gridDimensions: BridgeService<GridDimensions>,
-        @Inject(bridgeFromBarrierGrid) bridgeToOtherStreams: BridgeService<BarrierGrid>
+        @Inject(gridDimensions) private gridDimensions: BridgeService<GridDimensions>,
+        @Inject(barrierGrid) bridgeToOtherStreams: BridgeService<BarrierGrid>
     ) {
         bridgeToOtherStreams.link(this.getStream());
     }

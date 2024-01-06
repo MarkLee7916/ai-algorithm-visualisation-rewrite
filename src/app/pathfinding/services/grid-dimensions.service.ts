@@ -2,14 +2,14 @@ import { Observable, debounceTime, fromEvent, map, of, startWith, tap } from "rx
 import { GridDimensions, calculateGridDimensionsFromScreenDimensions } from "../models/grid/grid";
 import { Inject, Injectable } from "@angular/core";
 import { BridgeService } from "./bridge";
-import { bridgeFromGridDimensions } from "../pathfinding.tokens";
+import { gridDimensions } from "../pathfinding.tokens";
 import { StateService } from "./state.service";
 
 @Injectable({
     providedIn: 'root'
 })
 export class GridDimensionsService implements StateService<GridDimensions> {
-    constructor(@Inject(bridgeFromGridDimensions) bridgeToOtherStreams: BridgeService<GridDimensions>) {
+    constructor(@Inject(gridDimensions) bridgeToOtherStreams: BridgeService<GridDimensions>) {
         bridgeToOtherStreams.link(this.getStream());
     }
 

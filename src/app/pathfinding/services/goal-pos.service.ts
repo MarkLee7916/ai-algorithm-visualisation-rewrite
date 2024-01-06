@@ -1,6 +1,6 @@
 import { Injectable, Inject } from "@angular/core";
 import { Pos, genDefaultGoalPos, isSamePos } from "../models/grid/pos";
-import { bridgeFromGoalPos, bridgeFromGridDimensions, bridgeFromStartPos } from "../pathfinding.tokens";
+import { goalPos, gridDimensions, startPos } from "../pathfinding.tokens";
 import { BridgeService } from "./bridge";
 import { DomUpdatesService } from "./dom-updates.service";
 import { filter, map, merge, tap, withLatestFrom } from "rxjs";
@@ -13,9 +13,9 @@ import { StateService } from "./state.service";
 export class GoalPosService implements StateService<Pos> {
     constructor(
         private domUpdates: DomUpdatesService,
-        @Inject(bridgeFromStartPos) private startPos: BridgeService<Pos>,
-        @Inject(bridgeFromGridDimensions) private gridDimensions: BridgeService<GridDimensions>,
-        @Inject(bridgeFromGoalPos) bridgeToOtherStreams: BridgeService<Pos>,
+        @Inject(startPos) private startPos: BridgeService<Pos>,
+        @Inject(gridDimensions) private gridDimensions: BridgeService<GridDimensions>,
+        @Inject(goalPos) bridgeToOtherStreams: BridgeService<Pos>,
     ) {
         bridgeToOtherStreams.link(this.getStream());
     }
