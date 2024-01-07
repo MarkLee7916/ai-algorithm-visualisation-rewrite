@@ -22,3 +22,4 @@ export const startPos = new InjectionToken<BridgeService<Pos>>('bridgeFromStartP
 export const goalPos = new InjectionToken<BridgeService<Pos>>('bridgeFromGoalPos');
 export const heuristicDistGrid = new InjectionToken<BridgeService<HeuristicDistFromGoalGrid>>('heuristicDistGrid');
 export const lastPosDraggedFrom = new InjectionToken<BridgeService<Pos | null>>('lastPosDraggedFrom');
+export const mousePress = new InjectionToken<BridgeService<boolean>>('mousePress');

@@ -1,8 +1,8 @@
 import { Inject, Injectable } from "@angular/core";
-import { goalPos, gridDimensions } from "../pathfinding.tokens";
+import { goalPos, gridDimensions, heuristicDistGrid } from "../pathfinding.tokens";
 import { GridDimensions } from "../models/grid/grid";
 import { BridgeService } from "./bridge";
-import { combineLatest } from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { HeuristicDistFromGoalGrid, createHeuristicDistFromGoalGrid } from "../models/grid/heuristic-dist-from-goal-grid";
 import { Pos } from "../models/grid/pos";
 import { StateService } from "./state.service";
@@ -10,19 +10,20 @@ import { StateService } from "./state.service";
 @Injectable({
     providedIn: 'root'
 })
-export class HeuristicDistGridService {
+export class HeuristicDistGridService implements StateService<HeuristicDistFromGoalGrid> {
     constructor(
         @Inject(gridDimensions) private gridDimensions: BridgeService<GridDimensions>,
         @Inject(goalPos) private goalPos: BridgeService<Pos>,
+        @Inject(heuristicDistGrid) bridgeToOtherStreams: BridgeService<HeuristicDistFromGoalGrid>,
     ) {
-        // TODO: link to bridge
+        bridgeToOtherStreams.link(this.getStream());
     }
 
     getStream() {
         return this.heuristicDistGrid$;
     }
 
-    heuristicDistGrid$ = combineLatest([this.gridDimensions.getStream(), this.goalPos.getStream()],
+    heuristicDistGrid$: Observable<HeuristicDistFromGoalGrid> = combineLatest([this.gridDimensions.getStream(), this.goalPos.getStream()],
         ({ height, width }, goalPos) => createHeuristicDistFromGoalGrid(height, width, goalPos)
     );
 }
