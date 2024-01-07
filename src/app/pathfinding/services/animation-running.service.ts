@@ -37,7 +37,6 @@ export class AnimationRunningService implements StateService<boolean> {
         map(() => false)
     );
 
-    // Update the animation running flag if the DOM requests it, but also reset it to false if the problem statement changes
     private isAnimationRunning$ = merge(
         this.domUpdates.setAnimationRunning$,
         this.stopIfAtFinalFrame$,

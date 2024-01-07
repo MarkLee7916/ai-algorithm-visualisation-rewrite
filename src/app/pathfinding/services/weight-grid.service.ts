@@ -39,7 +39,6 @@ export class WeightGridService implements StateService<WeightGrid> {
         map(({ height, width }) => ({ kind: 'AdaptToNewDimensions', height, width }))
     )
 
-    // TODO: make sure this stream gets a message to upgrade the grid dimensions when app starts
     private weightGrid$: Observable<WeightGrid> = merge(
         this.clearWeightGrid$,
         this.tileActivation$,

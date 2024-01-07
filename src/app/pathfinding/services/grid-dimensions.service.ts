@@ -18,7 +18,7 @@ export class GridDimensionsService implements StateService<GridDimensions> {
         startWith(null)
     );
 
-    // TODO: Pipe from changes in dual grids and changes in screen size
+    // TODO: Pipe from changes in dual grids
     private dimensions$: Observable<GridDimensions> = this.windowResize$.pipe(
         map(() => calculateGridDimensionsFromScreenDimensions())
     );

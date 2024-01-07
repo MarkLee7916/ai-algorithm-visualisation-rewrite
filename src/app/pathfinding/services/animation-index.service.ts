@@ -37,7 +37,6 @@ export class AnimationIndexService implements StateService<number> {
         map(([, frames]): AnimationIndexAction => ({ kind: 'ResetIfIndexAt', indexToResetAt: frames.length - 1 }))
     );
 
-    // Animation index updates when either an event requests it or the problem statement changes
     private animationIndex$: Observable<number> =
         merge(
             this.animate.getStream(),

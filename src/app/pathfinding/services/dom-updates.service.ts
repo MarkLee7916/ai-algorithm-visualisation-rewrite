@@ -10,7 +10,6 @@ import { TileEvent } from '../models/grid/tile-event';
     providedIn: 'root'
 })
 export class DomUpdatesService {
-    // TODO: find a better way to initialise app with default values
     newAnimationIndexAction$ = new BehaviorSubject<AnimationIndexAction>({ kind: 'Reset' });
     setAnimationRunning$ = new BehaviorSubject<boolean>(false);
     setAnimationDelay$ = new BehaviorSubject<number>(0);

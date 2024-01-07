@@ -45,6 +45,5 @@ export class AnimationFramesService implements StateService<AnimationFrame[]> {
         map(({ height, width }) => [initBlankAnimationFrame(height, width), initBlankAnimationFrame(height, width), initBlankAnimationFrame(height, width)])
     );
 
-    // Animation frames update when animation index changes and the problem statement has changed from last time
     private animationFrames$: Observable<AnimationFrame[]> = merge(this.calculateFrames$, this.resetFramesFromGridDimensionChanges$);
 }
