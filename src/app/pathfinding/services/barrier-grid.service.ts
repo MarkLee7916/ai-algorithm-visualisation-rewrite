@@ -1,7 +1,7 @@
 import { Injectable, Inject } from "@angular/core";
 import { BarrierGrid, NO_BARRIER, initBarrierGrid, toggleBarrierAt } from "../models/grid/barrier-grid";
 import { GridDimensions, adaptToNewDimensions, height, width } from "../models/grid/grid";
-import { barrierGrid, gridDimensions } from "../pathfinding.tokens";
+import { barrierGrid, goalPos, gridDimensions, startPos } from "../pathfinding.tokens";
 import { BridgeService } from "./bridge";
 import { DomUpdatesService } from "./dom-updates.service";
 import { BarrierGridAction } from "../models/actions/actions";
@@ -9,6 +9,7 @@ import { Observable, filter, map, merge, scan, tap, withLatestFrom } from "rxjs"
 import { ObstaclePlacedOnTileOption } from "../models/dropdown/dropdown-enums";
 import * as _ from "lodash";
 import { StateService } from "./state.service";
+import { Pos, isSamePos } from "../models/grid/pos";
 
 @Injectable({
     providedIn: 'root'
@@ -16,6 +17,8 @@ import { StateService } from "./state.service";
 export class BarrierGridService implements StateService<BarrierGrid> {
     constructor(
         private domUpdates: DomUpdatesService,
+        @Inject(startPos) private startPos: BridgeService<Pos>,
+        @Inject(goalPos) private goalPos: BridgeService<Pos>,
         @Inject(gridDimensions) private gridDimensions: BridgeService<GridDimensions>,
         @Inject(barrierGrid) bridgeToOtherStreams: BridgeService<BarrierGrid>
     ) {
@@ -27,9 +30,9 @@ export class BarrierGridService implements StateService<BarrierGrid> {
     )
 
     private tileActivation$: Observable<BarrierGridAction> = this.domUpdates.activateTile$.pipe(
-        withLatestFrom(this.domUpdates.setObstaclePlacedOnTile$),
-        filter(([, dataType]) => dataType === ObstaclePlacedOnTileOption.Barrier),
-        map(([pos,]) => ({ kind: 'ToggleBarrierAt', row: pos.row, col: pos.col }))
+        withLatestFrom(this.domUpdates.setObstaclePlacedOnTile$, this.startPos.getStream(), this.goalPos.getStream()),
+        filter(([posActivated, dataType, startPos, goalPos]) => !isSamePos(startPos, posActivated) && !isSamePos(goalPos, posActivated) && dataType === ObstaclePlacedOnTileOption.Barrier),
+        map(([posActivated, , ,]) => ({ kind: 'ToggleBarrierAt', row: posActivated.row, col: posActivated.col }))
     )
 
     private adaptToNewGridDimensions$: Observable<BarrierGridAction> = this.gridDimensions.getStream().pipe(

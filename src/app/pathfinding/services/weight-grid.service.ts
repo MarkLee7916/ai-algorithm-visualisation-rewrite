@@ -7,8 +7,9 @@ import { ObstaclePlacedOnTileOption } from "../models/dropdown/dropdown-enums";
 import * as _ from "lodash";
 import { GridDimensions, adaptToNewDimensions, height, width } from "../models/grid/grid";
 import { BridgeService } from "./bridge";
-import { gridDimensions, weightGrid } from "../pathfinding.tokens";
+import { goalPos, gridDimensions, startPos, weightGrid } from "../pathfinding.tokens";
 import { StateService } from "./state.service";
+import { Pos, isSamePos } from "../models/grid/pos";
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +18,8 @@ export class WeightGridService implements StateService<WeightGrid> {
     constructor(
         private domUpdates: DomUpdatesService,
         @Inject(gridDimensions) private gridDimensions: BridgeService<GridDimensions>,
+        @Inject(startPos) private startPos: BridgeService<Pos>,
+        @Inject(goalPos) private goalPos: BridgeService<Pos>,
         @Inject(weightGrid) bridgeToOtherStreams: BridgeService<WeightGrid>
     ) {
         bridgeToOtherStreams.link(this.getStream());
@@ -27,9 +30,9 @@ export class WeightGridService implements StateService<WeightGrid> {
     )
 
     private tileActivation$: Observable<WeightGridAction> = this.domUpdates.activateTile$.pipe(
-        withLatestFrom(this.domUpdates.setObstaclePlacedOnTile$),
-        filter(([, dataType]) => dataType === ObstaclePlacedOnTileOption.RandomWeight),
-        map(([pos,]) => ({ kind: 'ToggleRandomWeightAt', row: pos.row, col: pos.col }))
+        withLatestFrom(this.domUpdates.setObstaclePlacedOnTile$, this.startPos.getStream(), this.goalPos.getStream()),
+        filter(([posActivated, dataType, startPos, goalPos]) => !isSamePos(startPos, posActivated) && !isSamePos(goalPos, posActivated) && dataType === ObstaclePlacedOnTileOption.RandomWeight),
+        map(([pos, , ,]) => ({ kind: 'ToggleRandomWeightAt', row: pos.row, col: pos.col }))
     )
 
     private adaptToNewGridDimensions$: Observable<WeightGridAction> = this.gridDimensions.getStream().pipe(
