@@ -8,7 +8,7 @@ import { AnimationFrame } from "./models/animation/animation-frame";
 import { AnimationIndexAction } from "./models/actions/actions";
 import { GridDimensions } from "./models/grid/grid";
 import { WeightGrid } from "./models/grid/weight-grid";
-import { animate, animationFrames, animationIndex, animationRunning, barrierGrid, currentAnimationFrame, goalPos, gridDimensions, problemStatementChanges, startPos, weightGrid, heuristicDistGrid } from "./pathfinding.tokens";
+import { animate, animationFrames, animationIndex, animationRunning, barrierGrid, currentAnimationFrame, goalPos, gridDimensions, problemStatementChanges, startPos, weightGrid, heuristicDistGrid, lastPosDraggedFrom } from "./pathfinding.tokens";
 import { ProblemStatement } from "./models/problem-statement/problem-statement";
 import { BarrierGrid } from "./models/grid/barrier-grid";
 import { Pos } from "./models/grid/pos";
@@ -35,6 +35,7 @@ import { HeuristicDistFromGoalGrid } from "./models/grid/heuristic-dist-from-goa
     { provide: barrierGrid, useClass: BridgeService<BarrierGrid> },
     { provide: startPos, useClass: BridgeService<Pos> },
     { provide: goalPos, useClass: BridgeService<Pos> },
+    { provide: lastPosDraggedFrom, useClass: BridgeService<Pos | null> },
     { provide: heuristicDistGrid, useClass: BridgeService<HeuristicDistFromGoalGrid> },
   ]
 })

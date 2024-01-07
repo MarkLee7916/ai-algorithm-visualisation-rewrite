@@ -14,6 +14,7 @@ import { HeuristicDistGridService } from "../../services/heuristic-dist-grid.ser
 import { MousePressService } from "../../services/mouse-press.service";
 import { ProblemStatementChangesService } from "../../services/problem-statement-changes.service";
 import { combineLatest } from "rxjs";
+import { LastPosDraggedFromService } from "../../services/last-pos-dragged-from";
 
 @Component({
     selector: 'app-page',
@@ -37,7 +38,8 @@ export class PageComponent {
         public gridDimensionsService: GridDimensionsService,
         public heuristicDistGridService: HeuristicDistGridService,
         public mousePressService: MousePressService,
-        public problemStatementChangesService: ProblemStatementChangesService
+        public problemStatementChangesService: ProblemStatementChangesService,
+        public lastPosDraggedFromService: LastPosDraggedFromService
     ) { }
 }
 

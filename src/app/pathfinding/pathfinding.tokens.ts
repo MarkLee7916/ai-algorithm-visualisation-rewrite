@@ -21,3 +21,4 @@ export const barrierGrid = new InjectionToken<BridgeService<BarrierGrid>>('bridg
 export const startPos = new InjectionToken<BridgeService<Pos>>('bridgeFromStartPos');
 export const goalPos = new InjectionToken<BridgeService<Pos>>('bridgeFromGoalPos');
 export const heuristicDistGrid = new InjectionToken<BridgeService<HeuristicDistFromGoalGrid>>('heuristicDistGrid');
+export const lastPosDraggedFrom = new InjectionToken<BridgeService<Pos | null>>('lastPosDraggedFrom');
