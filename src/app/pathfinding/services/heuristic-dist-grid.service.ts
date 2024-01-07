@@ -15,7 +15,7 @@ export class HeuristicDistGridService {
         @Inject(gridDimensions) private gridDimensions: BridgeService<GridDimensions>,
         @Inject(goalPos) private goalPos: BridgeService<Pos>,
     ) {
-
+        // TODO: link to bridge
     }
 
     getStream() {

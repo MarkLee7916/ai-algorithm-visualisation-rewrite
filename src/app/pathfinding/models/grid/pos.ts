@@ -1,11 +1,18 @@
 export type Pos = { row: number; col: number };
 
+export function movePositionWithinBoundsOfGrid(pos: Pos, height: number, width: number): Pos {
+    return {
+        row: pos.row >= height ? height - 1 : pos.row,
+        col: pos.col >= width ? width - 1 : pos.col,
+    };
+}
+
 export function genDefaultStartPos() {
     return { row: 1, col: 1 };
 }
 
-export function genDefaultGoalPos(height: number, width: number) {
-    return { row: height - 2, col: width - 2 };
+export function genDefaultGoalPos() {
+    return { row: Number.MAX_SAFE_INTEGER, col: Number.MAX_SAFE_INTEGER };
 }
 
 export function hasPos(posList: Pos[], posToCheckFor: Pos) {

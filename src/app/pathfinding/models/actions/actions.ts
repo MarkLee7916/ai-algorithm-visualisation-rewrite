@@ -1,4 +1,5 @@
 import { BarrierGrid } from "../grid/barrier-grid"
+import { Pos } from "../grid/pos"
 import { WeightGrid } from "../grid/weight-grid"
 
 export type AnimationIndexAction =
@@ -20,5 +21,9 @@ export type BarrierGridAction =
     { kind: 'AdaptToNewDimensions', height: number, width: number } |
     { kind: 'ResetGrid' } |
     { kind: 'NewGrid', grid: BarrierGrid }
+
+export type StartOrGoalPosAction =
+    { kind: 'MovePositionWithinBoundsOfGrid', newHeight: number, newWidth: number } |
+    { kind: 'HandleDrop', posToDropAt: Pos, lastPosDraggedFrom: Pos | null, opposingPos: Pos, barrierGrid: BarrierGrid }
 
 
