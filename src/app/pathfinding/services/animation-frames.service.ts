@@ -18,15 +18,11 @@ export class AnimationFramesService implements StateService<AnimationFrame[]> {
         @Inject(animationFrames) private bridgeToOtherStreams: BridgeService<AnimationFrame[]>,
         @Inject(gridDimensions) private gridDimensions: BridgeService<GridDimensions>,
     ) {
-        bridgeToOtherStreams.link(this.getStream());
+        bridgeToOtherStreams.link(this.stream$);
     }
 
-    getStream() {
-        return this.animationFrames$;
-    }
-
-    private calculateFrames$ = this.problemStatementChanges.getStream().pipe(
-        switchMap(problemStatement => this.animationIndex.getStream().pipe(
+    private calculateFrames$ = this.problemStatementChanges.stream$.pipe(
+        switchMap(problemStatement => this.animationIndex.stream$.pipe(
             skip(1),
             filter(animationIndex => animationIndex > 0),
             map(() => {
@@ -41,9 +37,9 @@ export class AnimationFramesService implements StateService<AnimationFrame[]> {
     );
 
     // TODO: find something better than repeating this three times
-    private resetFramesFromGridDimensionChanges$ = this.gridDimensions.getStream().pipe(
+    private resetFramesFromGridDimensionChanges$ = this.gridDimensions.stream$.pipe(
         map(({ height, width }) => [initBlankAnimationFrame(height, width), initBlankAnimationFrame(height, width), initBlankAnimationFrame(height, width)])
     );
 
-    private animationFrames$: Observable<AnimationFrame[]> = merge(this.calculateFrames$, this.resetFramesFromGridDimensionChanges$);
+    stream$: Observable<AnimationFrame[]> = merge(this.calculateFrames$, this.resetFramesFromGridDimensionChanges$);
 }

@@ -120,7 +120,7 @@ export class TileComponent {
     @Output() activate =
         merge(
             this.isMouseOver$.pipe(
-                withLatestFrom(this.mousePressService.getStream()),
+                withLatestFrom(this.mousePressService.stream$),
                 filter(([isMouseOver, isMousePressed]) => isMouseOver && isMousePressed),
                 map(() => { })
             ),

@@ -2,14 +2,14 @@
 <!--TODO, handle outputs-->
 <div class="page">
     <app-grid
-        [weightGrid]="(weightGridService.getStream() | async)!" 
-        [barrierGrid]="(barrierGridService.getStream() | async)!" 
-        [startPos]="(startPosService.getStream() | async)!" 
-        [goalPos]="(goalPosService.getStream() | async)!" 
+        [weightGrid]="(weightGridService.stream$ | async)!" 
+        [barrierGrid]="(barrierGridService.stream$ | async)!" 
+        [startPos]="(startPosService.stream$ | async)!" 
+        [goalPos]="(goalPosService.stream$ | async)!" 
         [typeOfDataDisplayedOnTile]="(domUpdatesService.setTypeOfTypeOfDataDisplayedOnTile$ | async)!" 
         [willDisplayTooltipOnMouseOver]="false" 
-        [animationFrame]="(currentAnimationFrameService.getStream() | async)!" 
-        [heuristicDistFromGoalGrid]="(heuristicDistGridService.getStream() | async)!"
+        [animationFrame]="(currentAnimationFrameService.stream$ | async)!" 
+        [heuristicDistFromGoalGrid]="(heuristicDistGridService.stream$ | async)!"
         (activate)="domUpdatesService.activateTile$.next($event)"
         (drag)="domUpdatesService.drag$.next($event)" 
         (drop)="domUpdatesService.drop$.next($event)" 

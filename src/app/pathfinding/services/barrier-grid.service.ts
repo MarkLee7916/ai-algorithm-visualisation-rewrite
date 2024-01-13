@@ -22,7 +22,7 @@ export class BarrierGridService implements StateService<BarrierGrid> {
         @Inject(gridDimensions) private gridDimensions: BridgeService<GridDimensions>,
         @Inject(barrierGrid) bridgeToOtherStreams: BridgeService<BarrierGrid>
     ) {
-        bridgeToOtherStreams.link(this.getStream());
+        bridgeToOtherStreams.link(this.stream$);
     }
 
     private clearBarrierGrid$: Observable<BarrierGridAction> = this.domUpdates.clearBarrierAndWeightGrids$.pipe(
@@ -30,16 +30,16 @@ export class BarrierGridService implements StateService<BarrierGrid> {
     )
 
     private tileActivation$: Observable<BarrierGridAction> = this.domUpdates.activateTile$.pipe(
-        withLatestFrom(this.domUpdates.setObstaclePlacedOnTile$, this.startPos.getStream(), this.goalPos.getStream()),
+        withLatestFrom(this.domUpdates.setObstaclePlacedOnTile$, this.startPos.stream$, this.goalPos.stream$),
         filter(([posActivated, dataType, startPos, goalPos]) => !isSamePos(startPos, posActivated) && !isSamePos(goalPos, posActivated) && dataType === ObstaclePlacedOnTileOption.Barrier),
         map(([posActivated, , ,]) => ({ kind: 'ToggleBarrierAt', row: posActivated.row, col: posActivated.col }))
     )
 
-    private adaptToNewGridDimensions$: Observable<BarrierGridAction> = this.gridDimensions.getStream().pipe(
+    private adaptToNewGridDimensions$: Observable<BarrierGridAction> = this.gridDimensions.stream$.pipe(
         map(({ height, width }) => ({ kind: 'AdaptToNewDimensions', height, width }))
     )
 
-    private barrierGrid$: Observable<BarrierGrid> = merge(
+    stream$: Observable<BarrierGrid> = merge(
         this.clearBarrierGrid$,
         this.tileActivation$,
         this.adaptToNewGridDimensions$
@@ -60,8 +60,4 @@ export class BarrierGridService implements StateService<BarrierGrid> {
             }
         }, initBarrierGrid(1, 1))
     )
-
-    getStream() {
-        return this.barrierGrid$;
-    }
 }

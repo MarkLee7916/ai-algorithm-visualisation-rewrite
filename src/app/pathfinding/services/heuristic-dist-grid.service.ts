@@ -16,14 +16,10 @@ export class HeuristicDistGridService implements StateService<HeuristicDistFromG
         @Inject(goalPos) private goalPos: BridgeService<Pos>,
         @Inject(heuristicDistGrid) bridgeToOtherStreams: BridgeService<HeuristicDistFromGoalGrid>,
     ) {
-        bridgeToOtherStreams.link(this.getStream());
+        bridgeToOtherStreams.link(this.stream$);
     }
 
-    getStream() {
-        return this.heuristicDistGrid$;
-    }
-
-    heuristicDistGrid$: Observable<HeuristicDistFromGoalGrid> = combineLatest([this.gridDimensions.getStream(), this.goalPos.getStream()],
+    stream$: Observable<HeuristicDistFromGoalGrid> = combineLatest([this.gridDimensions.stream$, this.goalPos.stream$],
         ({ height, width }, goalPos) => createHeuristicDistFromGoalGrid(height, width, goalPos)
     );
 }

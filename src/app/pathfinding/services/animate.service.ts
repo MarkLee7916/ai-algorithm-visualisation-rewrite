@@ -16,19 +16,15 @@ export class AnimateService implements StateService<AnimationIndexAction> {
         @Inject(animationRunning) private animationRunning: BridgeService<boolean>,
         @Inject(animate) bridgeToOtherStreams: BridgeService<AnimationIndexAction>,
     ) {
-        bridgeToOtherStreams.link(this.getStream());
-    }
-
-    getStream() {
-        return this.animate$;
+        bridgeToOtherStreams.link(this.stream$);
     }
 
     /*
         When animation running is set to true, repeatedly emit an increment action with a delay specified by animationDelay$ until 
         it's set to false again
     */
-    private animate$: Observable<AnimationIndexAction> = combineLatest([
-        this.animationRunning.getStream(),
+    stream$: Observable<AnimationIndexAction> = combineLatest([
+        this.animationRunning.stream$,
         this.domUpdates.setAnimationDelay$
     ]).pipe(
         switchMap(([isAnimationRunning, animationDelay]) =>

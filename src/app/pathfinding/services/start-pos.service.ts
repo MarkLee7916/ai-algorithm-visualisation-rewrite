@@ -21,11 +21,7 @@ export class StartPosService implements StateService<Pos> {
         @Inject(gridDimensions) private gridDimensions: BridgeService<GridDimensions>,
         @Inject(startPos) bridgeToOtherStreams: BridgeService<Pos>,
     ) {
-        bridgeToOtherStreams.link(this.getStream());
-    }
-
-    getStream() {
-        return this.startPos$;
+        bridgeToOtherStreams.link(this.stream$);
     }
 
     private canDropAt(posToDropAt: Pos, goalPos: Pos, barrierGrid: BarrierGrid) {
@@ -36,19 +32,19 @@ export class StartPosService implements StateService<Pos> {
         return posDraggedFrom && isSamePos(posDraggedFrom, currentStartPos);
     }
 
-    handleDrop$: Observable<StartOrGoalPosAction> = this.domUpdates.drop$.pipe(
+    private handleDrop$: Observable<StartOrGoalPosAction> = this.domUpdates.drop$.pipe(
         throttleTime(100),
         map(tileEvent => tileEvent.pos),
         distinctUntilChanged((pos1, pos2) => isSamePos(pos1, pos2)),
-        withLatestFrom(this.lastPosDraggedFrom.getStream(), this.goalPos.getStream(), this.barrierGrid.getStream()),
+        withLatestFrom(this.lastPosDraggedFrom.stream$, this.goalPos.stream$, this.barrierGrid.stream$),
         map(([posToDropAt, lastPosDraggedFrom, goalPos, barrierGrid]) => ({ kind: 'HandleDrop', posToDropAt, lastPosDraggedFrom, opposingPos: goalPos, barrierGrid }))
     );
 
-    handleGridDimensionChange$: Observable<StartOrGoalPosAction> = this.gridDimensions.getStream().pipe(
+    private handleGridDimensionChange$: Observable<StartOrGoalPosAction> = this.gridDimensions.stream$.pipe(
         map(({ height, width }) => ({ kind: 'MovePositionWithinBoundsOfGrid', newHeight: height, newWidth: width }))
     );
 
-    private startPos$ = merge(this.handleDrop$, this.handleGridDimensionChange$).pipe(
+    stream$ = merge(this.handleDrop$, this.handleGridDimensionChange$).pipe(
         scan((currentStartPos, action) => {
             if (action.kind === 'HandleDrop') {
                 const { posToDropAt, lastPosDraggedFrom, opposingPos: goalPos, barrierGrid } = action;

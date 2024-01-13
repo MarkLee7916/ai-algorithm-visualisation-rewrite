@@ -20,26 +20,22 @@ export class AnimationIndexService implements StateService<number> {
         @Inject(animationRunning) private animationRunning: BridgeService<boolean>,
         @Inject(animationIndex) bridgeToOtherStreams: BridgeService<number>
     ) {
-        bridgeToOtherStreams.link(this.getStream());
+        bridgeToOtherStreams.link(this.stream$);
     }
 
-    getStream() {
-        return this.animationIndex$;
-    }
-
-    private resetAnimationIndexAsProblemStatementChanged$ = this.problemStatementChanges.getStream().pipe(
+    private resetAnimationIndexAsProblemStatementChanged$ = this.problemStatementChanges.stream$.pipe(
         map((): AnimationIndexAction => ({ kind: 'Reset' }))
     );
 
-    private resetAnimationIndexWhenUserRunsAlgorithmWhenOnFinalFrame$ = this.animationRunning.getStream().pipe(
+    private resetAnimationIndexWhenUserRunsAlgorithmWhenOnFinalFrame$ = this.animationRunning.stream$.pipe(
         filter(isRunning => isRunning),
-        withLatestFrom(this.animationFrames.getStream()),
+        withLatestFrom(this.animationFrames.stream$),
         map(([, frames]): AnimationIndexAction => ({ kind: 'ResetIfIndexAt', indexToResetAt: frames.length - 1 }))
     );
 
-    private animationIndex$: Observable<number> =
+    stream$: Observable<number> =
         merge(
-            this.animate.getStream(),
+            this.animate.stream$,
             this.domUpdates.newAnimationIndexAction$,
             this.resetAnimationIndexAsProblemStatementChanged$,
             this.resetAnimationIndexWhenUserRunsAlgorithmWhenOnFinalFrame$
@@ -59,7 +55,7 @@ export class AnimationIndexService implements StateService<number> {
                     throw new Error('Unexpected action kind');
                 }
             }, 0),
-            withLatestFrom(this.animationFrames.getStream()),
+            withLatestFrom(this.animationFrames.stream$),
             map(([index, frames]) => {
                 if (index < 0) {
                     return 0;

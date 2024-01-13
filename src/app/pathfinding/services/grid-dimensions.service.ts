@@ -10,7 +10,7 @@ import { StateService } from "./state.service";
 })
 export class GridDimensionsService implements StateService<GridDimensions> {
     constructor(@Inject(gridDimensions) bridgeToOtherStreams: BridgeService<GridDimensions>) {
-        bridgeToOtherStreams.link(this.getStream());
+        bridgeToOtherStreams.link(this.stream$);
     }
 
     private windowResize$ = fromEvent(window, 'resize').pipe(
@@ -19,11 +19,7 @@ export class GridDimensionsService implements StateService<GridDimensions> {
     );
 
     // TODO: Pipe from changes in dual grids
-    private dimensions$: Observable<GridDimensions> = this.windowResize$.pipe(
+    stream$: Observable<GridDimensions> = this.windowResize$.pipe(
         map(() => calculateGridDimensionsFromScreenDimensions())
     );
-
-    getStream() {
-        return this.dimensions$;
-    }
 }

@@ -6,16 +6,12 @@ import { StateService } from "./state.service";
 @Injectable()
 export class BridgeService<T> implements StateService<T> {
     next(data: T) {
-        this.bridgeSubject$.next(data);
-    }
-
-    getStream(): Observable<T> {
-        return this.bridgeSubject$;
+        this.stream$.next(data);
     }
 
     link(stream: Observable<T>) {
         stream.subscribe(value => this.next(value));
     }
 
-    private bridgeSubject$ = new ReplaySubject<T>(1);
+    stream$ = new ReplaySubject<T>(1);
 }

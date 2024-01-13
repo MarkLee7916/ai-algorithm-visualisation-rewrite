@@ -14,15 +14,11 @@ export class CurrentAnimationFrameService implements StateService<AnimationFrame
         @Inject(animationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
         @Inject(currentAnimationFrame) bridgeToOtherStreams: BridgeService<AnimationFrame>,
     ) {
-        bridgeToOtherStreams.link(this.getStream());
+        bridgeToOtherStreams.link(this.stream$);
     }
 
-    getStream() {
-        return this.currentAnimationFrame$;
-    }
-
-    private currentAnimationFrame$: Observable<AnimationFrame> =
-        combineLatest([this.animationFrames.getStream(), this.animationIndex.getStream()],
+    stream$: Observable<AnimationFrame> =
+        combineLatest([this.animationFrames.stream$, this.animationIndex.stream$],
             (frames, index) => frames[index]
         );
 }

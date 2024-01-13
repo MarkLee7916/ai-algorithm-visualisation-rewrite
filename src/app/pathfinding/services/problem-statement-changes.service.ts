@@ -22,20 +22,16 @@ export class ProblemStatementChangesService implements StateService<ProblemState
         @Inject(goalPos) private goalPos: BridgeService<Pos>,
         @Inject(problemStatementChanges) bridgeToOtherStreams: BridgeService<ProblemStatement>,
     ) {
-        bridgeToOtherStreams.link(this.getStream());
+        bridgeToOtherStreams.link(this.stream$);
     }
 
-    getStream() {
-        return this.problemStatementChanges$;
-    }
-
-    private problemStatementChanges$: Observable<ProblemStatement> = combineLatest([
+    stream$: Observable<ProblemStatement> = combineLatest([
         this.domUpdates.setNeighbourVisitOrdering$,
         this.domUpdates.setTypeOfNeighboursAllowed$,
         this.domUpdates.setPathfindingAlgo$,
-        this.weightGrid.getStream(),
-        this.barrierGrid.getStream(),
-        this.startPos.getStream(),
-        this.goalPos.getStream()
+        this.weightGrid.stream$,
+        this.barrierGrid.stream$,
+        this.startPos.stream$,
+        this.goalPos.stream$
     ]);
 }

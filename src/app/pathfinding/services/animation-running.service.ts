@@ -18,26 +18,22 @@ export class AnimationRunningService implements StateService<boolean> {
         @Inject(animationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
         @Inject(animationRunning) bridgeToOtherStreams: BridgeService<boolean>,
     ) {
-        bridgeToOtherStreams.link(this.getStream());
+        bridgeToOtherStreams.link(this.stream$);
     }
 
-    getStream() {
-        return this.isAnimationRunning$;
-    }
-
-    private stopIfNeedToUpdateFrames$ = this.problemStatementChanges.getStream().pipe(
+    private stopIfNeedToUpdateFrames$ = this.problemStatementChanges.stream$.pipe(
         map(() => false)
     );
 
     private stopIfAtFinalFrame$ = combineLatest([
-        this.animationIndex.getStream(),
-        this.animationFrames.getStream()
+        this.animationIndex.stream$,
+        this.animationFrames.stream$
     ]).pipe(
         filter(([index, frames]) => index === frames.length - 1),
         map(() => false)
     );
 
-    private isAnimationRunning$ = merge(
+    stream$ = merge(
         this.domUpdates.setAnimationRunning$,
         this.stopIfAtFinalFrame$,
         this.stopIfNeedToUpdateFrames$

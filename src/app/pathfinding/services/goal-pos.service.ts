@@ -21,11 +21,7 @@ export class GoalPosService implements StateService<Pos> {
         @Inject(gridDimensions) private gridDimensions: BridgeService<GridDimensions>,
         @Inject(goalPos) bridgeToOtherStreams: BridgeService<Pos>,
     ) {
-        bridgeToOtherStreams.link(this.getStream());
-    }
-
-    getStream() {
-        return this.goalPos$;
+        bridgeToOtherStreams.link(this.stream$);
     }
 
     private canDropAt(posToDropAt: Pos, startPos: Pos, barrierGrid: BarrierGrid) {
@@ -36,18 +32,18 @@ export class GoalPosService implements StateService<Pos> {
         return posDraggedFrom && isSamePos(posDraggedFrom, currentGoalPos);
     }
 
-    handleDrop$: Observable<StartOrGoalPosAction> = this.domUpdates.drop$.pipe(
+    private handleDrop$: Observable<StartOrGoalPosAction> = this.domUpdates.drop$.pipe(
         throttleTime(100),
         map(tileEvent => tileEvent.pos),
-        withLatestFrom(this.lastPosDraggedFrom.getStream(), this.startPos.getStream(), this.barrierGrid.getStream()),
+        withLatestFrom(this.lastPosDraggedFrom.stream$, this.startPos.stream$, this.barrierGrid.stream$),
         map(([posToDropAt, lastPosDraggedFrom, startPos, barrierGrid]) => ({ kind: 'HandleDrop', posToDropAt, lastPosDraggedFrom, opposingPos: startPos, barrierGrid }))
     );
 
-    handleGridDimensionChange$: Observable<StartOrGoalPosAction> = this.gridDimensions.getStream().pipe(
+    private handleGridDimensionChange$: Observable<StartOrGoalPosAction> = this.gridDimensions.stream$.pipe(
         map(({ height, width }) => ({ kind: 'MovePositionWithinBoundsOfGrid', newHeight: height, newWidth: width }))
     );
 
-    private goalPos$ = merge(this.handleDrop$, this.handleGridDimensionChange$).pipe(
+    stream$ = merge(this.handleDrop$, this.handleGridDimensionChange$).pipe(
         scan((currentGoalPos, action) => {
             if (action.kind === 'HandleDrop') {
                 const { posToDropAt, lastPosDraggedFrom, opposingPos: startPos, barrierGrid } = action;

@@ -17,20 +17,16 @@ export class LastPosDraggedFromService implements StateService<Pos | null> {
         @Inject(goalPos) private goalPos: BridgeService<Pos>,
         @Inject(lastPosDraggedFrom) bridgeToOtherStreams: BridgeService<Pos | null>,
     ) {
-        bridgeToOtherStreams.link(this.getStream());
-    }
-
-    getStream() {
-        return this.lastPosDraggedFrom$;
+        bridgeToOtherStreams.link(this.stream$);
     }
 
     private canDragFrom(pos: Pos, startPos: Pos, goalPos: Pos) {
         return isSamePos(pos, startPos) || isSamePos(pos, goalPos);
     }
 
-    lastPosDraggedFrom$ = this.domUpdates.drag$.pipe(
+    stream$ = this.domUpdates.drag$.pipe(
         throttleTime(100),
-        withLatestFrom(this.startPos.getStream(), this.goalPos.getStream()),
+        withLatestFrom(this.startPos.stream$, this.goalPos.stream$),
         tap(([tileEvent, startPos, goalPos]) => {
             if (!this.canDragFrom(tileEvent.pos, startPos, goalPos)) {
                 tileEvent.event.preventDefault();

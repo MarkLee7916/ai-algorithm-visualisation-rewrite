@@ -13,11 +13,7 @@ export class MousePressService implements StateService<boolean>  {
         private domUpdates: DomUpdatesService,
         @Inject(mousePress) bridgeToOtherStreams: BridgeService<boolean>,
     ) {
-        bridgeToOtherStreams.link(this.getStream());
-    }
-
-    getStream() {
-        return this.isMouseDown$;
+        bridgeToOtherStreams.link(this.stream$);
     }
 
     private handleDrop$ = this.domUpdates.drop$.pipe(
@@ -29,5 +25,5 @@ export class MousePressService implements StateService<boolean>  {
         map((event: Event) => (event as MouseEvent).buttons === 1)
     );
 
-    private isMouseDown$ = merge(this.handleDrop$, this.handleMouseEvents$);
+    stream$ = merge(this.handleDrop$, this.handleMouseEvents$);
 }

@@ -22,7 +22,7 @@ export class WeightGridService implements StateService<WeightGrid> {
         @Inject(goalPos) private goalPos: BridgeService<Pos>,
         @Inject(weightGrid) bridgeToOtherStreams: BridgeService<WeightGrid>
     ) {
-        bridgeToOtherStreams.link(this.getStream());
+        bridgeToOtherStreams.link(this.stream$);
     }
 
     private clearWeightGrid$: Observable<WeightGridAction> = this.domUpdates.clearBarrierAndWeightGrids$.pipe(
@@ -30,16 +30,16 @@ export class WeightGridService implements StateService<WeightGrid> {
     )
 
     private tileActivation$: Observable<WeightGridAction> = this.domUpdates.activateTile$.pipe(
-        withLatestFrom(this.domUpdates.setObstaclePlacedOnTile$, this.startPos.getStream(), this.goalPos.getStream()),
+        withLatestFrom(this.domUpdates.setObstaclePlacedOnTile$, this.startPos.stream$, this.goalPos.stream$),
         filter(([posActivated, dataType, startPos, goalPos]) => !isSamePos(startPos, posActivated) && !isSamePos(goalPos, posActivated) && dataType === ObstaclePlacedOnTileOption.RandomWeight),
         map(([pos, , ,]) => ({ kind: 'ToggleRandomWeightAt', row: pos.row, col: pos.col }))
     )
 
-    private adaptToNewGridDimensions$: Observable<WeightGridAction> = this.gridDimensions.getStream().pipe(
+    private adaptToNewGridDimensions$: Observable<WeightGridAction> = this.gridDimensions.stream$.pipe(
         map(({ height, width }) => ({ kind: 'AdaptToNewDimensions', height, width }))
     )
 
-    private weightGrid$: Observable<WeightGrid> = merge(
+    stream$: Observable<WeightGrid> = merge(
         this.clearWeightGrid$,
         this.tileActivation$,
         this.adaptToNewGridDimensions$
@@ -65,9 +65,5 @@ export class WeightGridService implements StateService<WeightGrid> {
             }
         }, initWeightGrid(1, 1))
     )
-
-    getStream() {
-        return this.weightGrid$;
-    }
 }
 
