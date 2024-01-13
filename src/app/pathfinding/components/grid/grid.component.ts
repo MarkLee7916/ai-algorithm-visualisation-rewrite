@@ -42,6 +42,7 @@ export class GridComponent implements OnChanges {
     gridHeight!: number;
     gridWidth!: number;
 
+    // TODO: find a better way to do this
     ngOnChanges(changes: SimpleChanges) {
         if (changes['weightGrid']) {
             this.gridHeight = height(this.weightGrid);
