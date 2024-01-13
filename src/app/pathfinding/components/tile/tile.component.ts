@@ -73,7 +73,7 @@ export class TileComponent {
         [TileAnimationFrame.BeingExpanded, '#7FCDCD'],
     ]);
 
-    typeOfTypeOfDataDisplayedOnTileToTextColor = new UncheckedObjMap<TypeOfDataDisplayedOnTileOption, string>([
+    typeOfDataDisplayedOnTileToTextColor = new UncheckedObjMap<TypeOfDataDisplayedOnTileOption, string>([
         [TypeOfDataDisplayedOnTileOption.PathLengthsFromStart, '#006633'],
         [TypeOfDataDisplayedOnTileOption.Weights, 'var(--secondary-color)'],
         [TypeOfDataDisplayedOnTileOption.HeuristicDists, 'red'],
@@ -110,7 +110,7 @@ export class TileComponent {
     );
 
     textColor$ = this.domUpdates.setTypeOfDataToDisplay$.pipe(
-        map(typeOfData => this.typeOfTypeOfDataDisplayedOnTileToTextColor.get(typeOfData))
+        map(typeOfData => this.typeOfDataDisplayedOnTileToTextColor.get(typeOfData))
     )
 
     @Output() drag = this.domUpdates.startDrag$;
