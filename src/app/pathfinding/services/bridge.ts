@@ -5,13 +5,9 @@ import { StateService } from "./state.service";
 // Bridges streams to allow handling of cyclic dependencies
 @Injectable()
 export class BridgeService<T> implements StateService<T> {
-    next(data: T) {
-        this.stream$.next(data);
-    }
+    stream$ = new ReplaySubject<T>(1);
 
     link(stream: Observable<T>) {
-        stream.subscribe(value => this.next(value));
+        stream.subscribe(value => this.stream$.next(value));
     }
-
-    stream$ = new ReplaySubject<T>(1);
 }
