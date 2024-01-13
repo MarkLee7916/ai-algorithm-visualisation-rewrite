@@ -14,7 +14,7 @@ export class GridDimensionsService implements StateService<GridDimensions> {
     }
 
     private windowResize$ = fromEvent(window, 'resize').pipe(
-        debounceTime(1000),
+        debounceTime(10),
         startWith(null)
     );
 
