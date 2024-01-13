@@ -2,9 +2,10 @@
     <div class="row" *ngFor="let row of range(0, gridHeight);">
         <div *ngFor="let col of range(0, gridWidth);">
             <ng-container *ngIf="{row: row, col: col} as pos">
+                <!--TODO: find a way to avoid evaluating expressions here-->
                 <app-tile 
-                    [isStart]="isEqual(pos, startPos)" 
-                    [isGoal]="isEqual(pos, goalPos)" 
+                    [isStart]="isSamePos(pos, startPos)" 
+                    [isGoal]="isSamePos(pos, goalPos)" 
                     [isBarrier]="hasBarrierAt(barrierGrid, row, col)" 
                     [weight]="weightAt(weightGrid, row, col)" 
                     [pathLengthFromStart]="pathLengthAt(animationFrame.pathLengthGrid, row, col)" 
