@@ -13,3 +13,7 @@ export function assertNonNull<T>(item: T | null): T {
         return item;
     }
 }
+
+export function deepCopy<T>(item: T): T {
+    return JSON.parse(JSON.stringify(item));
+}

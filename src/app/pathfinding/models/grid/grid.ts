@@ -1,4 +1,5 @@
-import * as _ from "lodash";
+import { fill } from "lodash";
+import { deepCopy } from "../../../shared/utils";
 
 export type GridDimensions = {
     height: number,
@@ -65,8 +66,8 @@ function appendEmptyColumnToGrid<T>(grid: T[][], emptyValue: T): T[][] {
 }
 
 function appendEmptyRowToGrid<T>(grid: T[][], emptyValue: T, rowWidth: number): T[][] {
-    const gridCopy = _.cloneDeep(grid);
-    const emptyRow = _.fill(Array(rowWidth), emptyValue)
+    const gridCopy = deepCopy(grid);
+    const emptyRow = fill(Array(rowWidth), emptyValue)
 
     gridCopy.push(emptyRow);
 

@@ -7,9 +7,9 @@ import { DomUpdatesService } from "./dom-updates.service";
 import { BarrierGridAction } from "../models/actions/actions";
 import { Observable, filter, map, merge, scan, tap, withLatestFrom } from "rxjs";
 import { ObstaclePlacedOnTileOption } from "../models/dropdown/dropdown-enums";
-import * as _ from "lodash";
 import { StateService } from "./state.service";
 import { Pos, isSamePos } from "../models/grid/pos";
+import { deepCopy } from "../../shared/utils";
 
 @Injectable({
     providedIn: 'root'
@@ -46,13 +46,13 @@ export class BarrierGridService implements StateService<BarrierGrid> {
     ).pipe(
         scan((currentGrid, action) => {
             if (action.kind === 'ToggleBarrierAt') {
-                const copy = _.cloneDeep(currentGrid);
+                const copy = deepCopy(currentGrid);
                 toggleBarrierAt(copy, action.row, action.col);
                 return copy;
             } else if (action.kind === 'ResetGrid') {
                 return initBarrierGrid(height(currentGrid), width(currentGrid));
             } else if (action.kind === 'NewGrid') {
-                return _.cloneDeep(action.grid);
+                return deepCopy(action.grid);
             } else if (action.kind === 'AdaptToNewDimensions') {
                 return adaptToNewDimensions(currentGrid, NO_BARRIER, action.height, action.width);
             } else {

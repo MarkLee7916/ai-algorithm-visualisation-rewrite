@@ -4,12 +4,12 @@ import { Observable, filter, map, merge, scan, tap, withLatestFrom } from "rxjs"
 import { WeightGridAction } from "../models/actions/actions";
 import { DEFAULT_WEIGHT, WeightGrid, initWeightGrid, setWeightAt, toggleRandomWeightAt } from "../models/grid/weight-grid";
 import { ObstaclePlacedOnTileOption } from "../models/dropdown/dropdown-enums";
-import * as _ from "lodash";
 import { GridDimensions, adaptToNewDimensions, height, width } from "../models/grid/grid";
 import { BridgeService } from "./bridge";
 import { goalPos, gridDimensions, startPos, weightGrid } from "../pathfinding.tokens";
 import { StateService } from "./state.service";
 import { Pos, isSamePos } from "../models/grid/pos";
+import { deepCopy } from "../../shared/utils";
 
 @Injectable({
     providedIn: 'root'
@@ -46,19 +46,19 @@ export class WeightGridService implements StateService<WeightGrid> {
     ).pipe(
         scan((currentGrid, action) => {
             if (action.kind === 'AddWeightAt') {
-                const copy = _.cloneDeep(currentGrid);
+                const copy = deepCopy(currentGrid);
                 setWeightAt(copy, action.row, action.col, action.weight);
                 return copy;
             } else if (action.kind === 'ToggleRandomWeightAt') {
-                const copy = _.cloneDeep(currentGrid);
+                const copy = deepCopy(currentGrid);
                 toggleRandomWeightAt(copy, action.row, action.col);
                 return copy;
             } else if (action.kind === 'ResetGrid') {
                 return initWeightGrid(height(currentGrid), width(currentGrid));
             } else if (action.kind === 'NewGrid') {
-                return _.cloneDeep(action.grid);
+                return deepCopy(action.grid);
             } else if (action.kind === 'AdaptToNewDimensions') {
-                const copy = _.cloneDeep(currentGrid);
+                const copy = deepCopy(currentGrid);
                 return adaptToNewDimensions(copy, DEFAULT_WEIGHT, action.height, action.width);
             } else {
                 throw new Error('Unexpected action kind');

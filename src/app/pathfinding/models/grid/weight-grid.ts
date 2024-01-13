@@ -1,5 +1,5 @@
+import { random } from "lodash";
 import { tileAt, initGrid, setTileAt } from "./grid";
-import * as _ from "lodash";
 
 export type WeightGrid = number[][];
 
@@ -23,7 +23,7 @@ export function setWeightAt(grid: WeightGrid, row: number, col: number, weight: 
 
 export function toggleRandomWeightAt(grid: WeightGrid, row: number, col: number) {
     if (weightAt(grid, row, col) === DEFAULT_WEIGHT) {
-        setWeightAt(grid, row, col, _.random(MIN_RANDOM_WEIGHT, MAX_RANDOM_WEIGHT));
+        setWeightAt(grid, row, col, random(MIN_RANDOM_WEIGHT, MAX_RANDOM_WEIGHT));
     } else {
         setWeightAt(grid, row, col, DEFAULT_WEIGHT);
     }
