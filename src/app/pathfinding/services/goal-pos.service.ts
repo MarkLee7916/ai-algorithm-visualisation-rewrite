@@ -3,7 +3,7 @@ import { Pos, genDefaultGoalPos, isSamePos, movePositionWithinBoundsOfGrid } fro
 import { barrierGrid, startPos, gridDimensions, lastPosDraggedFrom, goalPos } from "../pathfinding.tokens";
 import { BridgeService } from "./bridge";
 import { DomUpdatesService } from "./dom-updates.service";
-import { Observable, combineLatest, filter, map, merge, of, scan, startWith, tap, throttleTime, withLatestFrom } from "rxjs";
+import { Observable, combineLatest, distinctUntilChanged, filter, map, merge, of, scan, startWith, tap, throttleTime, withLatestFrom } from "rxjs";
 import { StateService } from "./state.service";
 import { BarrierGrid, hasBarrierAt } from "../models/grid/barrier-grid";
 import { GridDimensions } from "../models/grid/grid";
@@ -35,6 +35,7 @@ export class GoalPosService implements StateService<Pos> {
     private handleDrop$: Observable<StartOrGoalPosAction> = this.domUpdates.drop$.pipe(
         throttleTime(100),
         map(tileEvent => tileEvent.pos),
+        distinctUntilChanged((pos1, pos2) => isSamePos(pos1, pos2)),
         withLatestFrom(this.lastPosDraggedFrom.stream$, this.startPos.stream$, this.barrierGrid.stream$),
         map(([posToDropAt, lastPosDraggedFrom, startPos, barrierGrid]) => ({ kind: 'HandleDrop', posToDropAt, lastPosDraggedFrom, opposingPos: startPos, barrierGrid }))
     );
