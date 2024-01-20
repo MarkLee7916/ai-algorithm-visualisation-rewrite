@@ -1,10 +1,10 @@
-import { Component, ChangeDetectionStrategy, Input, EventEmitter, Output, OnChanges, SimpleChanges } from "@angular/core";
+import { Component, ChangeDetectionStrategy, Input, EventEmitter, Output } from "@angular/core";
 import { WeightGrid, weightAt } from "../../models/grid/weight-grid";
 import { BarrierGrid, hasBarrierAt } from "../../models/grid/barrier-grid";
 import { Pos, isSamePos } from "../../models/grid/pos";
 import { TypeOfDataDisplayedOnTileOption } from "../../models/dropdown/dropdown-enums";
 import { AnimationFrame } from "../../models/animation/animation-frame";
-import { height, width } from "../../models/grid/grid";
+import { GridDimensions } from "../../models/grid/grid";
 import { pathLengthAt } from "../../models/grid/path-length-grid";
 import { frameAt } from "../../models/grid/animation-frame-grid";
 import { HeuristicDistFromGoalGrid, distAt } from "../../models/grid/heuristic-dist-from-goal-grid";
@@ -17,7 +17,7 @@ import { range } from "lodash";
     styleUrls: ['./grid.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GridComponent implements OnChanges {
+export class GridComponent {
     @Input() weightGrid!: WeightGrid;
     @Input() barrierGrid!: BarrierGrid;
     @Input() startPos!: Pos;
@@ -26,6 +26,8 @@ export class GridComponent implements OnChanges {
     @Input() willDisplayTooltipOnMouseOver!: boolean;
     @Input() animationFrame!: AnimationFrame;
     @Input() heuristicDistFromGoalGrid!: HeuristicDistFromGoalGrid;
+    @Input() gridDimensions!: GridDimensions;
+    @Input() isLoadingFromGridDimensionsChange!: boolean;
 
     @Output() drag = new EventEmitter<TileEvent>();
     @Output() drop = new EventEmitter<TileEvent>();
@@ -38,15 +40,4 @@ export class GridComponent implements OnChanges {
     weightAt = weightAt;
     hasBarrierAt = hasBarrierAt;
     distAt = distAt;
-
-    gridHeight!: number;
-    gridWidth!: number;
-
-    // TODO: find a better way to do this
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes['weightGrid']) {
-            this.gridHeight = height(this.weightGrid);
-            this.gridWidth = width(this.weightGrid);
-        }
-    }
 }

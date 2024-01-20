@@ -13,7 +13,7 @@ import { GridDimensionsService } from "../../services/grid-dimensions.service";
 import { HeuristicDistGridService } from "../../services/heuristic-dist-grid.service";
 import { MousePressService } from "../../services/mouse-press.service";
 import { ProblemStatementChangesService } from "../../services/problem-statement-changes.service";
-import { combineLatest } from "rxjs";
+import { combineLatest, map, switchMap } from "rxjs";
 import { LastPosDraggedFromService } from "../../services/last-pos-dragged-from";
 
 @Component({
@@ -41,6 +41,20 @@ export class PageComponent {
         public problemStatementChangesService: ProblemStatementChangesService,
         public lastPosDraggedFromService: LastPosDraggedFromService
     ) { }
+
+    gridBasedStreams = [
+        this.weightGridService.stream$,
+        this.barrierGridService.stream$,
+        this.currentAnimationFrameService.stream$.pipe(map(frame => frame.grid)),
+        this.currentAnimationFrameService.stream$.pipe(map(frame => frame.pathLengthGrid)),
+        this.heuristicDistGridService.stream$
+    ];
+
+    isLoadingFromGridDimensionsChange$ = this.gridDimensionsService.stream$.pipe(
+        switchMap(({ height, width }) => combineLatest(this.gridBasedStreams).pipe(
+            map(grids => grids.every(grid => grid.length === height && grid[0].length === width))
+        ))
+    );
 }
 
 
