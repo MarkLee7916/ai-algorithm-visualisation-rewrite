@@ -1,5 +1,5 @@
 import { Injectable, Inject } from "@angular/core";
-import { Pos, genDefaultGoalPos, isSamePos, movePositionWithinBoundsOfGrid } from "../models/grid/pos";
+import { Pos, genDefaultGoalPos, isOnGrid, isSamePos, movePositionWithinBoundsOfGrid } from "../models/grid/pos";
 import { barrierGrid, startPos, gridDimensions, lastPosDraggedFrom, goalPos } from "../pathfinding.tokens";
 import { BridgeService } from "./bridge";
 import { DomUpdatesService } from "./dom-updates.service";
@@ -8,6 +8,7 @@ import { StateService } from "./state.service";
 import { BarrierGrid, hasBarrierAt } from "../models/grid/barrier-grid";
 import { GridDimensions } from "../models/grid/grid";
 import { StartOrGoalPosAction } from "../models/actions/actions";
+import { NON_DIAGONAL_NEIGHBOURS, DIAGONAL_NEIGHBOURS, genNeighbouringPositions } from "../models/grid/neighbours";
 
 @Injectable({
     providedIn: 'root'
@@ -32,12 +33,20 @@ export class GoalPosService implements StateService<Pos> {
         return posDraggedFrom && isSamePos(posDraggedFrom, currentGoalPos);
     }
 
+    private findPosToDropAt(posToDropAt: Pos, startPos: Pos, barrierGrid: BarrierGrid, { height, width }: GridDimensions): Pos | undefined {
+        const neighbours = NON_DIAGONAL_NEIGHBOURS.concat(DIAGONAL_NEIGHBOURS);
+
+        return genNeighbouringPositions(posToDropAt, neighbours)
+            .filter(pos => isOnGrid(height, width, pos))
+            .find(pos => this.canDropAt(pos, startPos, barrierGrid));
+    }
+
     private handleDrop$: Observable<StartOrGoalPosAction> = this.domUpdates.drop$.pipe(
         throttleTime(100),
         map(tileEvent => tileEvent.pos),
         distinctUntilChanged((pos1, pos2) => isSamePos(pos1, pos2)),
-        withLatestFrom(this.lastPosDraggedFrom.stream$, this.startPos.stream$, this.barrierGrid.stream$),
-        map(([posToDropAt, lastPosDraggedFrom, startPos, barrierGrid]) => ({ kind: 'HandleDrop', posToDropAt, lastPosDraggedFrom, opposingPos: startPos, barrierGrid }))
+        withLatestFrom(this.lastPosDraggedFrom.stream$, this.startPos.stream$, this.barrierGrid.stream$, this.gridDimensions.stream$),
+        map(([posToDropAt, lastPosDraggedFrom, startPos, barrierGrid, gridDimensions]) => ({ kind: 'HandleDrop', posToDropAt, lastPosDraggedFrom, opposingPos: startPos, barrierGrid, gridDimensions }))
     );
 
     private handleGridDimensionChange$: Observable<StartOrGoalPosAction> = this.gridDimensions.stream$.pipe(
@@ -47,9 +56,16 @@ export class GoalPosService implements StateService<Pos> {
     stream$ = merge(this.handleDrop$, this.handleGridDimensionChange$).pipe(
         scan((currentGoalPos, action) => {
             if (action.kind === 'HandleDrop') {
-                const { posToDropAt, lastPosDraggedFrom, opposingPos: startPos, barrierGrid } = action;
-                const canDrop = this.wasDraggedFromGoal(currentGoalPos, lastPosDraggedFrom) && this.canDropAt(posToDropAt, startPos, barrierGrid);
-                return canDrop ? posToDropAt : currentGoalPos;
+                const { posToDropAt, lastPosDraggedFrom, opposingPos: startPos, barrierGrid, gridDimensions } = action;
+
+                if (!this.wasDraggedFromGoal(currentGoalPos, lastPosDraggedFrom)) {
+                    return currentGoalPos;
+                } else if (this.canDropAt(posToDropAt, startPos, barrierGrid)) {
+                    return posToDropAt;
+                } else {
+                    const validPosToDropAt = this.findPosToDropAt(posToDropAt, startPos, barrierGrid, gridDimensions);
+                    return validPosToDropAt ? validPosToDropAt : currentGoalPos;
+                }
             } else if (action.kind === 'MovePositionWithinBoundsOfGrid') {
                 return movePositionWithinBoundsOfGrid(currentGoalPos, action.newHeight, action.newWidth);
             } else {
