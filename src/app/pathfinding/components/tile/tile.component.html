@@ -9,19 +9,19 @@
   (dragenter)="$event.preventDefault()"
   (dragleave)="$event.preventDefault()"
   (dragover)="$event.preventDefault()"
-  (dragstart)="domUpdates.startDrag$.next($event)"
-  (drop)="domUpdates.startDrop$.next($event)"
-  (mouseenter)="domUpdates.setIsMouseOver$.next(true)"
-  (mouseleave)="domUpdates.setIsMouseOver$.next(false)"
-  (mousedown)="domUpdates.startMouseDown$.next()"
+  (dragstart)="updatesFromDom.startDrag$.next($event)"
+  (drop)="updatesFromDom.startDrop$.next($event)"
+  (mouseenter)="updatesFromDom.setIsMouseOver$.next(true)"
+  (mouseleave)="updatesFromDom.setIsMouseOver$.next(false)"
+  (mousedown)="updatesFromDom.startMouseDown$.next()"
 >
 
-  <p *ngIf="(domUpdates.setStart$ | async)" id="start-arrow">⇒</p>
+  <p *ngIf="(updatesFromParent.setStart$ | async)" id="start-arrow">⇒</p>
 
-  <p *ngIf="(domUpdates.setGoal$ | async)" id="goal-arrow">🎯</p>
+  <p *ngIf="(updatesFromParent.setGoal$ | async)" id="goal-arrow">🎯</p>
 
   <p
-    *ngIf="(domUpdates.setStart$ | async) === false && (domUpdates.setGoal$ | async) === false"
+    *ngIf="(updatesFromParent.setStart$ | async) === false && (updatesFromParent.setGoal$ | async) === false"
     [style.color]="textColor$ | async"
   >
     {{ textToDisplay$ | async }}
@@ -30,6 +30,6 @@
 
 <div class="tile-tooltip" *ngIf="shouldDisplayTooltip$ | async">
   <p>Calculated Distance From Start: {{ pathLengthFromStart$ | async }}</p>
-  <p>Estimated Distance To Goal: {{ domUpdates.setHeuristicDistFromGoal$ | async }}</p>
-  <p>Cost of passing through: {{ domUpdates.setWeight$ | async }}</p>
+  <p>Estimated Distance To Goal: {{ updatesFromParent.setHeuristicDistFromGoal$ | async }}</p>
+  <p>Cost of passing through: {{ updatesFromParent.setWeight$ | async }}</p>
 </div>

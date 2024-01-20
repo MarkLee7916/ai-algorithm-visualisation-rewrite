@@ -12,7 +12,7 @@ import { MousePressService } from "../../services/mouse-press.service";
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TileComponent {
-    domUpdates = {
+    updatesFromParent = {
         setStart$: new ReplaySubject<boolean>(1),
         setGoal$: new ReplaySubject<boolean>(1),
         setIsBarrier$: new ReplaySubject<boolean>(1),
@@ -22,46 +22,49 @@ export class TileComponent {
         setTypeOfDataToDisplay$: new ReplaySubject<TypeOfDataDisplayedOnTileOption>(1),
         setWillDisplayTooltipOnMouseOver$: new ReplaySubject<boolean>(1),
         setAnimationFrame$: new ReplaySubject<TileAnimationFrame>(1),
-        setIsMouseOver$: new ReplaySubject<boolean>,
-        startDrag$: new ReplaySubject<Event>,
-        startDrop$: new ReplaySubject<Event>,
-        startMouseDown$: new ReplaySubject<void>(1)
     };
 
+    updatesFromDom = {
+        setIsMouseOver$: new Subject<boolean>(),
+        startDrag$: new Subject<Event>(),
+        startDrop$: new Subject<Event>(),
+        startMouseDown$: new Subject<void>()
+    }
+
     @Input() set isStart(value: boolean) {
-        this.domUpdates.setStart$.next(value);
+        this.updatesFromParent.setStart$.next(value);
     }
 
     @Input() set isGoal(value: boolean) {
-        this.domUpdates.setGoal$.next(value);
+        this.updatesFromParent.setGoal$.next(value);
     }
 
     @Input() set isBarrier(value: boolean) {
-        this.domUpdates.setIsBarrier$.next(value);
+        this.updatesFromParent.setIsBarrier$.next(value);
     }
 
     @Input() set weight(value: number) {
-        this.domUpdates.setWeight$.next(value);
+        this.updatesFromParent.setWeight$.next(value);
     }
 
     @Input() set pathLengthFromStart(value: number) {
-        this.domUpdates.setPathLengthFromStart$.next(value);
+        this.updatesFromParent.setPathLengthFromStart$.next(value);
     }
 
     @Input() set heuristicDistFromGoal(value: number) {
-        this.domUpdates.setHeuristicDistFromGoal$.next(value);
+        this.updatesFromParent.setHeuristicDistFromGoal$.next(value);
     }
 
     @Input() set typeOfDataToDisplay(value: TypeOfDataDisplayedOnTileOption) {
-        this.domUpdates.setTypeOfDataToDisplay$.next(value);
+        this.updatesFromParent.setTypeOfDataToDisplay$.next(value);
     }
 
     @Input() set willDisplayTooltipOnMouseOver(value: boolean) {
-        this.domUpdates.setWillDisplayTooltipOnMouseOver$.next(value);
+        this.updatesFromParent.setWillDisplayTooltipOnMouseOver$.next(value);
     }
 
     @Input() set animationFrame(value: TileAnimationFrame) {
-        this.domUpdates.setAnimationFrame$.next(value);
+        this.updatesFromParent.setAnimationFrame$.next(value);
     }
 
     animationFrameToColor = new UncheckedObjMap<TileAnimationFrame, string>([
@@ -85,37 +88,37 @@ export class TileComponent {
     ];
 
     isMouseOver$ = merge(
-        this.domUpdates.setIsMouseOver$,
-        this.domUpdates.startDrag$.pipe(map(() => false))
+        this.updatesFromDom.setIsMouseOver$,
+        this.updatesFromDom.startDrag$.pipe(map(() => false))
     )
 
-    shouldTileBeHighlighted$ = this.domUpdates.setAnimationFrame$.pipe(
+    shouldTileBeHighlighted$ = this.updatesFromParent.setAnimationFrame$.pipe(
         map(frame => this.animationFramesToHighlight.includes(frame))
     );
 
-    backgroundColor$ = combineLatest([this.domUpdates.setAnimationFrame$, this.domUpdates.setIsBarrier$],
+    backgroundColor$ = combineLatest([this.updatesFromParent.setAnimationFrame$, this.updatesFromParent.setIsBarrier$],
         (frame, isBarrier) => isBarrier ? 'gray' : this.animationFrameToColor.get(frame)
     );
 
-    textToDisplay$ = combineLatest([this.domUpdates.setTypeOfDataToDisplay$, this.domUpdates.setWeight$, this.domUpdates.setPathLengthFromStart$, this.domUpdates.setHeuristicDistFromGoal$],
+    textToDisplay$ = combineLatest([this.updatesFromParent.setTypeOfDataToDisplay$, this.updatesFromParent.setWeight$, this.updatesFromParent.setPathLengthFromStart$, this.updatesFromParent.setHeuristicDistFromGoal$],
         (typeOfData, weight, pathLengthFromStart, heuristicDistFromGoal) => this.getTextToDisplay(typeOfData, weight, pathLengthFromStart, heuristicDistFromGoal)
     );
 
-    shouldDisplayTooltip$ = combineLatest([this.domUpdates.setWillDisplayTooltipOnMouseOver$, this.isMouseOver$],
+    shouldDisplayTooltip$ = combineLatest([this.updatesFromParent.setWillDisplayTooltipOnMouseOver$, this.isMouseOver$],
         (willDisplayTooltipOnMouseOver, isMouseOver) => willDisplayTooltipOnMouseOver && isMouseOver
     );
 
-    pathLengthFromStart$ = this.domUpdates.setPathLengthFromStart$.pipe(
+    pathLengthFromStart$ = this.updatesFromParent.setPathLengthFromStart$.pipe(
         map(length => this.getPathLengthToDisplay(length))
     );
 
-    textColor$ = this.domUpdates.setTypeOfDataToDisplay$.pipe(
+    textColor$ = this.updatesFromParent.setTypeOfDataToDisplay$.pipe(
         map(typeOfData => this.typeOfDataDisplayedOnTileToTextColor.get(typeOfData))
     )
 
-    @Output() drag = this.domUpdates.startDrag$;
+    @Output() drag = this.updatesFromDom.startDrag$;
 
-    @Output() drop = this.domUpdates.startDrop$;
+    @Output() drop = this.updatesFromDom.startDrop$;
 
     @Output() activate =
         merge(
@@ -124,7 +127,7 @@ export class TileComponent {
                 filter(([isMouseOver, isMousePressed]) => isMouseOver && isMousePressed),
                 map(() => { })
             ),
-            this.domUpdates.startMouseDown$
+            this.updatesFromDom.startMouseDown$
         )
 
     constructor(private mousePressService: MousePressService) { }
