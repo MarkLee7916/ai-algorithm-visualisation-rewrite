@@ -1,6 +1,10 @@
 import { DEFAULT_NEIGHBOUR_VISIT_ORDER } from "../models/grid/neighbours"
 
 export const barriersOnlyPathFound = {
+    height: 24,
+
+    width: 44,
+
     barrierGrid: [
         [false, false, false, true, false, false, false, false, false, true, true, false, false, false, false, true, false, false, false, true, false, false, true, true, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, true, true, true],
         [false, false, false, false, false, false, false, true, false, false, false, false, false, true, true, true, false, false, true, false, false, false, true, true, false, true, false, false, true, true, false, true, false, false, true, true, true, false, false, false, false, false, false, false],

@@ -9,5 +9,7 @@ export type ConcretePathfindingAlgoImpl = (
     goalPos: Pos,
     gridWeights: WeightGrid,
     gridBarriers: BarrierGrid,
-    neighbours: NeighbourOrdering
+    neighbours: NeighbourOrdering,
+    gridHeight: number,
+    gridWidth: number
 ) => AnimationFrame[];

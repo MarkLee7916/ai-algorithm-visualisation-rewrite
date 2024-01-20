@@ -26,11 +26,12 @@ export class AnimationFramesService implements StateService<AnimationFrame[]> {
             skip(1),
             filter(animationIndex => animationIndex > 0),
             map(() => {
-                const [neighbourOrdering, typeOfNeighboursAllowed, pathfindingAlgo, weightGrid, barrierGrid, startPos, goalPos] = problemStatement;
+                const [neighbourOrdering, typeOfNeighboursAllowed, pathfindingAlgo, weightGrid, barrierGrid, startPos, goalPos, gridDimensions] = problemStatement;
                 const filterNeighboursFunction = typeOfNeighboursAllowedOptionToImpl.get(typeOfNeighboursAllowed);
                 const algoImpl = pathfindingAlgoOptionToImpl.get(pathfindingAlgo);
+                const { height, width } = gridDimensions;
 
-                return algoImpl(startPos, goalPos, weightGrid, barrierGrid, filterNeighboursFunction(neighbourOrdering));
+                return algoImpl(startPos, goalPos, weightGrid, barrierGrid, filterNeighboursFunction(neighbourOrdering), height, width);
             }),
             take(1)
         ))

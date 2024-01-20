@@ -1,6 +1,10 @@
 import { NON_DIAGONAL_NEIGHBOURS } from "../models/grid/neighbours"
 
 export const barriersOnlyNoPathFound = {
+    height: 3,
+
+    width: 3,
+
     gridBarriers: [
         [false, true, true],
         [true, false, false],

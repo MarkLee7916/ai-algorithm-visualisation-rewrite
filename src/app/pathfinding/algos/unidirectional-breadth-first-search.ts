@@ -13,10 +13,10 @@ export function unidirectionalBFS(
     goalPos: Pos,
     _: WeightGrid,
     barrierGrid: BarrierGrid,
-    neighbourOrdering: Neighbour[]
+    neighbourOrdering: Neighbour[],
+    gridHeight: number,
+    gridWidth: number
 ): AnimationFrame[] {
-    const gridHeight = height(barrierGrid);
-    const gridWidth = width(barrierGrid);
 
     return genericUnidirectionalSearch(
         startPos,
@@ -25,6 +25,8 @@ export function unidirectionalBFS(
         initWeightGrid(gridHeight, gridWidth),
         barrierGrid,
         neighbourOrdering,
-        new ObjMap<Pos, number>([])
+        new ObjMap<Pos, number>([]),
+        gridHeight,
+        gridWidth
     );
 }

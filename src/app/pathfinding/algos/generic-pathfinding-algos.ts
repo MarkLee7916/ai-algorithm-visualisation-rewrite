@@ -19,11 +19,10 @@ export function genericUnidirectionalSearch(
     weightGrid: WeightGrid,
     barrierGrid: BarrierGrid,
     neighbourOrdering: NeighbourOrdering,
-    pathLengthMap: ObjMap<Pos, number>
+    pathLengthMap: ObjMap<Pos, number>,
+    gridHeight: number,
+    gridWidth: number
 ): AnimationFrame[] {
-    const gridHeight = height(weightGrid);
-    const gridWidth = width(weightGrid);
-
     const pathMap = new ObjMap<Pos, Pos>([]);
     const expandedGrid = initExpandedGrid(gridHeight, gridWidth);
     const visitedGrid = initVisitedGrid(gridHeight, gridWidth);
@@ -44,7 +43,9 @@ export function genericUnidirectionalSearch(
             barrierGrid,
             pathLengthMap,
             neighbourOrdering,
-            frames
+            frames,
+            gridHeight,
+            gridWidth
         );
 
         if (isFound) {
@@ -53,7 +54,20 @@ export function genericUnidirectionalSearch(
         }
     }
 
-    frames.push(genAnimationFrame(pathMap, visitedGrid, expandedGrid, null, [], goalPos, pathLengthMap, 'No path found!'));
+    frames.push(
+        genAnimationFrame(
+            pathMap,
+            visitedGrid,
+            expandedGrid,
+            null,
+            [],
+            goalPos,
+            pathLengthMap,
+            'No path found!',
+            gridHeight,
+            gridWidth
+        )
+    );
     return frames;
 }
 
@@ -73,10 +87,10 @@ function considerNextStep(
     barrierGrid: BarrierGrid,
     pathLengthMap: ObjMap<Pos, number>,
     neighbourOrdering: NeighbourOrdering,
-    frames: AnimationFrame[]
+    frames: AnimationFrame[],
+    gridHeight: number,
+    gridWidth: number
 ) {
-    const gridHeight = height(weightGrid);
-    const gridWidth = width(weightGrid);
     const posBeingExpanded = agenda.remove();
 
     markExpandedAt(expandedGrid, posBeingExpanded.row, posBeingExpanded.col);
@@ -90,7 +104,9 @@ function considerNextStep(
             [],
             goalPosForThisRun,
             pathLengthMap,
-            genExpansionCommentary(posBeingExpanded)
+            genExpansionCommentary(posBeingExpanded),
+            gridHeight,
+            gridWidth
         )
     );
 
@@ -134,7 +150,9 @@ function considerNextStep(
             validUnvisitedNeighbours,
             goalPosForThisRun,
             pathLengthMap,
-            genAddingNeighboursCommentary(posBeingExpanded, validUnvisitedNeighbours)
+            genAddingNeighboursCommentary(posBeingExpanded, validUnvisitedNeighbours),
+            gridHeight,
+            gridWidth
         )
     );
 
@@ -149,10 +167,10 @@ function genAnimationFrame(
     positionsBeingAddedToAgenda: Pos[],
     goalPosForThisRun: Pos,
     pathLengthMap: ObjMap<Pos, number>,
-    commentary: string
+    commentary: string,
+    gridHeight: number,
+    gridWidth: number
 ) {
-    const gridHeight = height(visitedGrid);
-    const gridWidth = width(visitedGrid);
     const frame = initBlankAnimationFrame(gridHeight, gridWidth);
     const pathList = convertPathMapToList(pathMap, posBeingExpanded)
 
