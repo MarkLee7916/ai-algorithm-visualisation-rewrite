@@ -18,4 +18,10 @@
     </app-grid>
 
     <button (click)="domUpdatesService.setAnimationRunning$.next(true)">Button</button>
+    <input 
+        type="checkbox" 
+        [value]="(domUpdatesService.setDualMode$ | async)"
+        (change)="domUpdatesService.setDualMode$.next(dualMode.checked)"
+        #dualMode
+    />
 </div>

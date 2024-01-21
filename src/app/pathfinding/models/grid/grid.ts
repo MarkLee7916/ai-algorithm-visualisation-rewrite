@@ -6,10 +6,10 @@ export type GridDimensions = {
     width: number
 }
 
-export function calculateGridDimensionsFromScreenDimensions() {
+export function calculateGridDimensionsFromScreenDimensions(modifier: number) {
     return {
-        height: Math.round(window.innerHeight / 40),
-        width: Math.round(window.innerWidth / 40)
+        height: Math.round(window.innerHeight / modifier),
+        width: Math.round(window.innerWidth / modifier)
     }
 }
 

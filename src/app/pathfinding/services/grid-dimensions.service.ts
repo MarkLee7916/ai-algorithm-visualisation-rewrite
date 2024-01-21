@@ -1,15 +1,19 @@
-import { Observable, debounceTime, fromEvent, map, of, startWith, tap } from "rxjs";
+import { Observable, combineLatest, debounceTime, fromEvent, map, of, startWith, tap } from "rxjs";
 import { GridDimensions, calculateGridDimensionsFromScreenDimensions } from "../models/grid/grid";
 import { Inject, Injectable } from "@angular/core";
 import { BridgeService } from "./bridge";
 import { gridDimensions } from "../pathfinding.tokens";
 import { StateService } from "./state.service";
+import { DomUpdatesService } from "./dom-updates.service";
 
 @Injectable({
     providedIn: 'root'
 })
 export class GridDimensionsService implements StateService<GridDimensions> {
-    constructor(@Inject(gridDimensions) bridgeToOtherStreams: BridgeService<GridDimensions>) {
+    constructor(
+        private domUpdates: DomUpdatesService,
+        @Inject(gridDimensions) bridgeToOtherStreams: BridgeService<GridDimensions>
+    ) {
         bridgeToOtherStreams.link(this.stream$);
     }
 
@@ -18,8 +22,10 @@ export class GridDimensionsService implements StateService<GridDimensions> {
         startWith(null)
     );
 
-    // TODO: Pipe from changes in dual grids
-    stream$: Observable<GridDimensions> = this.windowResize$.pipe(
-        map(() => calculateGridDimensionsFromScreenDimensions())
+    stream$: Observable<GridDimensions> = combineLatest([this.windowResize$, this.domUpdates.setDualMode$]).pipe(
+        map(([, isInDualMode]) => {
+            const modifier = isInDualMode ? 80 : 40;
+            return calculateGridDimensionsFromScreenDimensions(modifier);
+        })
     );
 }

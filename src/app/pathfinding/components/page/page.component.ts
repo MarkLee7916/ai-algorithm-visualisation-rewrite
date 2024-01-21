@@ -52,7 +52,7 @@ export class PageComponent {
 
     isLoadingFromGridDimensionsChange$ = this.gridDimensionsService.stream$.pipe(
         switchMap(({ height, width }) => combineLatest(this.gridBasedStreams).pipe(
-            map(grids => grids.every(grid => grid.length === height && grid[0].length === width))
+            map(grids => grids.some(grid => grid.length !== height || grid[0].length !== width))
         ))
     );
 }

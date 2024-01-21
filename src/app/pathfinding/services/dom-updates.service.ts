@@ -19,6 +19,7 @@ export class DomUpdatesService {
     setMazeGenAlgo$ = new BehaviorSubject<MazeGenAlgoOption>(DEFAULT_MAZE_GEN_ALGO);
     setTypeOfDataDisplayedOnTile$ = new BehaviorSubject<TypeOfDataDisplayedOnTileOption>(DEFAULT_TYPE_OF_DATA_DISPLAYED_ON_TILE);
     setTypeOfNeighboursAllowed$ = new BehaviorSubject<TypeOfNeighboursAllowedOption>(DEFAULT_TYPE_OF_NEIGHBOURS_ALLOWED);
+    setDualMode$ = new BehaviorSubject<boolean>(false);
     clearBarrierAndWeightGrids$ = new Subject<void>();
     activateTile$ = new Subject<Pos>();
     drag$ = new Subject<TileEvent>();
