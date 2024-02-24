@@ -45,8 +45,7 @@ export class AnimationFramesForMultipleAlgosService implements StateService<Anim
                 return buildAnimationFramesForMultipleAlgos(algoToFramesMapping);
             }),
             take(1)
-        )),
-        shareReplay(1)
+        ))
     );
 
     private resetFromGridDimensionChanges$: Observable<AnimationFramesForMultipleAlgos> = this.gridDimensions.stream$.pipe(
@@ -65,5 +64,7 @@ export class AnimationFramesForMultipleAlgosService implements StateService<Anim
         })
     );
 
-    stream$: Observable<AnimationFramesForMultipleAlgos> = merge(this.calculateFrames$, this.resetFromGridDimensionChanges$);
+    stream$: Observable<AnimationFramesForMultipleAlgos> = merge(this.calculateFrames$, this.resetFromGridDimensionChanges$).pipe(
+        shareReplay(1)
+    );
 }
