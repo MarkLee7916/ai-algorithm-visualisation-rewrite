@@ -1,13 +1,14 @@
 <!--TODO, handle willDisplayTooltipOnMouseOver logic-->
 <div class="page">
     <app-grid
+        *ngFor="let algo of (domUpdates.setPathfindingAlgos$ | async)!"
         [weightGrid]="(weightGridService.stream$ | async)!" 
         [barrierGrid]="(barrierGridService.stream$ | async)!" 
         [startPos]="(startPosService.stream$ | async)!" 
         [goalPos]="(goalPosService.stream$ | async)!" 
         [typeOfDataDisplayedOnTile]="(domUpdatesService.setTypeOfDataDisplayedOnTile$ | async)!" 
         [willDisplayTooltipOnMouseOver]="false" 
-        [animationFrame]="(currentAnimationFrameService.stream$ | async)!" 
+        [animationFrame]="(currentAnimationFrameForMultipleAlgosService.stream$ | async)?.get(algo)!" 
         [heuristicDistFromGoalGrid]="(heuristicDistGridService.stream$ | async)!"
         [gridDimensions]="(gridDimensionsService.stream$ | async)!"
         [isLoadingFromGridDimensionsChange]="(isLoadingFromGridDimensionsChange$ | async)!"
@@ -18,10 +19,4 @@
     </app-grid>
 
     <button (click)="domUpdatesService.setAnimationRunning$.next(true)">Button</button>
-    <input 
-        type="checkbox" 
-        [value]="(domUpdatesService.setDualMode$ | async)"
-        (change)="domUpdatesService.setDualMode$.next(dualMode.checked)"
-        #dualMode
-    />
 </div>

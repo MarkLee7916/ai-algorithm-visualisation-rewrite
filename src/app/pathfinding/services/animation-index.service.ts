@@ -3,8 +3,8 @@ import { Observable, merge, map, scan, withLatestFrom, tap, filter, distinctUnti
 import { AnimationIndexAction } from "../models/actions/actions";
 import { DomUpdatesService } from "./dom-updates.service";
 import { BridgeService } from "./bridge";
-import { AnimationFrame } from "../models/animation/animation-frame";
-import { problemStatementChanges, animate, animationFrames, animationIndex, animationRunning } from "../pathfinding.tokens";
+import { AnimationFrame, AnimationFramesForMultipleAlgos } from "../models/animation/animation-frame";
+import { problemStatementChanges, animate, animationFramesForMultipleAlgos, animationIndex, animationRunning } from "../pathfinding.tokens";
 import { ProblemStatement } from "../models/problem-statement/problem-statement";
 import { StateService } from "./state.service";
 
@@ -16,7 +16,7 @@ export class AnimationIndexService implements StateService<number> {
         private domUpdates: DomUpdatesService,
         @Inject(problemStatementChanges) private problemStatementChanges: BridgeService<ProblemStatement>,
         @Inject(animate) private animate: BridgeService<AnimationIndexAction>,
-        @Inject(animationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
+        @Inject(animationFramesForMultipleAlgos) private animationFramesForMultipleAlgos: BridgeService<AnimationFramesForMultipleAlgos>,
         @Inject(animationRunning) private animationRunning: BridgeService<boolean>,
         @Inject(animationIndex) bridgeToOtherStreams: BridgeService<number>
     ) {
@@ -29,8 +29,8 @@ export class AnimationIndexService implements StateService<number> {
 
     private resetAnimationIndexWhenUserRunsAlgorithmWhenOnFinalFrame$ = this.animationRunning.stream$.pipe(
         filter(isRunning => isRunning),
-        withLatestFrom(this.animationFrames.stream$),
-        map(([, frames]): AnimationIndexAction => ({ kind: 'ResetIfIndexAt', indexToResetAt: frames.length - 1 }))
+        withLatestFrom(this.animationFramesForMultipleAlgos.stream$),
+        map(([, framesForMultipleAlgos]): AnimationIndexAction => ({ kind: 'ResetIfIndexAt', indexToResetAt: framesForMultipleAlgos.lengthOfFramesForEachAlgo - 1 }))
     );
 
     stream$: Observable<number> =
@@ -55,12 +55,12 @@ export class AnimationIndexService implements StateService<number> {
                     throw new Error('Unexpected action kind');
                 }
             }, 0),
-            withLatestFrom(this.animationFrames.stream$),
-            map(([index, frames]) => {
+            withLatestFrom(this.animationFramesForMultipleAlgos.stream$),
+            map(([index, framesForMultipleAlgos]) => {
                 if (index < 0) {
                     return 0;
-                } else if (index >= frames.length) {
-                    return frames.length - 1
+                } else if (index >= framesForMultipleAlgos.lengthOfFramesForEachAlgo) {
+                    return framesForMultipleAlgos.lengthOfFramesForEachAlgo - 1
                 } else {
                     return index;
                 }

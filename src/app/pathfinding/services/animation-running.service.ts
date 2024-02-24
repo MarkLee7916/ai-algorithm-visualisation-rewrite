@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@angular/core';
 import { combineLatest, distinctUntilChanged, filter, map, merge, shareReplay, tap } from 'rxjs';
 import { DomUpdatesService } from './dom-updates.service';
 import { BridgeService } from './bridge';
-import { AnimationFrame } from '../models/animation/animation-frame';
-import { animationIndex, animationFrames, animationRunning, problemStatementChanges } from '../pathfinding.tokens';
+import { AnimationFrame, AnimationFramesForMultipleAlgos } from '../models/animation/animation-frame';
+import { animationIndex, animationFramesForMultipleAlgos, animationRunning, problemStatementChanges } from '../pathfinding.tokens';
 import { ProblemStatement } from '../models/problem-statement/problem-statement';
 import { StateService } from './state.service';
 
@@ -15,7 +15,7 @@ export class AnimationRunningService implements StateService<boolean> {
         private domUpdates: DomUpdatesService,
         @Inject(problemStatementChanges) private problemStatementChanges: BridgeService<ProblemStatement>,
         @Inject(animationIndex) private animationIndex: BridgeService<number>,
-        @Inject(animationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
+        @Inject(animationFramesForMultipleAlgos) private animationFramesForMultipleAlgos: BridgeService<AnimationFramesForMultipleAlgos>,
         @Inject(animationRunning) bridgeToOtherStreams: BridgeService<boolean>,
     ) {
         bridgeToOtherStreams.link(this.stream$);
@@ -27,9 +27,9 @@ export class AnimationRunningService implements StateService<boolean> {
 
     private stopIfAtFinalFrame$ = combineLatest([
         this.animationIndex.stream$,
-        this.animationFrames.stream$
+        this.animationFramesForMultipleAlgos.stream$
     ]).pipe(
-        filter(([index, frames]) => index === frames.length - 1),
+        filter(([index, framesForMultipleAlgos]) => index === framesForMultipleAlgos.lengthOfFramesForEachAlgo - 1),
         map(() => false)
     );
 

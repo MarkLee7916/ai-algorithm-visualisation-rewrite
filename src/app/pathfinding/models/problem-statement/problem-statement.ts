@@ -8,7 +8,7 @@ import { WeightGrid } from "../grid/weight-grid";
 export type ProblemStatement = [
     NeighbourOrdering,
     TypeOfNeighboursAllowedOption,
-    PathfindingAlgoOption,
+    PathfindingAlgoOption[],
     WeightGrid,
     BarrierGrid,
     Pos,

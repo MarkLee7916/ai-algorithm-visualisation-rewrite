@@ -3,10 +3,10 @@ import { WeightGridService } from "../../services/weight-grid.service";
 import { BarrierGridService } from "../../services/barrier-grid.service";
 import { StartPosService } from "../../services/start-pos.service";
 import { GoalPosService } from "../../services/goal-pos.service";
-import { CurrentAnimationFrameService } from "../../services/current-animation-frame.service";
+import { CurrentAnimationFrameForMultipleAlgosService } from "../../services/current-animation-frame.service";
 import { DomUpdatesService } from "../../services/dom-updates.service";
 import { AnimateService } from "../../services/animate.service";
-import { AnimationFramesService } from "../../services/animation-frames.service";
+import { AnimationFramesForMultipleAlgosService } from "../../services/animation-frames-for-multiple-algos.service";
 import { AnimationIndexService } from "../../services/animation-index.service";
 import { AnimationRunningService } from "../../services/animation-running.service";
 import { GridDimensionsService } from "../../services/grid-dimensions.service";
@@ -25,14 +25,15 @@ import { LastPosDraggedFromService } from "../../services/last-pos-dragged-from"
 export class PageComponent {
     constructor(
         // TODO: find a better way of including all the services in the compilation 
+        public domUpdates: DomUpdatesService,
         public weightGridService: WeightGridService,
         public barrierGridService: BarrierGridService,
         public startPosService: StartPosService,
         public goalPosService: GoalPosService,
-        public currentAnimationFrameService: CurrentAnimationFrameService,
+        public currentAnimationFrameForMultipleAlgosService: CurrentAnimationFrameForMultipleAlgosService,
         public domUpdatesService: DomUpdatesService,
         public animateService: AnimateService,
-        public animationFramesService: AnimationFramesService,
+        public animationFramesForMultipleAlgosService: AnimationFramesForMultipleAlgosService,
         public animationIndexService: AnimationIndexService,
         public animationRunningService: AnimationRunningService,
         public gridDimensionsService: GridDimensionsService,
@@ -45,8 +46,6 @@ export class PageComponent {
     gridBasedStreams = [
         this.weightGridService.stream$,
         this.barrierGridService.stream$,
-        this.currentAnimationFrameService.stream$.pipe(map(frame => frame.grid)),
-        this.currentAnimationFrameService.stream$.pipe(map(frame => frame.pathLengthGrid)),
         this.heuristicDistGridService.stream$
     ];
 

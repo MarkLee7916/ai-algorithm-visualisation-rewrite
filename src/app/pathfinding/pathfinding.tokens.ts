@@ -1,6 +1,6 @@
 import { InjectionToken } from "@angular/core";
 import { AnimationIndexAction } from "./models/actions/actions";
-import { AnimationFrame } from "./models/animation/animation-frame";
+import { AnimationFrame, AnimationFramesForMultipleAlgos, AlgoToCurrentFrameMapping } from "./models/animation/animation-frame";
 import { GridDimensions } from "./models/grid/grid";
 import { WeightGrid } from "./models/grid/weight-grid";
 import { BridgeService } from "./services/bridge";
@@ -10,10 +10,10 @@ import { Pos } from "./models/grid/pos";
 import { HeuristicDistFromGoalGrid } from "./models/grid/heuristic-dist-from-goal-grid";
 
 export const animate = new InjectionToken<BridgeService<AnimationIndexAction>>('bridgeFromAnimate');
-export const animationFrames = new InjectionToken<BridgeService<AnimationFrame[]>>('bridgeFromAnimationFrames');
+export const animationFramesForMultipleAlgos = new InjectionToken<BridgeService<AnimationFramesForMultipleAlgos>>('bridgeFromAnimationFramesForMultipleAlgos');
 export const animationIndex = new InjectionToken<BridgeService<number>>('bridgeFromAnimationIndex');
 export const animationRunning = new InjectionToken<BridgeService<boolean>>('bridgeFromAnimationRunning');
-export const currentAnimationFrame = new InjectionToken<BridgeService<AnimationFrame>>('bridgeFromCurrentAnimationFrame');
+export const currentAnimationFrameForMultipleAlgos = new InjectionToken<BridgeService<AlgoToCurrentFrameMapping>>('bridgeFromCurrentAnimationFrame');
 export const gridDimensions = new InjectionToken<BridgeService<GridDimensions>>('bridgeFromGridDimensions');
 export const problemStatementChanges = new InjectionToken<BridgeService<ProblemStatement>>('bridgeFromProblemStatementChanges');
 export const weightGrid = new InjectionToken<BridgeService<WeightGrid>>('bridgeFromWeightGrid');

@@ -1,25 +1,25 @@
 import { Inject, Injectable } from "@angular/core";
 import { Observable, combineLatest, shareReplay, tap } from "rxjs";
-import { AnimationFrame } from "../models/animation/animation-frame";
+import { AlgoToCurrentFrameMapping, AnimationFrame, AnimationFramesForMultipleAlgos, buildAlgoToCurrentFrameMapping } from "../models/animation/animation-frame";
 import { BridgeService } from "./bridge";
-import { animationIndex, animationFrames, currentAnimationFrame } from "../pathfinding.tokens";
+import { animationIndex, animationFramesForMultipleAlgos, currentAnimationFrameForMultipleAlgos } from "../pathfinding.tokens";
 import { StateService } from "./state.service";
 
 @Injectable({
     providedIn: 'root'
 })
-export class CurrentAnimationFrameService implements StateService<AnimationFrame> {
+export class CurrentAnimationFrameForMultipleAlgosService implements StateService<AlgoToCurrentFrameMapping> {
     constructor(
         @Inject(animationIndex) private animationIndex: BridgeService<number>,
-        @Inject(animationFrames) private animationFrames: BridgeService<AnimationFrame[]>,
-        @Inject(currentAnimationFrame) bridgeToOtherStreams: BridgeService<AnimationFrame>,
+        @Inject(animationFramesForMultipleAlgos) private animationFramesForMultipleAlgos: BridgeService<AnimationFramesForMultipleAlgos>,
+        @Inject(currentAnimationFrameForMultipleAlgos) bridgeToOtherStreams: BridgeService<AlgoToCurrentFrameMapping>,
     ) {
         bridgeToOtherStreams.link(this.stream$);
     }
 
-    stream$: Observable<AnimationFrame> =
-        combineLatest([this.animationFrames.stream$, this.animationIndex.stream$],
-            (frames, index) => frames[index]
+    stream$: Observable<AlgoToCurrentFrameMapping> =
+        combineLatest([this.animationFramesForMultipleAlgos.stream$, this.animationIndex.stream$],
+            (framesForMultipleAlgos, index) => buildAlgoToCurrentFrameMapping(framesForMultipleAlgos.algoToFramesMapping, index)
         ).pipe(
             shareReplay(1)
         );

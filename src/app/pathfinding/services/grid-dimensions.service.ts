@@ -22,9 +22,9 @@ export class GridDimensionsService implements StateService<GridDimensions> {
         startWith(null)
     );
 
-    stream$: Observable<GridDimensions> = combineLatest([this.windowResize$, this.domUpdates.setDualMode$]).pipe(
-        map(([, isInDualMode]) => {
-            const modifier = isInDualMode ? 80 : 40;
+    stream$: Observable<GridDimensions> = combineLatest([this.windowResize$, this.domUpdates.setPathfindingAlgos$]).pipe(
+        map(([, algos]) => {
+            const modifier = 250 / algos.length
             return calculateGridDimensionsFromScreenDimensions(modifier);
         }),
         shareReplay(1)

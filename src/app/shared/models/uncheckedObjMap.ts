@@ -24,4 +24,8 @@ export class UncheckedObjMap<K, V> {
   public keys(): K[] {
     return Array.from(this.map.keys()).map((keyStr) => JSON.parse(keyStr));
   }
+
+  public values(): V[] {
+    return this.keys().map(key => this.get(key));
+  }
 }
