@@ -24,16 +24,6 @@ export type AnimationFrame = {
     finalPathLength: number;
 };
 
-export function buildSingleAlgosMapping(algos: PathfindingAlgoOption[], listOfAnimationFramesForSingleAlgos: AnimationFramesForSingleAlgo[]): AlgoToFramesMapping {
-    const mapping = new UncheckedObjMap<PathfindingAlgoOption, AnimationFramesForSingleAlgo>([]);
-
-    for (let i = 0; i < algos.length; ++i) {
-        mapping.set(algos[i], listOfAnimationFramesForSingleAlgos[i]);
-    }
-
-    return mapping;
-}
-
 export function buildAlgoToCurrentFrameMapping(algoToFramesMapping: AlgoToFramesMapping, index: number) {
     const mapping = new UncheckedObjMap<PathfindingAlgoOption, AnimationFrame>([]);
 
@@ -45,18 +35,17 @@ export function buildAlgoToCurrentFrameMapping(algoToFramesMapping: AlgoToFrames
     return mapping;
 }
 
-export function buildAnimationFramesForMultipleAlgos(algos: PathfindingAlgoOption[], listOfAnimationFramesForSingleAlgos: AnimationFramesForSingleAlgo[]) {
-    const singleAlgosCopy = deepCopy(listOfAnimationFramesForSingleAlgos);
-    const maxLength = singleAlgosCopy.reduce((maxLength, currFrames) => Math.max(maxLength, currFrames.length), 0);
+export function buildAnimationFramesForMultipleAlgos(algoToFramesMapping: AlgoToFramesMapping) {
+    const maxLength = algoToFramesMapping.values().reduce((maxLength, currFrames) => Math.max(maxLength, currFrames.length), 0);
 
-    singleAlgosCopy.forEach(framesForSingleAlgo => {
+    algoToFramesMapping.values().forEach(framesForSingleAlgo => {
         while (framesForSingleAlgo.length < maxLength) {
             framesForSingleAlgo.push(deepCopy(framesForSingleAlgo[framesForSingleAlgo.length - 1]));
         }
     });
 
     return {
-        algoToFramesMapping: buildSingleAlgosMapping(algos, singleAlgosCopy),
+        algoToFramesMapping,
         lengthOfFramesForEachAlgo: maxLength
     };
 }
