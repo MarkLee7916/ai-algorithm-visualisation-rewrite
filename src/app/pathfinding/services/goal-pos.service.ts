@@ -3,7 +3,7 @@ import { Pos, genDefaultGoalPos, isOnGrid, isSamePos, movePositionWithinBoundsOf
 import { barrierGrid, startPos, gridDimensions, lastPosDraggedFrom, goalPos } from "../pathfinding.tokens";
 import { BridgeService } from "./bridge";
 import { DomUpdatesService } from "./dom-updates.service";
-import { Observable, combineLatest, distinctUntilChanged, filter, map, merge, of, scan, startWith, tap, throttleTime, withLatestFrom } from "rxjs";
+import { Observable, combineLatest, distinctUntilChanged, filter, map, merge, of, scan, shareReplay, startWith, tap, throttleTime, withLatestFrom } from "rxjs";
 import { StateService } from "./state.service";
 import { BarrierGrid, hasBarrierAt } from "../models/grid/barrier-grid";
 import { GridDimensions } from "../models/grid/grid";
@@ -71,6 +71,7 @@ export class GoalPosService implements StateService<Pos> {
             } else {
                 throw new Error('Unexpected action kind');
             }
-        }, genDefaultGoalPos())
+        }, genDefaultGoalPos()),
+        shareReplay(1)
     );
 }

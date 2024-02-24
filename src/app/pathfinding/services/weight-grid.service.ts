@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@angular/core";
 import { DomUpdatesService } from "./dom-updates.service";
-import { Observable, filter, map, merge, scan, tap, withLatestFrom } from "rxjs";
+import { Observable, filter, map, merge, scan, shareReplay, tap, withLatestFrom } from "rxjs";
 import { WeightGridAction } from "../models/actions/actions";
 import { DEFAULT_WEIGHT, WeightGrid, initWeightGrid, setWeightAt, toggleRandomWeightAt } from "../models/grid/weight-grid";
 import { ObstaclePlacedOnTileOption } from "../models/dropdown/dropdown-enums";
@@ -63,7 +63,8 @@ export class WeightGridService implements StateService<WeightGrid> {
             } else {
                 throw new Error('Unexpected action kind');
             }
-        }, initWeightGrid(1, 1))
+        }, initWeightGrid(1, 1)),
+        shareReplay(1),
     )
 }
 

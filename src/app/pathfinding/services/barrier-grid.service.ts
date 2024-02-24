@@ -5,7 +5,7 @@ import { barrierGrid, goalPos, gridDimensions, startPos } from "../pathfinding.t
 import { BridgeService } from "./bridge";
 import { DomUpdatesService } from "./dom-updates.service";
 import { BarrierGridAction } from "../models/actions/actions";
-import { Observable, filter, map, merge, scan, tap, withLatestFrom } from "rxjs";
+import { Observable, filter, map, merge, scan, shareReplay, tap, withLatestFrom } from "rxjs";
 import { ObstaclePlacedOnTileOption } from "../models/dropdown/dropdown-enums";
 import { StateService } from "./state.service";
 import { Pos, isSamePos } from "../models/grid/pos";
@@ -58,6 +58,7 @@ export class BarrierGridService implements StateService<BarrierGrid> {
             } else {
                 throw new Error('Unexpected action kind');
             }
-        }, initBarrierGrid(1, 1))
+        }, initBarrierGrid(1, 1)),
+        shareReplay(1),
     )
 }
