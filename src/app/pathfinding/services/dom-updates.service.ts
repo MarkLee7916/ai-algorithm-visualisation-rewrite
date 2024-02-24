@@ -14,7 +14,7 @@ export class DomUpdatesService {
     setAnimationRunning$ = new BehaviorSubject<boolean>(false);
     setAnimationDelay$ = new BehaviorSubject<number>(0);
     setNeighbourVisitOrdering$ = new BehaviorSubject<NeighbourOrdering>(DEFAULT_NEIGHBOUR_VISIT_ORDER);
-    setPathfindingAlgos$ = new BehaviorSubject<PathfindingAlgoOption[]>([DEFAULT_PATHFINDING_ALGO, PathfindingAlgoOption.DFS, DEFAULT_PATHFINDING_ALGO]);
+    setPathfindingAlgos$ = new BehaviorSubject<PathfindingAlgoOption[]>([DEFAULT_PATHFINDING_ALGO]);
     setObstaclePlacedOnTile$ = new BehaviorSubject<ObstaclePlacedOnTileOption>(DEFAULT_OBSTACLE_PLACED_ON_TILE);
     setMazeGenAlgo$ = new BehaviorSubject<MazeGenAlgoOption>(DEFAULT_MAZE_GEN_ALGO);
     setTypeOfDataDisplayedOnTile$ = new BehaviorSubject<TypeOfDataDisplayedOnTileOption>(DEFAULT_TYPE_OF_DATA_DISPLAYED_ON_TILE);
