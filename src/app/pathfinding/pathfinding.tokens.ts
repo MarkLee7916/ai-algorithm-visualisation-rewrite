@@ -8,6 +8,7 @@ import { ProblemStatement } from "./models/problem-statement/problem-statement";
 import { BarrierGrid } from "./models/grid/barrier-grid";
 import { Pos } from "./models/grid/pos";
 import { HeuristicDistFromGoalGrid } from "./models/grid/heuristic-dist-from-goal-grid";
+import { PathfindingAlgoOption } from "./models/dropdown/dropdown-enums";
 
 export const animate = new InjectionToken<BridgeService<AnimationIndexAction>>('animate');
 export const animationFramesForMultipleAlgos = new InjectionToken<BridgeService<AnimationFramesForMultipleAlgos>>('animationFramesForMultipleAlgos');
@@ -23,3 +24,4 @@ export const goalPos = new InjectionToken<BridgeService<Pos>>('goalPos');
 export const heuristicDistGrid = new InjectionToken<BridgeService<HeuristicDistFromGoalGrid>>('heuristicDistGrid');
 export const lastPosDraggedFrom = new InjectionToken<BridgeService<Pos | null>>('lastPosDraggedFrom');
 export const mousePress = new InjectionToken<BridgeService<boolean>>('mousePress');
+export const pathfindingAlgos = new InjectionToken<BridgeService<PathfindingAlgoOption[]>>('pathfindingAlgos');

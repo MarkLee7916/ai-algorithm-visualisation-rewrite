@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@angular/core";
 import { Observable, switchMap, filter, map, take, tap, startWith, skip, merge, shareReplay, withLatestFrom } from "rxjs";
 import { AnimationFrame, AnimationFramesForMultipleAlgos, buildAnimationFramesForMultipleAlgos, initBlankAnimationFrame, AnimationFramesForSingleAlgo } from "../models/animation/animation-frame";
 import { BridgeService } from "./bridge";
-import { problemStatementChanges, animationIndex, animationFramesForMultipleAlgos, gridDimensions } from "../pathfinding.tokens";
+import { problemStatementChanges, animationIndex, animationFramesForMultipleAlgos, gridDimensions, pathfindingAlgos } from "../pathfinding.tokens";
 import { ProblemStatement } from "../models/problem-statement/problem-statement";
 import { typeOfNeighboursAllowedOptionToImpl, pathfindingAlgoOptionToImpl } from "../models/dropdown/dropdown-enum-mappings";
 import { GridDimensions } from "../models/grid/grid";
@@ -21,6 +21,7 @@ export class AnimationFramesForMultipleAlgosService implements StateService<Anim
         @Inject(problemStatementChanges) private problemStatementChanges: BridgeService<ProblemStatement>,
         @Inject(animationIndex) private animationIndex: BridgeService<number>,
         @Inject(animationFramesForMultipleAlgos) private bridgeToOtherStreams: BridgeService<AnimationFramesForMultipleAlgos>,
+        @Inject(pathfindingAlgos) private pathfindingAlgos: BridgeService<PathfindingAlgoOption[]>,
         @Inject(gridDimensions) private gridDimensions: BridgeService<GridDimensions>,
     ) {
         bridgeToOtherStreams.link(this.stream$);
@@ -49,7 +50,7 @@ export class AnimationFramesForMultipleAlgosService implements StateService<Anim
     );
 
     private resetFromGridDimensionChanges$: Observable<AnimationFramesForMultipleAlgos> = this.gridDimensions.stream$.pipe(
-        withLatestFrom(this.domUpdates.setPathfindingAlgos$),
+        withLatestFrom(this.pathfindingAlgos.stream$),
         map(([dimensions, pathfindingAlgos]) => {
             const { height, width } = dimensions;
             const blankFrame = initBlankAnimationFrame(height, width);

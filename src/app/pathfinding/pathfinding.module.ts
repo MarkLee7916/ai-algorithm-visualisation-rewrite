@@ -8,13 +8,14 @@ import { AlgoToCurrentFrameMapping, AnimationFrame, AnimationFramesForMultipleAl
 import { AnimationIndexAction } from "./models/actions/actions";
 import { GridDimensions } from "./models/grid/grid";
 import { WeightGrid } from "./models/grid/weight-grid";
-import { animate, animationFramesForMultipleAlgos, animationIndex, animationRunning, barrierGrid, currentAnimationFrameForMultipleAlgos, goalPos, gridDimensions, problemStatementChanges, startPos, weightGrid, heuristicDistGrid, lastPosDraggedFrom, mousePress } from "./pathfinding.tokens";
+import { animate, animationFramesForMultipleAlgos, animationIndex, animationRunning, barrierGrid, currentAnimationFrameForMultipleAlgos, goalPos, gridDimensions, problemStatementChanges, startPos, weightGrid, heuristicDistGrid, lastPosDraggedFrom, mousePress, pathfindingAlgos } from "./pathfinding.tokens";
 import { ProblemStatement } from "./models/problem-statement/problem-statement";
 import { BarrierGrid } from "./models/grid/barrier-grid";
 import { Pos } from "./models/grid/pos";
 import { TileComponent } from "./components/tile/tile.component";
 import { GridComponent } from "./components/grid/grid.component";
 import { HeuristicDistFromGoalGrid } from "./models/grid/heuristic-dist-from-goal-grid";
+import { PathfindingAlgoOption } from "./models/dropdown/dropdown-enums";
 
 @NgModule({
   declarations: [PageComponent, GridComponent, TileComponent],
@@ -38,6 +39,7 @@ import { HeuristicDistFromGoalGrid } from "./models/grid/heuristic-dist-from-goa
     { provide: lastPosDraggedFrom, useClass: BridgeService<Pos | null> },
     { provide: heuristicDistGrid, useClass: BridgeService<HeuristicDistFromGoalGrid> },
     { provide: mousePress, useClass: BridgeService<boolean> },
+    { provide: pathfindingAlgos, useClass: BridgeService<PathfindingAlgoOption[]> },
   ]
 })
 export class PathfindingModule { }

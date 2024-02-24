@@ -15,6 +15,7 @@ import { MousePressService } from "../../services/mouse-press.service";
 import { ProblemStatementChangesService } from "../../services/problem-statement-changes.service";
 import { combineLatest, map, switchMap } from "rxjs";
 import { LastPosDraggedFromService } from "../../services/last-pos-dragged-from";
+import { PathfindingAlgosService } from "../../services/pathfinding-algos.service";
 
 @Component({
     selector: 'app-page',
@@ -40,7 +41,8 @@ export class PageComponent {
         public heuristicDistGridService: HeuristicDistGridService,
         public mousePressService: MousePressService,
         public problemStatementChangesService: ProblemStatementChangesService,
-        public lastPosDraggedFromService: LastPosDraggedFromService
+        public lastPosDraggedFromService: LastPosDraggedFromService,
+        public pathfindingAlgosService: PathfindingAlgosService
     ) { }
 
     gridBasedStreams = [

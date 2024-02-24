@@ -1,7 +1,7 @@
 <!--TODO, handle willDisplayTooltipOnMouseOver logic-->
 <div class="page">
     <app-grid
-        *ngFor="let algo of (domUpdates.setPathfindingAlgos$ | async)!"
+        *ngFor="let algo of (pathfindingAlgosService.stream$ | async)!"
         [weightGrid]="(weightGridService.stream$ | async)!" 
         [barrierGrid]="(barrierGridService.stream$ | async)!" 
         [startPos]="(startPosService.stream$ | async)!" 
@@ -18,5 +18,8 @@
     >
     </app-grid>
 
-    <button (click)="domUpdatesService.setAnimationRunning$.next(true)">Button</button>
+    <button (click)="domUpdatesService.setAnimationRunning$.next(true)">Run</button>
+    <button (click)="domUpdatesService.newPathfindingAlgosAction$.next({ kind: 'Add' })">Add</button>
+    <button (click)="domUpdatesService.newPathfindingAlgosAction$.next({ kind: 'Reset' })">Reset</button>
+    <button (click)="domUpdatesService.clearBarrierAndWeightGrids$.next()">Clear</button>
 </div>

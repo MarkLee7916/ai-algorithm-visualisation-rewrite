@@ -1,3 +1,4 @@
+import { PathfindingAlgoOption } from "../dropdown/dropdown-enums"
 import { BarrierGrid } from "../grid/barrier-grid"
 import { GridDimensions } from "../grid/grid"
 import { Pos } from "../grid/pos"
@@ -27,4 +28,8 @@ export type StartOrGoalPosAction =
     { kind: 'MovePositionWithinBoundsOfGrid', newHeight: number, newWidth: number } |
     { kind: 'HandleDrop', posToDropAt: Pos, lastPosDraggedFrom: Pos | null, opposingPos: Pos, barrierGrid: BarrierGrid, gridDimensions: GridDimensions }
 
-
+export type PathfindingAlgosAction =
+    { kind: 'Reset' } |
+    { kind: 'Add' } |
+    { kind: 'Set', index: number, algo: PathfindingAlgoOption } |
+    { kind: 'Remove', index: number }

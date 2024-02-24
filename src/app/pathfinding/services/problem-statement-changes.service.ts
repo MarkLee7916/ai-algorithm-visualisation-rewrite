@@ -3,13 +3,14 @@ import { DomUpdatesService } from './dom-updates.service';
 import { shareReplay } from 'rxjs/operators';
 import { Observable, combineLatest } from 'rxjs';
 import { BridgeService } from './bridge';
-import { barrierGrid, goalPos, gridDimensions, problemStatementChanges, startPos, weightGrid } from '../pathfinding.tokens';
+import { barrierGrid, goalPos, gridDimensions, pathfindingAlgos, problemStatementChanges, startPos, weightGrid } from '../pathfinding.tokens';
 import { ProblemStatement } from '../models/problem-statement/problem-statement';
 import { WeightGrid } from '../models/grid/weight-grid';
 import { BarrierGrid } from '../models/grid/barrier-grid';
 import { Pos } from '../models/grid/pos';
 import { StateService } from './state.service';
 import { GridDimensions } from '../models/grid/grid';
+import { PathfindingAlgoOption } from '../models/dropdown/dropdown-enums';
 
 @Injectable({
     providedIn: 'root'
@@ -22,6 +23,7 @@ export class ProblemStatementChangesService implements StateService<ProblemState
         @Inject(startPos) private startPos: BridgeService<Pos>,
         @Inject(goalPos) private goalPos: BridgeService<Pos>,
         @Inject(gridDimensions) private gridDimensions: BridgeService<GridDimensions>,
+        @Inject(pathfindingAlgos) private pathfindingAlgos: BridgeService<PathfindingAlgoOption[]>,
         @Inject(problemStatementChanges) bridgeToOtherStreams: BridgeService<ProblemStatement>,
     ) {
         bridgeToOtherStreams.link(this.stream$);
@@ -30,7 +32,7 @@ export class ProblemStatementChangesService implements StateService<ProblemState
     stream$: Observable<ProblemStatement> = combineLatest([
         this.domUpdates.setNeighbourVisitOrdering$,
         this.domUpdates.setTypeOfNeighboursAllowed$,
-        this.domUpdates.setPathfindingAlgos$,
+        this.pathfindingAlgos.stream$,
         this.weightGrid.stream$,
         this.barrierGrid.stream$,
         this.startPos.stream$,

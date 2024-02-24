@@ -2,9 +2,10 @@ import { Observable, combineLatest, debounceTime, fromEvent, map, of, shareRepla
 import { GridDimensions, calculateGridDimensionsFromScreenDimensions } from "../models/grid/grid";
 import { Inject, Injectable } from "@angular/core";
 import { BridgeService } from "./bridge";
-import { gridDimensions } from "../pathfinding.tokens";
+import { gridDimensions, pathfindingAlgos } from "../pathfinding.tokens";
 import { StateService } from "./state.service";
 import { DomUpdatesService } from "./dom-updates.service";
+import { PathfindingAlgoOption } from "../models/dropdown/dropdown-enums";
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,9 @@ import { DomUpdatesService } from "./dom-updates.service";
 export class GridDimensionsService implements StateService<GridDimensions> {
     constructor(
         private domUpdates: DomUpdatesService,
-        @Inject(gridDimensions) bridgeToOtherStreams: BridgeService<GridDimensions>
+        @Inject(gridDimensions) bridgeToOtherStreams: BridgeService<GridDimensions>,
+        @Inject(pathfindingAlgos) private pathfindingAlgos: BridgeService<PathfindingAlgoOption[]>,
+
     ) {
         bridgeToOtherStreams.link(this.stream$);
     }
@@ -22,9 +25,9 @@ export class GridDimensionsService implements StateService<GridDimensions> {
         startWith(null)
     );
 
-    stream$: Observable<GridDimensions> = combineLatest([this.windowResize$, this.domUpdates.setPathfindingAlgos$]).pipe(
+    stream$: Observable<GridDimensions> = combineLatest([this.windowResize$, this.pathfindingAlgos.stream$]).pipe(
         map(([, algos]) => {
-            const modifier = 10 * Math.max(5, algos.length);
+            const modifier = 40 * Math.sqrt(Math.min(5, algos.length));
 
             return calculateGridDimensionsFromScreenDimensions(modifier);
         }),
