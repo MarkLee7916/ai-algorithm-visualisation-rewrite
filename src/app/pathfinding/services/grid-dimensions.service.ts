@@ -1,4 +1,4 @@
-import { Observable, combineLatest, debounceTime, fromEvent, map, of, startWith, tap } from "rxjs";
+import { Observable, combineLatest, debounceTime, fromEvent, map, of, shareReplay, startWith, tap } from "rxjs";
 import { GridDimensions, calculateGridDimensionsFromScreenDimensions } from "../models/grid/grid";
 import { Inject, Injectable } from "@angular/core";
 import { BridgeService } from "./bridge";
@@ -26,6 +26,7 @@ export class GridDimensionsService implements StateService<GridDimensions> {
         map(([, isInDualMode]) => {
             const modifier = isInDualMode ? 80 : 40;
             return calculateGridDimensionsFromScreenDimensions(modifier);
-        })
+        }),
+        shareReplay(1)
     );
 }

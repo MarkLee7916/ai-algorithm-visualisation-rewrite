@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@angular/core";
 import { StateService } from "./state.service";
 import { Pos, isSamePos } from "../models/grid/pos";
-import { combineLatest, filter, map, startWith, tap, throttleTime, withLatestFrom } from "rxjs";
+import { combineLatest, filter, map, shareReplay, startWith, tap, throttleTime, withLatestFrom } from "rxjs";
 import { BridgeService } from "./bridge";
 import { DomUpdatesService } from "./dom-updates.service";
 import { barrierGrid, goalPos, lastPosDraggedFrom, startPos } from "../pathfinding.tokens";
@@ -35,5 +35,6 @@ export class LastPosDraggedFromService implements StateService<Pos | null> {
         filter(([tileEvent, startPos, goalPos]) => this.canDragFrom(tileEvent.pos, startPos, goalPos)),
         map(([tileEvent, ,]) => tileEvent.pos),
         startWith(null),
+        shareReplay(1)
     )
 }

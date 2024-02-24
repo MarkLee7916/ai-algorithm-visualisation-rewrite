@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@angular/core";
-import { Observable, switchMap, filter, map, take, tap, startWith, skip, merge } from "rxjs";
+import { Observable, switchMap, filter, map, take, tap, startWith, skip, merge, shareReplay } from "rxjs";
 import { AnimationFrame, initBlankAnimationFrame } from "../models/animation/animation-frame";
 import { BridgeService } from "./bridge";
 import { problemStatementChanges, animationIndex, animationFrames, gridDimensions } from "../pathfinding.tokens";
@@ -34,7 +34,8 @@ export class AnimationFramesService implements StateService<AnimationFrame[]> {
                 return algoImpl(startPos, goalPos, weightGrid, barrierGrid, filterNeighboursFunction(neighbourOrdering), height, width);
             }),
             take(1)
-        ))
+        )),
+        shareReplay(1)
     );
 
     // TODO: find something better than repeating this three times

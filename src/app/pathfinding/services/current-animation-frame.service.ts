@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@angular/core";
-import { Observable, combineLatest, tap } from "rxjs";
+import { Observable, combineLatest, shareReplay, tap } from "rxjs";
 import { AnimationFrame } from "../models/animation/animation-frame";
 import { BridgeService } from "./bridge";
 import { animationIndex, animationFrames, currentAnimationFrame } from "../pathfinding.tokens";
@@ -20,5 +20,7 @@ export class CurrentAnimationFrameService implements StateService<AnimationFrame
     stream$: Observable<AnimationFrame> =
         combineLatest([this.animationFrames.stream$, this.animationIndex.stream$],
             (frames, index) => frames[index]
+        ).pipe(
+            shareReplay(1)
         );
 }

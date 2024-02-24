@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { Observable, combineLatest, interval } from 'rxjs';
 import { DomUpdatesService } from './dom-updates.service';
-import { map, switchMap, takeWhile, tap } from 'rxjs/operators';
+import { map, shareReplay, switchMap, takeWhile, tap } from 'rxjs/operators';
 import { AnimationIndexAction } from '../models/actions/actions';
 import { BridgeService } from './bridge';
 import { animationRunning, animate } from '../pathfinding.tokens';
@@ -30,7 +30,8 @@ export class AnimateService implements StateService<AnimationIndexAction> {
         switchMap(([isAnimationRunning, animationDelay]) =>
             interval(animationDelay).pipe(
                 map((): AnimationIndexAction => ({ kind: 'Increment' })),
-                takeWhile(() => isAnimationRunning)
+                takeWhile(() => isAnimationRunning),
+                shareReplay(1)
             )
         )
     );

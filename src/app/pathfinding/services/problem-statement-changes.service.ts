@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { DomUpdatesService } from './dom-updates.service';
-import { distinctUntilChanged, tap } from 'rxjs/operators';
+import { shareReplay } from 'rxjs/operators';
 import { Observable, combineLatest } from 'rxjs';
 import { BridgeService } from './bridge';
 import { barrierGrid, goalPos, gridDimensions, problemStatementChanges, startPos, weightGrid } from '../pathfinding.tokens';
@@ -36,5 +36,7 @@ export class ProblemStatementChangesService implements StateService<ProblemState
         this.startPos.stream$,
         this.goalPos.stream$,
         this.gridDimensions.stream$
-    ]);
+    ]).pipe(
+        shareReplay(1)
+    );
 }

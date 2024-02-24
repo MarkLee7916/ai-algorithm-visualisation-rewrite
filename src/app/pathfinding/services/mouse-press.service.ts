@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@angular/core";
-import { merge, fromEvent, map, throttleTime } from "rxjs";
+import { merge, fromEvent, map, throttleTime, shareReplay } from "rxjs";
 import { StateService } from "./state.service";
 import { mousePress } from "../pathfinding.tokens";
 import { BridgeService } from "./bridge";
@@ -25,5 +25,7 @@ export class MousePressService implements StateService<boolean>  {
         map((event: Event) => (event as MouseEvent).buttons === 1)
     );
 
-    stream$ = merge(this.handleDrop$, this.handleMouseEvents$);
+    stream$ = merge(this.handleDrop$, this.handleMouseEvents$).pipe(
+        shareReplay(1)
+    );
 }
