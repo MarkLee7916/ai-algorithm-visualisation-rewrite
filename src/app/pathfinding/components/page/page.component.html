@@ -1,25 +1,111 @@
-<!--TODO, handle willDisplayTooltipOnMouseOver logic-->
 <div class="page">
-    <app-grid
-        *ngFor="let algo of (pathfindingAlgosService.stream$ | async)!"
-        [weightGrid]="(weightGridService.stream$ | async)!" 
-        [barrierGrid]="(barrierGridService.stream$ | async)!" 
-        [startPos]="(startPosService.stream$ | async)!" 
-        [goalPos]="(goalPosService.stream$ | async)!" 
-        [typeOfDataDisplayedOnTile]="(domUpdatesService.setTypeOfDataDisplayedOnTile$ | async)!" 
-        [willDisplayTooltipOnMouseOver]="false" 
-        [animationFrame]="(currentAnimationFrameForMultipleAlgosService.stream$ | async)?.get(algo)!" 
-        [heuristicDistFromGoalGrid]="(heuristicDistGridService.stream$ | async)!"
-        [gridDimensions]="(gridDimensionsService.stream$ | async)!"
-        [isLoadingFromGridDimensionsChange]="(isLoadingFromGridDimensionsChange$ | async)!"
-        (activate)="domUpdatesService.activateTile$.next($event)"
-        (drag)="domUpdatesService.drag$.next($event)" 
-        (drop)="domUpdatesService.drop$.next($event)" 
-    >
-    </app-grid>
+    <div class="toolbar">
+        <h2 class="title">Pathfinding Visualiser</h2>
+    </div>
 
-    <button (click)="domUpdatesService.setAnimationRunning$.next(true)">Run</button>
-    <button (click)="domUpdatesService.newPathfindingAlgosAction$.next({ kind: 'Add' })">Add</button>
-    <button (click)="domUpdatesService.newPathfindingAlgosAction$.next({ kind: 'Reset' })">Reset</button>
-    <button (click)="domUpdatesService.clearBarrierAndWeightGrids$.next()">Clear</button>
+    <div class="legend-container">
+        <p>🟦 Expanded</p>
+        <p>🟥 In Agenda</p>
+        <p>🟨 Final Path</p>
+        <p>⬛ Barrier</p>
+        <p>⬜ Empty space</p>
+    </div>
+
+    <div class="content-container">
+        <div class="animation-menu">
+            <div class="range-container">
+                <p>Set Animation Delay</p>
+                <input type="range" class="range"/>
+                <p>1000ms</p>
+            </div>
+
+            <div class="media-control-container">
+                <img
+                    (click)="domUpdatesService.newAnimationIndexAction$.next({ kind: 'Decrement' })"
+                    id="step-back-btn"
+                    class="media-control-symbol"
+                    src="./assets/step-back-button.png"
+                />
+
+                <img
+                    *ngIf="(animationRunningService.stream$ | async) === false"
+                    (click)="domUpdatesService.setAnimationRunning$.next(true)"
+                    id="play-btn"
+                    class="media-control-symbol"
+                    src="./assets/play-button.png"
+                />
+
+                <img
+                    *ngIf="(animationRunningService.stream$ | async) === true"
+                    (click)="domUpdatesService.setAnimationRunning$.next(false)"
+                    id="pause-btn"
+                    class="media-control-symbol"
+                    src="./assets/pause-button.png"
+                />
+
+                <img
+                    (click)="domUpdatesService.newAnimationIndexAction$.next({ kind: 'Increment' })"
+                    id="step-forward-btn"
+                    class="media-control-symbol"
+                    src="./assets/step-forward-button.png"
+                />
+            </div>
+
+            <div class="range-container">
+                <p>Step Through Frames</p>
+                <input type="range" class="range"/>
+                <p>1000 / 1458</p>
+            </div>
+        </div>
+
+        <div class="grids-container">
+            <div class="grid-container" *ngFor="let algo of (pathfindingAlgosService.stream$ | async)!">
+                <app-grid    
+                    [weightGrid]="(weightGridService.stream$ | async)!" 
+                    [barrierGrid]="(barrierGridService.stream$ | async)!" 
+                    [startPos]="(startPosService.stream$ | async)!" 
+                    [goalPos]="(goalPosService.stream$ | async)!" 
+                    [typeOfDataDisplayedOnTile]="(domUpdatesService.setTypeOfDataDisplayedOnTile$ | async)!" 
+                    [willDisplayTooltipOnMouseOver]="false" 
+                    [animationFrame]="(currentAnimationFrameForMultipleAlgosService.stream$ | async)?.get(algo)!" 
+                    [heuristicDistFromGoalGrid]="(heuristicDistGridService.stream$ | async)!"
+                    [gridDimensions]="(gridDimensionsService.stream$ | async)!"
+                    [isLoadingFromGridDimensionsChange]="(isLoadingFromGridDimensionsChange$ | async)!"
+                    (activate)="domUpdatesService.activateTile$.next($event)"
+                    (drag)="domUpdatesService.drag$.next($event)" 
+                    (drop)="domUpdatesService.drop$.next($event)" 
+                >
+                </app-grid>
+                <div class="grid-info">
+                    <p>Expanded: 0</p>
+                    <p>Visited: 0</p>
+                    <p>Path Length: N/A</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-grouping">
+            <h2>Configure Algorithm</h2>
+        </div>
+        <div class="sidebar-grouping">
+            <h2>Maze Options</h2>
+            <button>Generate Maze</button>
+        </div>
+        <div class="sidebar-grouping">
+            <h2>Grid Options</h2>
+            <button>Clear Barriers and Weights</button>
+        </div>
+        <div class="sidebar-grouping">
+            <h2>Configure Multiple Grids</h2>
+            <button (click)="domUpdatesService.newPathfindingAlgosAction$.next({ kind: 'Add' })">Add Grid</button>
+            <button (click)="domUpdatesService.newPathfindingAlgosAction$.next({ kind: 'Reset' })">Reset Grids</button>
+        </div>
+        <div class="sidebar-grouping">
+            <h2>Save/Load</h2>
+            <button>Save Grid</button>
+            <button>Load Grid</button>
+        </div>
+    </div>
 </div>

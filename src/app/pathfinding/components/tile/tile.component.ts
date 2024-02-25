@@ -78,7 +78,7 @@ export class TileComponent {
 
     typeOfDataDisplayedOnTileToTextColor = new UncheckedObjMap<TypeOfDataDisplayedOnTileOption, string>([
         [TypeOfDataDisplayedOnTileOption.PathLengthsFromStart, '#006633'],
-        [TypeOfDataDisplayedOnTileOption.Weights, 'var(--secondary-color)'],
+        [TypeOfDataDisplayedOnTileOption.Weights, 'black'],
         [TypeOfDataDisplayedOnTileOption.HeuristicDists, 'red'],
     ]);
 

@@ -26,11 +26,7 @@ export class GridDimensionsService implements StateService<GridDimensions> {
     );
 
     stream$: Observable<GridDimensions> = combineLatest([this.windowResize$, this.pathfindingAlgos.stream$]).pipe(
-        map(([, algos]) => {
-            const modifier = 40 * Math.sqrt(Math.min(5, algos.length));
-
-            return calculateGridDimensionsFromScreenDimensions(modifier);
-        }),
+        map(([, algos]) => calculateGridDimensionsFromScreenDimensions(algos.length)),
         shareReplay(1)
     );
 }

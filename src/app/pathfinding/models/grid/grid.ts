@@ -6,10 +6,12 @@ export type GridDimensions = {
     width: number
 }
 
-export function calculateGridDimensionsFromScreenDimensions(modifier: number) {
+export function calculateGridDimensionsFromScreenDimensions(numberOfGrids: number) {
+    const modifier = 36 * Math.min(2, numberOfGrids);
+
     return {
         height: Math.round(window.innerHeight / modifier),
-        width: Math.round(window.innerWidth / modifier)
+        width: Math.round(window.innerWidth * 1.1 / modifier)
     }
 }
 
