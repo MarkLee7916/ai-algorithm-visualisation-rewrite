@@ -40,31 +40,30 @@ export class AnimationIndexService implements StateService<number> {
             this.resetAnimationIndexAsProblemStatementChanged$,
             this.resetAnimationIndexWhenUserRunsAlgorithmWhenOnFinalFrame$
         ).pipe(
-            scan((currentIndex, action) => {
-                if (action.kind === 'Increment') {
-                    return currentIndex + 1;
-                } else if (action.kind === 'Decrement') {
-                    return currentIndex - 1;
-                } else if (action.kind === 'Reset') {
-                    return 0;
-                } else if (action.kind === 'SetValue') {
-                    return action.valueToSetTo;
-                } else if (action.kind === 'ResetIfIndexAt') {
-                    return currentIndex === action.indexToResetAt ? 0 : currentIndex;
-                } else {
-                    throw new Error('Unexpected action kind');
-                }
-            }, 0),
             withLatestFrom(this.animationFramesForMultipleAlgos.stream$),
-            map(([index, framesForMultipleAlgos]) => {
-                if (index < 0) {
+            scan((currentIndex, [action, framesForMultipleAlgos]) => {
+                let newIndex = currentIndex;
+
+                if (action.kind === 'Increment') {
+                    newIndex = currentIndex + 1;
+                } else if (action.kind === 'Decrement') {
+                    newIndex = currentIndex - 1;
+                } else if (action.kind === 'Reset') {
+                    newIndex = 0;
+                } else if (action.kind === 'SetValue') {
+                    newIndex = action.valueToSetTo;
+                } else if (action.kind === 'ResetIfIndexAt') {
+                    newIndex = currentIndex === action.indexToResetAt ? 0 : currentIndex;
+                }
+
+                if (newIndex < 0) {
                     return 0;
-                } else if (index >= framesForMultipleAlgos.lengthOfFramesForEachAlgo) {
+                } else if (newIndex >= framesForMultipleAlgos.lengthOfFramesForEachAlgo) {
                     return framesForMultipleAlgos.lengthOfFramesForEachAlgo - 1
                 } else {
-                    return index;
+                    return newIndex;
                 }
-            }),
+            }, 0),
             distinctUntilChanged(),
             shareReplay(1),
         );
