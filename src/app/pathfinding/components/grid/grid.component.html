@@ -26,9 +26,9 @@
     </div>
 
     <div class="grid-info">
-        <p>Expanded: 0</p>
-        <p>Visited: 0</p>
-        <p>Path Length: N/A</p>
+        <p>Expanded: {{animationFrame.countOfTilesExpanded}}</p>
+        <p>Visited: {{animationFrame.countOfTilesVisited}}</p>
+        <p>Path Length: {{animationFrame.finalPathLength | formatPathLength}}</p>
     </div>
 </div>
 

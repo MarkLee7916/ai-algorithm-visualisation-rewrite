@@ -16,9 +16,10 @@ import { TileComponent } from "./components/tile/tile.component";
 import { GridComponent } from "./components/grid/grid.component";
 import { HeuristicDistFromGoalGrid } from "./models/grid/heuristic-dist-from-goal-grid";
 import { PathfindingAlgoOption } from "./models/dropdown/dropdown-enums";
+import { FormatPathLengthPipe } from "./pipes/format-path-length.pipe";
 
 @NgModule({
-  declarations: [PageComponent, GridComponent, TileComponent],
+  declarations: [PageComponent, GridComponent, TileComponent, FormatPathLengthPipe],
   imports: [
     CommonModule,
     BrowserModule,
