@@ -59,7 +59,7 @@
         </div>
 
         <div class="grids-container">
-            <div class="grid-container" *ngFor="let algo of (pathfindingAlgosService.stream$ | async)!">
+            <div *ngFor="let algo of (pathfindingAlgosService.stream$ | async)!">
                 <app-grid    
                     [weightGrid]="(weightGridService.stream$ | async)!" 
                     [barrierGrid]="(barrierGridService.stream$ | async)!" 
@@ -76,11 +76,6 @@
                     (drop)="domUpdatesService.drop$.next($event)" 
                 >
                 </app-grid>
-                <div class="grid-info">
-                    <p>Expanded: 0</p>
-                    <p>Visited: 0</p>
-                    <p>Path Length: N/A</p>
-                </div>
             </div>
         </div>
     </div>

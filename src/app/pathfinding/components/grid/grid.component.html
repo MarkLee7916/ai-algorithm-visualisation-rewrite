@@ -1,25 +1,34 @@
-<div *ngIf="!isLoadingFromGridDimensionsChange" class="grid" cellspacing="0" cellpadding="0">
-    <div class="row" *ngFor="let row of range(0, gridDimensions.height);">
-        <div *ngFor="let col of range(0, gridDimensions.width);">
-            <ng-container *ngIf="{row: row, col: col} as pos">
-                <!--TODO: find a way to avoid evaluating expressions here-->
-                <app-tile 
-                    [isStart]="isSamePos(pos, startPos)" 
-                    [isGoal]="isSamePos(pos, goalPos)" 
-                    [isBarrier]="hasBarrierAt(barrierGrid, row, col)" 
-                    [weight]="weightAt(weightGrid, row, col)" 
-                    [pathLengthFromStart]="pathLengthAt(animationFrame.pathLengthGrid, row, col)" 
-                    [heuristicDistFromGoal]="distAt(heuristicDistFromGoalGrid, row, col)" 
-                    [typeOfDataToDisplay]="typeOfDataDisplayedOnTile" 
-                    [willDisplayTooltipOnMouseOver]="willDisplayTooltipOnMouseOver" 
-                    [animationFrame]="frameAt(animationFrame.grid, row, col)" 
-                    (drag)="drag.emit({event: $event, pos})" 
-                    (drop)="drop.emit({event: $event, pos})" 
-                    (activate)="activate.emit(pos)" 
-                >
-                </app-tile>
-            </ng-container>
+
+<div class="grid-container">
+    <div *ngIf="!isLoadingFromGridDimensionsChange" class="grid" cellspacing="0" cellpadding="0">
+        <div class="row" *ngFor="let row of range(0, gridDimensions.height);">
+            <div *ngFor="let col of range(0, gridDimensions.width);">
+                <ng-container *ngIf="{row: row, col: col} as pos">
+                    <!--TODO: find a way to avoid evaluating expressions here-->
+                    <app-tile 
+                        [isStart]="isSamePos(pos, startPos)" 
+                        [isGoal]="isSamePos(pos, goalPos)" 
+                        [isBarrier]="hasBarrierAt(barrierGrid, row, col)" 
+                        [weight]="weightAt(weightGrid, row, col)" 
+                        [pathLengthFromStart]="pathLengthAt(animationFrame.pathLengthGrid, row, col)" 
+                        [heuristicDistFromGoal]="distAt(heuristicDistFromGoalGrid, row, col)" 
+                        [typeOfDataToDisplay]="typeOfDataDisplayedOnTile" 
+                        [willDisplayTooltipOnMouseOver]="willDisplayTooltipOnMouseOver" 
+                        [animationFrame]="frameAt(animationFrame.grid, row, col)" 
+                        (drag)="drag.emit({event: $event, pos})" 
+                        (drop)="drop.emit({event: $event, pos})" 
+                        (activate)="activate.emit(pos)" 
+                    >
+                    </app-tile>
+                </ng-container>
+            </div>
         </div>
+    </div>
+
+    <div class="grid-info">
+        <p>Expanded: 0</p>
+        <p>Visited: 0</p>
+        <p>Path Length: N/A</p>
     </div>
 </div>
 

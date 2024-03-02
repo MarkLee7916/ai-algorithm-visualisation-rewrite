@@ -20,27 +20,6 @@
             flex-wrap: wrap;
             flex-direction: row;
             margin-top: 30px;
-
-            .grid-container {
-                margin-left: 5px;
-                margin-right: 5px;
-                display: flex;
-                justify-content: space-around;
-                flex-direction: column;
-                margin-top: 30px;
-
-                .grid-info {
-                    height: 100%;
-                    margin-right: 5px;
-                    display: flex;
-                    justify-content: center;
-                }
-
-                .grid-info>p {
-                    margin-left: 10px;
-                    margin-right: 10px;
-                }
-            }
         }
 
         .animation-menu {
