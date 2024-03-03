@@ -53,8 +53,15 @@
 
             <div class="range-container">
                 <p>Step Through Frames</p>
-                <input type="range" class="range"/>
-                <p>1000 / 1458</p>
+                <input 
+                    type="range" 
+                    class="range" 
+                    [value]="(animationIndexService.stream$ | async)!" 
+                    min="0"
+                    [max]="(animationFramesForMultipleAlgosService.stream$ | async)!.lengthOfFramesForEachAlgo - 1"
+                    (input)="updateAnimationIndexFromRange($event)"
+                />
+                <p>{{(animationIndexService.stream$ | async)! + 1}} / {{(animationFramesForMultipleAlgosService.stream$ | async)!.lengthOfFramesForEachAlgo}}</p>
             </div>
         </div>
 
@@ -67,7 +74,7 @@
                     [goalPos]="(goalPosService.stream$ | async)!" 
                     [typeOfDataDisplayedOnTile]="(domUpdatesService.setTypeOfDataDisplayedOnTile$ | async)!" 
                     [willDisplayTooltipOnMouseOver]="false" 
-                    [animationFrame]="(currentAnimationFrameForMultipleAlgosService.stream$ | async)?.get(algo)!" 
+                    [animationFrame]="(currentAnimationFrameForMultipleAlgosService.stream$ | async)!.get(algo)!" 
                     [heuristicDistFromGoalGrid]="(heuristicDistGridService.stream$ | async)!"
                     [gridDimensions]="(gridDimensionsService.stream$ | async)!"
                     [isLoadingFromGridDimensionsChange]="(isLoadingFromGridDimensionsChange$ | async)!"
