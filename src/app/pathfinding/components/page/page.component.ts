@@ -74,12 +74,6 @@ export class PageComponent {
         return (value as AnimationFramesForMultipleAlgos).lengthOfFramesForEachAlgo !== undefined;
     }
 
-    isLoadingFromGridDimensionsChange$ = this.gridDimensionsService.stream$.pipe(
-        switchMap(({ height, width }) => combineLatest(this.gridBasedStreams).pipe(
-            map(grids => grids.some(grid => grid.length !== height || grid[0].length !== width))
-        ))
-    );
-
     updateAnimationIndexFromRange(event: Event) {
         const rangeElement = event.target as HTMLInputElement;
         const valueToSetTo = parseInt(rangeElement.value, 10);

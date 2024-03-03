@@ -27,7 +27,6 @@ export class GridComponent {
     @Input() animationFrame!: AnimationFrame;
     @Input() heuristicDistFromGoalGrid!: HeuristicDistFromGoalGrid;
     @Input() gridDimensions!: GridDimensions;
-    @Input() isLoadingFromGridDimensionsChange!: boolean;
 
     @Output() drag = new EventEmitter<TileEvent>();
     @Output() drop = new EventEmitter<TileEvent>();

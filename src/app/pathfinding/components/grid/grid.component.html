@@ -1,6 +1,6 @@
 
 <div class="grid-container">
-    <div *ngIf="!isLoadingFromGridDimensionsChange" class="grid" cellspacing="0" cellpadding="0">
+    <div class="grid" cellspacing="0" cellpadding="0">
         <div class="row" *ngFor="let row of range(0, gridDimensions.height);">
             <div *ngFor="let col of range(0, gridDimensions.width);">
                 <ng-container *ngIf="{row: row, col: col} as pos">
@@ -30,8 +30,4 @@
         <p>Visited: {{animationFrame.countOfTilesVisited}}</p>
         <p>Path Length: {{animationFrame.finalPathLength | formatPathLength}}</p>
     </div>
-</div>
-
-<div *ngIf="isLoadingFromGridDimensionsChange">
-    Loading...
 </div>
