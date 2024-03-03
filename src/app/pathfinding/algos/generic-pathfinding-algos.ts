@@ -49,7 +49,7 @@ export function genericUnidirectionalSearch(
         );
 
         if (isFound) {
-            addFoundCommentaryToFinalAnimationFrame(frames);
+            addFoundCommentaryToFinalAnimationFrame(frames, goalPos);
             return frames;
         }
     }
@@ -71,10 +71,11 @@ export function genericUnidirectionalSearch(
     return frames;
 }
 
-function addFoundCommentaryToFinalAnimationFrame(frames: AnimationFrame[]) {
+function addFoundCommentaryToFinalAnimationFrame(frames: AnimationFrame[], goalPos: Pos) {
     const finalFrame = frames[frames.length - 1];
 
     finalFrame.commentary = "Path found!";
+    setFrameAt(finalFrame.grid, goalPos.row, goalPos.col, TileAnimationFrame.FinalPath);
 }
 
 function considerNextStep(
@@ -187,10 +188,10 @@ function genAnimationFrame(
         for (let col = 0; col < gridWidth; col++) {
             const pos = { row, col };
 
-            if (hasPos(pathList, pos)) {
-                setFrameAt(frame.grid, row, col, TileAnimationFrame.FinalPath);
-            } else if (posBeingExpanded && isSamePos(posBeingExpanded, pos)) {
+            if (posBeingExpanded && isSamePos(posBeingExpanded, pos)) {
                 setFrameAt(frame.grid, row, col, TileAnimationFrame.BeingExpanded);
+            } else if (hasPos(pathList, pos)) {
+                setFrameAt(frame.grid, row, col, TileAnimationFrame.FinalPath);
             } else if (hasPos(positionsBeingAddedToAgenda, pos)) {
                 setFrameAt(frame.grid, row, col, TileAnimationFrame.BeingAddedToAgenda);
             } else if (hasBeenExpandedAt(expandedGrid, row, col)) {
