@@ -61,7 +61,7 @@
                     [max]="(animationFramesForMultipleAlgosService.stream$ | async)!.lengthOfFramesForEachAlgo - 1"
                     (input)="updateAnimationIndexFromRange($event)"
                 />
-                <p>{{(animationIndexService.stream$ | async)! + 1}} / {{(animationFramesForMultipleAlgosService.stream$ | async)!.lengthOfFramesForEachAlgo}}</p>
+                <p>{{(animationIndexService.stream$ | async)! + 1}} / {{(numberOfAnimationFramesDisplay$ | async)!}}</p>
             </div>
         </div>
 

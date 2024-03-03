@@ -13,9 +13,12 @@ import { GridDimensionsService } from "../../services/grid-dimensions.service";
 import { HeuristicDistGridService } from "../../services/heuristic-dist-grid.service";
 import { MousePressService } from "../../services/mouse-press.service";
 import { ProblemStatementChangesService } from "../../services/problem-statement-changes.service";
-import { combineLatest, map, switchMap } from "rxjs";
+import { combineLatest, map, merge, switchMap } from "rxjs";
 import { LastPosDraggedFromService } from "../../services/last-pos-dragged-from";
 import { PathfindingAlgosService } from "../../services/pathfinding-algos.service";
+import { ProblemStatement } from "../../models/problem-statement/problem-statement";
+import { GridDimensions } from "../../models/grid/grid";
+import { AnimationFramesForMultipleAlgos } from "../../models/animation/animation-frame";
 
 @Component({
     selector: 'app-page',
@@ -50,6 +53,26 @@ export class PageComponent {
         this.barrierGridService.stream$,
         this.heuristicDistGridService.stream$
     ];
+
+    numberOfAnimationFramesDisplay$ = merge(
+        this.problemStatementChangesService.stream$,
+        this.animationFramesForMultipleAlgosService.stream$,
+        this.gridDimensionsService.stream$
+    ).pipe(
+        map((value) => {
+            if (this.isInstanceOfAnimationFramesForMultipleAlgos(value)) {
+                return value.lengthOfFramesForEachAlgo;
+            } else {
+                return "?";
+            }
+        })
+    );
+
+    isInstanceOfAnimationFramesForMultipleAlgos(
+        value: ProblemStatement | AnimationFramesForMultipleAlgos | GridDimensions
+    ): value is AnimationFramesForMultipleAlgos {
+        return (value as AnimationFramesForMultipleAlgos).lengthOfFramesForEachAlgo !== undefined;
+    }
 
     isLoadingFromGridDimensionsChange$ = this.gridDimensionsService.stream$.pipe(
         switchMap(({ height, width }) => combineLatest(this.gridBasedStreams).pipe(
