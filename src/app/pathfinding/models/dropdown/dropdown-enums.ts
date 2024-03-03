@@ -32,7 +32,7 @@ export enum TypeOfDataDisplayedOnTileOption {
     HeuristicDists = 'Display Heuristic Distance',
 }
 
-export const DEFAULT_OBSTACLE_PLACED_ON_TILE = ObstaclePlacedOnTileOption.Barrier;
+export const DEFAULT_OBSTACLE_PLACED_ON_TILE = ObstaclePlacedOnTileOption.RandomWeight;
 
 export const DEFAULT_MAZE_GEN_ALGO = MazeGenAlgoOption.Random;
 

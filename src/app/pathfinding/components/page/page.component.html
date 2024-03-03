@@ -100,7 +100,12 @@
         </div>
         <div class="sidebar-grouping">
             <h2>Configure Multiple Grids</h2>
-            <button (click)="domUpdatesService.newPathfindingAlgosAction$.next({ kind: 'Add' })">Add Grid</button>
+            <button 
+                *ngIf="(shouldRenderAddGridButton$ | async) === true"
+                (click)="domUpdatesService.newPathfindingAlgosAction$.next({ kind: 'Add' })"
+            >
+                Add Grid
+            </button>
             <button (click)="domUpdatesService.newPathfindingAlgosAction$.next({ kind: 'Reset' })">Reset Grids</button>
         </div>
         <div class="sidebar-grouping">

@@ -68,6 +68,10 @@ export class PageComponent {
         })
     );
 
+    shouldRenderAddGridButton$ = this.animationFramesForMultipleAlgosService.stream$.pipe(
+        map(({ algoToFramesMapping }) => algoToFramesMapping.keys().length < this.pathfindingAlgosService.MAX_NUMBER_OF_ALGOS)
+    );
+
     isInstanceOfAnimationFramesForMultipleAlgos(
         value: ProblemStatement | AnimationFramesForMultipleAlgos | GridDimensions
     ): value is AnimationFramesForMultipleAlgos {

@@ -17,16 +17,24 @@ export class PathfindingAlgosService implements StateService<PathfindingAlgoOpti
         bridgeToOtherStreams.link(this.stream$);
     }
 
+    readonly MAX_NUMBER_OF_ALGOS = 4;
+
     stream$ = this.domUpdates.newPathfindingAlgosAction$.pipe(
-        scan((algos, action) => {
+        scan((selectedAlgos, action) => {
             if (action.kind === 'Add') {
-                return algos.concat(DEFAULT_PATHFINDING_ALGO)
+                const availableAlgos = Object.values(PathfindingAlgoOption) as PathfindingAlgoOption[];
+                const firstAvailableAlgo = availableAlgos.find(algo => !selectedAlgos.includes(algo));
+                return selectedAlgos.concat(firstAvailableAlgo ? firstAvailableAlgo : DEFAULT_PATHFINDING_ALGO);
             } else if (action.kind === 'Reset') {
                 return [DEFAULT_PATHFINDING_ALGO]
             } else if (action.kind === 'Remove') {
-                return algos.slice(0, action.index).concat(algos.slice(action.index, algos.length));
+                const selectedAlgosBeforeItemToRemove = selectedAlgos.slice(0, action.index);
+                const selectedAlgosAfterItemToRemove = selectedAlgos.slice(action.index, selectedAlgos.length);
+                return selectedAlgosBeforeItemToRemove.concat(selectedAlgosAfterItemToRemove);
             } else if (action.kind === 'Set') {
-                return algos.slice(0, action.index).concat(action.algo).concat(algos.slice(action.index, algos.length));
+                const selectedAlgosBeforeItemToSet = selectedAlgos.slice(0, action.index);
+                const selectedAlgosAfterItemToSet = selectedAlgos.slice(action.index, selectedAlgos.length);
+                return selectedAlgosBeforeItemToSet.concat(action.algo, selectedAlgosAfterItemToSet);
             } else {
                 throw new Error('Unexpected action kind');
             }
