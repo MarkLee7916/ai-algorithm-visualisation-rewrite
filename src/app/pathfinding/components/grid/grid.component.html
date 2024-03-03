@@ -26,8 +26,11 @@
     </div>
 
     <div class="grid-info">
-        <p>Expanded: {{animationFrame.countOfTilesExpanded}}</p>
-        <p>Visited: {{animationFrame.countOfTilesVisited}}</p>
-        <p>Path Length: {{animationFrame.finalPathLength | formatPathLength}}</p>
+        <div class="grid-commentary">{{animationFrame.commentary}}</div>
+        <div class="grid-stats">
+            <p>Expanded: {{animationFrame.countOfTilesExpanded}}</p>
+            <p>Visited: {{animationFrame.countOfTilesVisited}}</p>
+            <p>Path Length: {{animationFrame.finalPathLength | formatPathLength}}</p>
+        </div>
     </div>
 </div>

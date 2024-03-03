@@ -21,13 +21,19 @@
 
     .grid-info {
         height: 100%;
-        margin-right: 5px;
         display: flex;
-        justify-content: center;
-    }
+        flex-direction: column;
+        align-items: center;
 
-    .grid-info>p {
-        margin-left: 10px;
-        margin-right: 10px;
+        .grid-stats {
+            margin-top: 5px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .grid-stats>p {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
     }
 }
