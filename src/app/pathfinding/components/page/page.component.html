@@ -94,7 +94,42 @@
             </div>
         </div>
         <div class="sidebar-grouping">
-            <h2>Neighbour Directions</h2>
+            <h2>Neighbours Allowed</h2>
+            <div class="radio-button-grouping">
+                <span class="radio-button">
+                    <input 
+                        [checked]="(domUpdatesService.setTypeOfNeighboursAllowed$ | async) === TypeOfNeighboursAllowedOption.NonDiagonals"
+                        type="radio" 
+                        id="non-diagonals" 
+                        name="type-of-neighbours-allowed" 
+                        [value]="TypeOfNeighboursAllowedOption.NonDiagonals"
+                        (change)="domUpdatesService.setTypeOfNeighboursAllowed$.next(TypeOfNeighboursAllowedOption.NonDiagonals)"
+                    />
+                    <label for="non-diagonals">Non Diagonals</label>
+                </span>
+                <span class="radio-button">
+                    <input
+                        [checked]="(domUpdatesService.setTypeOfNeighboursAllowed$ | async) === TypeOfNeighboursAllowedOption.Diagonals" 
+                        type="radio" 
+                        id="diagonals" 
+                        name="type-of-neighbours-allowed" 
+                        [value]="TypeOfNeighboursAllowedOption.Diagonals"
+                        (change)="domUpdatesService.setTypeOfNeighboursAllowed$.next(TypeOfNeighboursAllowedOption.Diagonals)"
+                    />
+                    <label for="diagonals">Diagonals</label>
+                </span>
+                <span class="radio-button">
+                    <input
+                        [checked]="(domUpdatesService.setTypeOfNeighboursAllowed$ | async) === TypeOfNeighboursAllowedOption.AllDirections" 
+                        type="radio" 
+                        id="all-directions" 
+                        name="type-of-neighbours-allowed" 
+                        [value]="TypeOfNeighboursAllowedOption.AllDirections"
+                        (change)="domUpdatesService.setTypeOfNeighboursAllowed$.next(TypeOfNeighboursAllowedOption.AllDirections)"
+                    />
+                    <label for="all-directions">All Directions</label>
+                </span>     
+            </div>
         </div>
         <div class="sidebar-grouping">
             <h2>Maze Type</h2>
