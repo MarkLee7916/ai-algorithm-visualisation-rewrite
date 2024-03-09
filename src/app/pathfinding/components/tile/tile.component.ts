@@ -145,6 +145,10 @@ export class TileComponent {
     }
 
     getPathLengthToDisplay(pathLengthFromStart: number) {
-        return pathLengthFromStart !== Number.POSITIVE_INFINITY ? this.pathLengthFromStart.toString() : '∞'
+        if (!pathLengthFromStart || pathLengthFromStart === Number.POSITIVE_INFINITY) {
+            return '∞';
+        } else {
+            return pathLengthFromStart.toString();
+        }
     }
 }

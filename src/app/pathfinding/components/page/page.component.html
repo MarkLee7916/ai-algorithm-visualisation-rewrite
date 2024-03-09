@@ -147,7 +147,42 @@
             </div>
         </div>
         <div class="sidebar-grouping">
-            <h2>Info Displayed On Tile</h2>
+            <h2>Data Displayed On Tile</h2>
+            <div class="radio-button-grouping">
+                <span class="radio-button">
+                    <input 
+                        [checked]="(domUpdatesService.setTypeOfDataDisplayedOnTile$ | async) === TypeOfDataDisplayedOnTileOption.Weights"
+                        type="radio" 
+                        id="weights" 
+                        name="data-displayed-on-tile" 
+                        [value]="TypeOfDataDisplayedOnTileOption.Weights"
+                        (change)="domUpdatesService.setTypeOfDataDisplayedOnTile$.next(TypeOfDataDisplayedOnTileOption.Weights)"
+                    />
+                    <label for="weights">Weights</label>
+                </span>
+                <span class="radio-button">
+                    <input
+                        [checked]="(domUpdatesService.setTypeOfDataDisplayedOnTile$ | async) === TypeOfDataDisplayedOnTileOption.PathLengthsFromStart" 
+                        type="radio" 
+                        id="path-lengths-from-start" 
+                        name="data-displayed-on-tile" 
+                        [value]="TypeOfDataDisplayedOnTileOption.PathLengthsFromStart"
+                        (change)="domUpdatesService.setTypeOfDataDisplayedOnTile$.next(TypeOfDataDisplayedOnTileOption.PathLengthsFromStart)"
+                    />
+                    <label for="path-lengths-from-start">Path Lengths</label>
+                </span>
+                <span class="radio-button">
+                    <input
+                        [checked]="(domUpdatesService.setTypeOfDataDisplayedOnTile$ | async) === TypeOfDataDisplayedOnTileOption.HeuristicDists" 
+                        type="radio" 
+                        id="heuristic-dists" 
+                        name="data-displayed-on-tile" 
+                        [value]="TypeOfDataDisplayedOnTileOption.HeuristicDists"
+                        (change)="domUpdatesService.setTypeOfDataDisplayedOnTile$.next(TypeOfDataDisplayedOnTileOption.HeuristicDists)"
+                    />
+                    <label for="heuristic-dists">Heuristic Distances</label>
+                </span>     
+            </div>
         </div>
         <div class="sidebar-grouping">
             <h2>Configure Multiple Grids</h2>
