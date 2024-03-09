@@ -7,8 +7,7 @@ export enum ObstaclePlacedOnTileOption {
 export enum MazeGenAlgoOption {
     Random = 'Random Grid',
     FillGrid = 'Fill Grid',
-    VerticalDivision = 'Vertical Division',
-    HorizontalDivision = 'Horizontal Division',
+    Division = 'Division',
 }
 
 export enum PathfindingAlgoOption {

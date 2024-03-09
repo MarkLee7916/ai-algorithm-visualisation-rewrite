@@ -132,7 +132,42 @@
             </div>
         </div>
         <div class="sidebar-grouping">
-            <h2>Maze Type</h2>
+            <h2>Maze Generation Algo</h2>
+            <div class="radio-button-grouping">
+                <span class="radio-button">
+                    <input 
+                        [checked]="(domUpdatesService.setMazeGenAlgo$ | async) === MazeGenAlgoOption.Random"
+                        type="radio" 
+                        id="random" 
+                        name="maze-gen-algo" 
+                        [value]="MazeGenAlgoOption.Random"
+                        (change)="domUpdatesService.setMazeGenAlgo$.next(MazeGenAlgoOption.Random)"
+                    />
+                    <label for="random">Random</label>
+                </span>
+                <span class="radio-button">
+                    <input
+                        [checked]="(domUpdatesService.setMazeGenAlgo$ | async) === MazeGenAlgoOption.FillGrid" 
+                        type="radio" 
+                        id="fill-grid" 
+                        name="maze-gen-algo" 
+                        [value]="MazeGenAlgoOption.FillGrid"
+                        (change)="domUpdatesService.setMazeGenAlgo$.next(MazeGenAlgoOption.FillGrid)"
+                    />
+                    <label for="fill-grid">Fill Grid</label>
+                </span>
+                <span class="radio-button">
+                    <input
+                        [checked]="(domUpdatesService.setMazeGenAlgo$ | async) === MazeGenAlgoOption.Division" 
+                        type="radio" 
+                        id="division" 
+                        name="maze-gen-algo" 
+                        [value]="MazeGenAlgoOption.Division"
+                        (change)="domUpdatesService.setMazeGenAlgo$.next(MazeGenAlgoOption.Division)"
+                    />
+                    <label for="division">Division</label>
+                </span>     
+            </div>
         </div>
         <div class="sidebar-grouping">
             <h2>Grid Options</h2>
