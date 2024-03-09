@@ -48,12 +48,6 @@ export class PageComponent {
         public pathfindingAlgosService: PathfindingAlgosService
     ) { }
 
-    gridBasedStreams = [
-        this.weightGridService.stream$,
-        this.barrierGridService.stream$,
-        this.heuristicDistGridService.stream$
-    ];
-
     numberOfAnimationFramesDisplay$ = merge(
         this.problemStatementChangesService.stream$,
         this.animationFramesForMultipleAlgosService.stream$,
