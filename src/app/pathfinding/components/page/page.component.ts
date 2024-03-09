@@ -30,23 +30,22 @@ import { MazeGenAlgoOption, ObstaclePlacedOnTileOption, TypeOfDataDisplayedOnTil
 export class PageComponent {
     constructor(
         // TODO: find a better way of including all the services in the compilation 
+        public weightGrid: WeightGridService,
+        public barrierGrid: BarrierGridService,
+        public startPos: StartPosService,
+        public goalPos: GoalPosService,
+        public currentAnimationFrameForMultipleAlgos: CurrentAnimationFrameForMultipleAlgosService,
         public domUpdates: DomUpdatesService,
-        public weightGridService: WeightGridService,
-        public barrierGridService: BarrierGridService,
-        public startPosService: StartPosService,
-        public goalPosService: GoalPosService,
-        public currentAnimationFrameForMultipleAlgosService: CurrentAnimationFrameForMultipleAlgosService,
-        public domUpdatesService: DomUpdatesService,
-        public animateService: AnimateService,
-        public animationFramesForMultipleAlgosService: AnimationFramesForMultipleAlgosService,
-        public animationIndexService: AnimationIndexService,
-        public animationRunningService: AnimationRunningService,
-        public gridDimensionsService: GridDimensionsService,
-        public heuristicDistGridService: HeuristicDistGridService,
-        public mousePressService: MousePressService,
-        public problemStatementChangesService: ProblemStatementChangesService,
-        public lastPosDraggedFromService: LastPosDraggedFromService,
-        public pathfindingAlgosService: PathfindingAlgosService
+        public animate: AnimateService,
+        public animationFramesForMultipleAlgos: AnimationFramesForMultipleAlgosService,
+        public animationIndex: AnimationIndexService,
+        public animationRunning: AnimationRunningService,
+        public gridDimensions: GridDimensionsService,
+        public heuristicDistGrid: HeuristicDistGridService,
+        public mousePress: MousePressService,
+        public problemStatementChanges: ProblemStatementChangesService,
+        public lastPosDraggedFrom: LastPosDraggedFromService,
+        public pathfindingAlgos: PathfindingAlgosService
     ) { }
 
     ObstaclePlacedOnTileOption = ObstaclePlacedOnTileOption;
@@ -55,9 +54,9 @@ export class PageComponent {
     MazeGenAlgoOption = MazeGenAlgoOption;
 
     numberOfAnimationFramesDisplay$ = merge(
-        this.problemStatementChangesService.stream$,
-        this.animationFramesForMultipleAlgosService.stream$,
-        this.gridDimensionsService.stream$
+        this.problemStatementChanges.stream$,
+        this.animationFramesForMultipleAlgos.stream$,
+        this.gridDimensions.stream$
     ).pipe(
         map((value) => {
             if (this.isInstanceOfAnimationFramesForMultipleAlgos(value)) {
@@ -68,8 +67,8 @@ export class PageComponent {
         })
     );
 
-    shouldRenderAddGridButton$ = this.animationFramesForMultipleAlgosService.stream$.pipe(
-        map(({ algoToFramesMapping }) => algoToFramesMapping.keys().length < this.pathfindingAlgosService.MAX_NUMBER_OF_ALGOS)
+    shouldRenderAddGridButton$ = this.animationFramesForMultipleAlgos.stream$.pipe(
+        map(({ algoToFramesMapping }) => algoToFramesMapping.keys().length < this.pathfindingAlgos.MAX_NUMBER_OF_ALGOS)
     );
 
     isInstanceOfAnimationFramesForMultipleAlgos(
@@ -82,7 +81,7 @@ export class PageComponent {
         const rangeElement = event.target as HTMLInputElement;
         const valueToSetTo = parseInt(rangeElement.value, 10);
 
-        this.domUpdatesService.newAnimationIndexAction$.next({ kind: 'SetValue', valueToSetTo });
+        this.domUpdates.newAnimationIndexAction$.next({ kind: 'SetValue', valueToSetTo });
     }
 }
 
