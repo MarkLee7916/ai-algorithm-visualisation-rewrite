@@ -19,6 +19,7 @@ import { PathfindingAlgosService } from "../../services/pathfinding-algos.servic
 import { ProblemStatement } from "../../models/problem-statement/problem-statement";
 import { GridDimensions } from "../../models/grid/grid";
 import { AnimationFramesForMultipleAlgos } from "../../models/animation/animation-frame";
+import { ObstaclePlacedOnTileOption } from "../../models/dropdown/dropdown-enums";
 
 @Component({
     selector: 'app-page',
@@ -47,6 +48,8 @@ export class PageComponent {
         public lastPosDraggedFromService: LastPosDraggedFromService,
         public pathfindingAlgosService: PathfindingAlgosService
     ) { }
+
+    ObstaclePlacedOnTileOption = ObstaclePlacedOnTileOption;
 
     numberOfAnimationFramesDisplay$ = merge(
         this.problemStatementChangesService.stream$,

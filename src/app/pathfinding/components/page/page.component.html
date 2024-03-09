@@ -89,29 +89,79 @@
     <div class="sidebar">
         <div class="sidebar-grouping">
             <h2>Configure Algorithm</h2>
+            <div class="sidebar-button-grouping">
+                <button>Visit Order</button>
+            </div>
         </div>
         <div class="sidebar-grouping">
-            <h2>Maze Options</h2>
-            <button>Generate Maze</button>
+            <h2>Neighbour Directions</h2>
+        </div>
+        <div class="sidebar-grouping">
+            <h2>Maze Type</h2>
         </div>
         <div class="sidebar-grouping">
             <h2>Grid Options</h2>
-            <button>Clear Barriers and Weights</button>
+            <div class="sidebar-button-grouping">
+                <button>Generate Maze</button>
+                <button>Clear</button>
+                <button>Save</button>
+                <button>Load</button>
+            </div>
+        </div>
+        <div class="sidebar-grouping">
+            <h2>Obstacle Placed On Tile</h2>
+            <div class="radio-button-grouping">
+                <span class="radio-button">
+                    <input 
+                        [checked]="(domUpdatesService.setObstaclePlacedOnTile$ | async) === ObstaclePlacedOnTileOption.RandomWeight"
+                        type="radio" 
+                        id="random-weight" 
+                        name="obstacle-placed-on-tile" 
+                        [value]="ObstaclePlacedOnTileOption.RandomWeight"
+                        (change)="domUpdatesService.setObstaclePlacedOnTile$.next(ObstaclePlacedOnTileOption.RandomWeight)"
+                    />
+                    <label for="random-weight">Random Weight</label>
+                </span>
+                <span class="radio-button">
+                    <input
+                        [checked]="(domUpdatesService.setObstaclePlacedOnTile$ | async) === ObstaclePlacedOnTileOption.CustomWeight" 
+                        type="radio" 
+                        id="custom-weight" 
+                        name="obstacle-placed-on-tile" 
+                        [value]="ObstaclePlacedOnTileOption.CustomWeight"
+                        (change)="domUpdatesService.setObstaclePlacedOnTile$.next(ObstaclePlacedOnTileOption.CustomWeight)"
+                    />
+                    <label for="custom-weight">Custom Weight</label>
+                </span>
+                <span class="radio-button">
+                    <input
+                        [checked]="(domUpdatesService.setObstaclePlacedOnTile$ | async) === ObstaclePlacedOnTileOption.Barrier" 
+                        type="radio" 
+                        id="barrier" 
+                        name="obstacle-placed-on-tile" 
+                        [value]="ObstaclePlacedOnTileOption.Barrier"
+                        (change)="domUpdatesService.setObstaclePlacedOnTile$.next(ObstaclePlacedOnTileOption.Barrier)"
+                    />
+                    <label for="barrier">Barrier</label>
+                </span>     
+            </div>
+        </div>
+        <div class="sidebar-grouping">
+            <h2>Info Displayed On Tile</h2>
         </div>
         <div class="sidebar-grouping">
             <h2>Configure Multiple Grids</h2>
-            <button 
-                *ngIf="(shouldRenderAddGridButton$ | async) === true"
-                (click)="domUpdatesService.newPathfindingAlgosAction$.next({ kind: 'Add' })"
-            >
-                Add Grid
-            </button>
-            <button (click)="domUpdatesService.newPathfindingAlgosAction$.next({ kind: 'Reset' })">Reset Grids</button>
-        </div>
-        <div class="sidebar-grouping">
-            <h2>Save/Load</h2>
-            <button>Save Grid</button>
-            <button>Load Grid</button>
+            <div class="sidebar-button-grouping">
+                <button 
+                    *ngIf="(shouldRenderAddGridButton$ | async) === true"
+                    (click)="domUpdatesService.newPathfindingAlgosAction$.next({ kind: 'Add' })"
+                >
+                    Add
+                </button>
+                <button (click)="domUpdatesService.newPathfindingAlgosAction$.next({ kind: 'Reset' })">
+                    Reset
+                </button>
+            </div>
         </div>
     </div>
 </div>

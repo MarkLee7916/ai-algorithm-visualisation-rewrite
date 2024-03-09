@@ -4,6 +4,16 @@
     height: 100vh;
     width: 100vw;
 
+    button {
+        background-color: white;
+        padding: 2px;
+    }
+
+    button:hover {
+        opacity: 0.5;
+        cursor: pointer;
+    }
+
     .content-container {
         margin-top: 100px;
         margin-right: 300px;
@@ -112,6 +122,45 @@
             justify-content: space-around;
             align-items: center;
             flex-direction: column;
+            width: 100%;
+
+            .radio-button-grouping {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+
+                .radio-button {
+                    margin-left: 5px;
+                    margin-right: 5px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .radio-button:hover * {
+                    opacity: 0.5;
+                    cursor: pointer;
+                }
+
+                .radio-button>input {
+                    margin-right: 1px;
+                }
+
+                .radio-button>label {
+                    font-size: 13px;
+                }
+            }
+
+            .sidebar-button-grouping {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+            }
+
+            .sidebar-button-grouping>button {
+                margin-left: 5px;
+                margin-right: 5px;
+            }
         }
 
         .sidebar-grouping>* {
