@@ -24,9 +24,13 @@ export type BarrierGridAction =
     { kind: 'ResetGrid' } |
     { kind: 'NewGrid', grid: BarrierGrid }
 
-export type StartOrGoalPosAction =
+export type StartPosAction =
     { kind: 'MovePositionWithinBoundsOfGrid', newHeight: number, newWidth: number } |
-    { kind: 'HandleDrop', posToDropAt: Pos, lastPosDraggedFrom: Pos | null, opposingPos: Pos, barrierGrid: BarrierGrid, gridDimensions: GridDimensions }
+    { kind: 'HandleDrop', posToDropAt: Pos, lastPosDraggedFrom: Pos | null, goalPos: Pos, barrierGrid: BarrierGrid, gridDimensions: GridDimensions }
+
+export type GoalPosAction =
+    { kind: 'MovePositionWithinBoundsOfGrid', newHeight: number, newWidth: number } |
+    { kind: 'HandleDrop', posToDropAt: Pos, lastPosDraggedFrom: Pos | null, startPos: Pos, barrierGrid: BarrierGrid, gridDimensions: GridDimensions }
 
 export type PathfindingAlgosAction =
     { kind: 'Reset' } |

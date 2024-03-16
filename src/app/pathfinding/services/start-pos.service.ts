@@ -7,7 +7,7 @@ import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, 
 import { StateService } from "./state.service";
 import { BarrierGrid, hasBarrierAt } from "../models/grid/barrier-grid";
 import { GridDimensions } from "../models/grid/grid";
-import { StartOrGoalPosAction } from "../models/actions/actions";
+import { StartPosAction } from "../models/actions/actions";
 import { DIAGONAL_NEIGHBOURS, NON_DIAGONAL_NEIGHBOURS, genNeighbouringPositions } from "../models/grid/neighbours";
 
 @Injectable({
@@ -41,22 +41,22 @@ export class StartPosService implements StateService<Pos> {
             .find(pos => this.canDropAt(pos, goalPos, barrierGrid));
     }
 
-    private handleDrop$: Observable<StartOrGoalPosAction> = this.domUpdates.drop$.pipe(
+    private handleDrop$: Observable<StartPosAction> = this.domUpdates.drop$.pipe(
         throttleTime(100),
         map(tileEvent => tileEvent.pos),
         distinctUntilChanged((pos1, pos2) => isSamePos(pos1, pos2)),
         withLatestFrom(this.lastPosDraggedFrom.stream$, this.goalPos.stream$, this.barrierGrid.stream$, this.gridDimensions.stream$),
-        map(([posToDropAt, lastPosDraggedFrom, goalPos, barrierGrid, gridDimensions]) => ({ kind: 'HandleDrop', posToDropAt, lastPosDraggedFrom, opposingPos: goalPos, barrierGrid, gridDimensions }))
+        map(([posToDropAt, lastPosDraggedFrom, goalPos, barrierGrid, gridDimensions]) => ({ kind: 'HandleDrop', posToDropAt, lastPosDraggedFrom, goalPos, barrierGrid, gridDimensions }))
     );
 
-    private handleGridDimensionChange$: Observable<StartOrGoalPosAction> = this.gridDimensions.stream$.pipe(
+    private handleGridDimensionChange$: Observable<StartPosAction> = this.gridDimensions.stream$.pipe(
         map(({ height, width }) => ({ kind: 'MovePositionWithinBoundsOfGrid', newHeight: height, newWidth: width }))
     );
 
     stream$ = merge(this.handleDrop$, this.handleGridDimensionChange$).pipe(
         scan((currentStartPos, action) => {
             if (action.kind === 'HandleDrop') {
-                const { posToDropAt, lastPosDraggedFrom, opposingPos: goalPos, barrierGrid, gridDimensions } = action;
+                const { posToDropAt, lastPosDraggedFrom, goalPos, barrierGrid, gridDimensions } = action;
 
                 if (!this.wasDraggedFromStart(currentStartPos, lastPosDraggedFrom)) {
                     return currentStartPos;
