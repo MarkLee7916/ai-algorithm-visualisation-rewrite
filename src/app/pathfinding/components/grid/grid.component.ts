@@ -9,7 +9,7 @@ import { pathLengthAt } from "../../models/grid/path-length-grid";
 import { frameAt } from "../../models/grid/animation-frame-grid";
 import { HeuristicDistFromGoalGrid, distAt } from "../../models/grid/heuristic-dist-from-goal-grid";
 import { TileEvent } from "../../models/grid/tile-event";
-import { range } from "lodash";
+import { range } from "../../../shared/utils";
 
 @Component({
     selector: 'app-grid',
