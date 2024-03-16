@@ -45,7 +45,7 @@ export class BarrierGridService implements StateService<BarrierGrid> {
         })
     )
 
-    private tileActivation$: Observable<BarrierGridAction> = merge(this.domUpdates.activateTile$, this.generateMaze$).pipe(
+    private posActivation$: Observable<BarrierGridAction> = merge(this.domUpdates.activateAtPos$, this.generateMaze$).pipe(
         withLatestFrom(this.domUpdates.obstaclePlacedOnTile$, this.startPos.stream$, this.goalPos.stream$),
         filter(([posActivated, dataType, startPos, goalPos]) => !isSamePos(startPos, posActivated) && !isSamePos(goalPos, posActivated) && dataType === ObstaclePlacedOnTileOption.Barrier),
         map(([posActivated, , ,]) => ({ kind: 'ToggleBarrierAt', row: posActivated.row, col: posActivated.col }))
@@ -58,7 +58,7 @@ export class BarrierGridService implements StateService<BarrierGrid> {
     stream$: Observable<BarrierGrid> = merge(
         this.clearBarrierGridFromUserInput$,
         this.clearBarrierGridToGenerateMaze$,
-        this.tileActivation$,
+        this.posActivation$,
         this.adaptToNewGridDimensions$
     ).pipe(
         scan((currentGrid, action) => {

@@ -77,7 +77,7 @@
                     [animationFrame]="(currentAnimationFrameForMultipleAlgos.stream$ | async)!.get(algo)!" 
                     [heuristicDistFromGoalGrid]="(heuristicDistGrid.stream$ | async)!"
                     [gridDimensions]="(gridDimensions.stream$ | async)!"
-                    (activate)="domUpdates.activateTile$.next($event)"
+                    (activate)="domUpdates.activateAtPos$.next($event)"
                     (drag)="domUpdates.drag$.next($event)" 
                     (drop)="domUpdates.drop$.next($event)" 
                 >

@@ -10,6 +10,7 @@ import { TileEvent } from '../models/grid/tile-event';
     providedIn: 'root'
 })
 export class DomUpdatesService {
+    // TODO: these should probably be regular Subjects
     newAnimationIndexAction$ = new BehaviorSubject<AnimationIndexAction>({ kind: 'Reset' });
     newPathfindingAlgosAction$ = new BehaviorSubject<PathfindingAlgosAction>({ kind: 'Reset' });
 
@@ -23,7 +24,7 @@ export class DomUpdatesService {
 
     clearBarrierAndWeightGrids$ = new Subject<void>();
     generateMaze$ = new Subject<void>();
-    activateTile$ = new Subject<Pos>();
+    activateAtPos$ = new Subject<Pos>();
     drag$ = new Subject<TileEvent>();
     drop$ = new Subject<TileEvent>();
 }

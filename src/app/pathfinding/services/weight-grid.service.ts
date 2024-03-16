@@ -45,7 +45,7 @@ export class WeightGridService implements StateService<WeightGrid> {
         })
     )
 
-    private tileActivation$: Observable<WeightGridAction> = merge(this.domUpdates.activateTile$, this.generateMaze$).pipe(
+    private posActivation$: Observable<WeightGridAction> = merge(this.domUpdates.activateAtPos$, this.generateMaze$).pipe(
         withLatestFrom(this.domUpdates.obstaclePlacedOnTile$, this.startPos.stream$, this.goalPos.stream$),
         filter(([posActivated, dataType, startPos, goalPos]) => !isSamePos(startPos, posActivated) && !isSamePos(goalPos, posActivated) && dataType === ObstaclePlacedOnTileOption.RandomWeight),
         map(([pos, , ,]) => ({ kind: 'ToggleRandomWeightAt', row: pos.row, col: pos.col }))
@@ -58,7 +58,7 @@ export class WeightGridService implements StateService<WeightGrid> {
     stream$: Observable<WeightGrid> = merge(
         this.clearWeightGridFromUserInput$,
         this.clearWeightGridToGenerateMaze$,
-        this.tileActivation$,
+        this.posActivation$,
         this.adaptToNewGridDimensions$
     ).pipe(
         scan((currentGrid, action) => {
