@@ -27,22 +27,27 @@ export class AnimationFramesForMultipleAlgosService implements StateService<Anim
         bridgeToOtherStreams.link(this.stream$);
     }
 
+    private computeFramesForEachAlgo(problemStatement: ProblemStatement) {
+        const [neighbourOrdering, typeOfNeighboursAllowed, pathfindingAlgos, weightGrid, barrierGrid, startPos, goalPos, gridDimensions] = problemStatement;
+        const filterNeighboursFunction = typeOfNeighboursAllowedOptionToImpl.get(typeOfNeighboursAllowed);
+        const { height, width } = gridDimensions;
+        const algoToFramesMapping = new UncheckedObjMap<PathfindingAlgoOption, AnimationFramesForSingleAlgo>([]);
+
+        pathfindingAlgos.forEach(algo => {
+            const algoImpl = pathfindingAlgoOptionToImpl.get(algo);
+            const frames = algoImpl(startPos, goalPos, weightGrid, barrierGrid, filterNeighboursFunction(neighbourOrdering), height, width);
+            algoToFramesMapping.set(algo, frames);
+        });
+
+        return algoToFramesMapping;
+    }
+
     private calculateFrames$ = this.problemStatementChanges.stream$.pipe(
         switchMap(problemStatement => this.animationIndex.stream$.pipe(
             skip(1),
             filter(animationIndex => animationIndex > 0),
             map(() => {
-                const [neighbourOrdering, typeOfNeighboursAllowed, pathfindingAlgos, weightGrid, barrierGrid, startPos, goalPos, gridDimensions] = problemStatement;
-                const filterNeighboursFunction = typeOfNeighboursAllowedOptionToImpl.get(typeOfNeighboursAllowed);
-                const { height, width } = gridDimensions;
-                const algoToFramesMapping = new UncheckedObjMap<PathfindingAlgoOption, AnimationFramesForSingleAlgo>([]);
-
-                pathfindingAlgos.forEach(algo => {
-                    const algoImpl = pathfindingAlgoOptionToImpl.get(algo);
-                    const frames = algoImpl(startPos, goalPos, weightGrid, barrierGrid, filterNeighboursFunction(neighbourOrdering), height, width);
-                    algoToFramesMapping.set(algo, frames);
-                });
-
+                const algoToFramesMapping = this.computeFramesForEachAlgo(problemStatement);
                 return buildAnimationFramesForMultipleAlgos(algoToFramesMapping);
             }),
             take(1)
