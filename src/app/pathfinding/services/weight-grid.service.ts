@@ -36,7 +36,7 @@ export class WeightGridService implements StateService<WeightGrid> {
     )
 
     private generateMaze$: Observable<Pos> = this.domUpdates.generateMaze$.pipe(
-        withLatestFrom(this.domUpdates.setObstaclePlacedOnTile$, this.domUpdates.setMazeGenAlgo$, this.gridDimensions.stream$),
+        withLatestFrom(this.domUpdates.obstaclePlacedOnTile$, this.domUpdates.mazeGenAlgo$, this.gridDimensions.stream$),
         filter(([, dataType, ,]) => dataType === ObstaclePlacedOnTileOption.RandomWeight),
         switchMap(([, , algo, dimensions]) => {
             const mazeAlgoImpl = mazeGenAlgoOptionToImpl.get(algo);
@@ -46,7 +46,7 @@ export class WeightGridService implements StateService<WeightGrid> {
     )
 
     private tileActivation$: Observable<WeightGridAction> = merge(this.domUpdates.activateTile$, this.generateMaze$).pipe(
-        withLatestFrom(this.domUpdates.setObstaclePlacedOnTile$, this.startPos.stream$, this.goalPos.stream$),
+        withLatestFrom(this.domUpdates.obstaclePlacedOnTile$, this.startPos.stream$, this.goalPos.stream$),
         filter(([posActivated, dataType, startPos, goalPos]) => !isSamePos(startPos, posActivated) && !isSamePos(goalPos, posActivated) && dataType === ObstaclePlacedOnTileOption.RandomWeight),
         map(([pos, , ,]) => ({ kind: 'ToggleRandomWeightAt', row: pos.row, col: pos.col }))
     )

@@ -25,7 +25,7 @@ export class AnimateService implements StateService<AnimationIndexAction> {
     */
     stream$: Observable<AnimationIndexAction> = combineLatest([
         this.animationRunning.stream$,
-        this.domUpdates.setAnimationDelay$
+        this.domUpdates.animationDelay$
     ]).pipe(
         switchMap(([isAnimationRunning, animationDelay]) =>
             interval(animationDelay).pipe(

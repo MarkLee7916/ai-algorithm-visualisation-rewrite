@@ -30,8 +30,8 @@ export class ProblemStatementChangesService implements StateService<ProblemState
     }
 
     stream$: Observable<ProblemStatement> = combineLatest([
-        this.domUpdates.setNeighbourVisitOrdering$,
-        this.domUpdates.setTypeOfNeighboursAllowed$,
+        this.domUpdates.neighbourVisitOrdering$,
+        this.domUpdates.typeOfNeighboursAllowed$,
         this.pathfindingAlgos.stream$,
         this.weightGrid.stream$,
         this.barrierGrid.stream$,

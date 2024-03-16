@@ -29,7 +29,7 @@
 
                 <img
                     *ngIf="(animationRunning.stream$ | async) === false"
-                    (click)="domUpdates.setAnimationRunning$.next(true)"
+                    (click)="domUpdates.animationRunning$.next(true)"
                     id="play-btn"
                     class="media-control-symbol"
                     src="./assets/play-button.png"
@@ -37,7 +37,7 @@
 
                 <img
                     *ngIf="(animationRunning.stream$ | async) === true"
-                    (click)="domUpdates.setAnimationRunning$.next(false)"
+                    (click)="domUpdates.animationRunning$.next(false)"
                     id="pause-btn"
                     class="media-control-symbol"
                     src="./assets/pause-button.png"
@@ -72,7 +72,7 @@
                     [barrierGrid]="(barrierGrid.stream$ | async)!" 
                     [startPos]="(startPos.stream$ | async)!" 
                     [goalPos]="(goalPos.stream$ | async)!" 
-                    [typeOfDataDisplayedOnTile]="(domUpdates.setTypeOfDataDisplayedOnTile$ | async)!" 
+                    [typeOfDataDisplayedOnTile]="(domUpdates.typeOfDataDisplayedOnTile$ | async)!" 
                     [willDisplayTooltipOnMouseOver]="false" 
                     [animationFrame]="(currentAnimationFrameForMultipleAlgos.stream$ | async)!.get(algo)!" 
                     [heuristicDistFromGoalGrid]="(heuristicDistGrid.stream$ | async)!"
@@ -98,34 +98,34 @@
             <div class="radio-button-grouping">
                 <span class="radio-button">
                     <input 
-                        [checked]="(domUpdates.setTypeOfNeighboursAllowed$ | async) === TypeOfNeighboursAllowedOption.NonDiagonals"
+                        [checked]="(domUpdates.typeOfNeighboursAllowed$ | async) === TypeOfNeighboursAllowedOption.NonDiagonals"
                         type="radio" 
                         id="non-diagonals" 
                         name="type-of-neighbours-allowed" 
                         [value]="TypeOfNeighboursAllowedOption.NonDiagonals"
-                        (change)="domUpdates.setTypeOfNeighboursAllowed$.next(TypeOfNeighboursAllowedOption.NonDiagonals)"
+                        (change)="domUpdates.typeOfNeighboursAllowed$.next(TypeOfNeighboursAllowedOption.NonDiagonals)"
                     />
                     <label for="non-diagonals">Non Diagonals</label>
                 </span>
                 <span class="radio-button">
                     <input
-                        [checked]="(domUpdates.setTypeOfNeighboursAllowed$ | async) === TypeOfNeighboursAllowedOption.Diagonals" 
+                        [checked]="(domUpdates.typeOfNeighboursAllowed$ | async) === TypeOfNeighboursAllowedOption.Diagonals" 
                         type="radio" 
                         id="diagonals" 
                         name="type-of-neighbours-allowed" 
                         [value]="TypeOfNeighboursAllowedOption.Diagonals"
-                        (change)="domUpdates.setTypeOfNeighboursAllowed$.next(TypeOfNeighboursAllowedOption.Diagonals)"
+                        (change)="domUpdates.typeOfNeighboursAllowed$.next(TypeOfNeighboursAllowedOption.Diagonals)"
                     />
                     <label for="diagonals">Diagonals</label>
                 </span>
                 <span class="radio-button">
                     <input
-                        [checked]="(domUpdates.setTypeOfNeighboursAllowed$ | async) === TypeOfNeighboursAllowedOption.AllDirections" 
+                        [checked]="(domUpdates.typeOfNeighboursAllowed$ | async) === TypeOfNeighboursAllowedOption.AllDirections" 
                         type="radio" 
                         id="all-directions" 
                         name="type-of-neighbours-allowed" 
                         [value]="TypeOfNeighboursAllowedOption.AllDirections"
-                        (change)="domUpdates.setTypeOfNeighboursAllowed$.next(TypeOfNeighboursAllowedOption.AllDirections)"
+                        (change)="domUpdates.typeOfNeighboursAllowed$.next(TypeOfNeighboursAllowedOption.AllDirections)"
                     />
                     <label for="all-directions">All Directions</label>
                 </span>     
@@ -136,34 +136,34 @@
             <div class="radio-button-grouping">
                 <span class="radio-button">
                     <input 
-                        [checked]="(domUpdates.setMazeGenAlgo$ | async) === MazeGenAlgoOption.Random"
+                        [checked]="(domUpdates.mazeGenAlgo$ | async) === MazeGenAlgoOption.Random"
                         type="radio" 
                         id="random" 
                         name="maze-gen-algo" 
                         [value]="MazeGenAlgoOption.Random"
-                        (change)="domUpdates.setMazeGenAlgo$.next(MazeGenAlgoOption.Random)"
+                        (change)="domUpdates.mazeGenAlgo$.next(MazeGenAlgoOption.Random)"
                     />
                     <label for="random">Random</label>
                 </span>
                 <span class="radio-button">
                     <input
-                        [checked]="(domUpdates.setMazeGenAlgo$ | async) === MazeGenAlgoOption.FillGrid" 
+                        [checked]="(domUpdates.mazeGenAlgo$ | async) === MazeGenAlgoOption.FillGrid" 
                         type="radio" 
                         id="fill-grid" 
                         name="maze-gen-algo" 
                         [value]="MazeGenAlgoOption.FillGrid"
-                        (change)="domUpdates.setMazeGenAlgo$.next(MazeGenAlgoOption.FillGrid)"
+                        (change)="domUpdates.mazeGenAlgo$.next(MazeGenAlgoOption.FillGrid)"
                     />
                     <label for="fill-grid">Fill Grid</label>
                 </span>
                 <span class="radio-button">
                     <input
-                        [checked]="(domUpdates.setMazeGenAlgo$ | async) === MazeGenAlgoOption.Division" 
+                        [checked]="(domUpdates.mazeGenAlgo$ | async) === MazeGenAlgoOption.Division" 
                         type="radio" 
                         id="division" 
                         name="maze-gen-algo" 
                         [value]="MazeGenAlgoOption.Division"
-                        (change)="domUpdates.setMazeGenAlgo$.next(MazeGenAlgoOption.Division)"
+                        (change)="domUpdates.mazeGenAlgo$.next(MazeGenAlgoOption.Division)"
                     />
                     <label for="division">Division</label>
                 </span>     
@@ -183,34 +183,34 @@
             <div class="radio-button-grouping">
                 <span class="radio-button">
                     <input 
-                        [checked]="(domUpdates.setObstaclePlacedOnTile$ | async) === ObstaclePlacedOnTileOption.RandomWeight"
+                        [checked]="(domUpdates.obstaclePlacedOnTile$ | async) === ObstaclePlacedOnTileOption.RandomWeight"
                         type="radio" 
                         id="random-weight" 
                         name="obstacle-placed-on-tile" 
                         [value]="ObstaclePlacedOnTileOption.RandomWeight"
-                        (change)="domUpdates.setObstaclePlacedOnTile$.next(ObstaclePlacedOnTileOption.RandomWeight)"
+                        (change)="domUpdates.obstaclePlacedOnTile$.next(ObstaclePlacedOnTileOption.RandomWeight)"
                     />
                     <label for="random-weight">Random Weight</label>
                 </span>
                 <span class="radio-button">
                     <input
-                        [checked]="(domUpdates.setObstaclePlacedOnTile$ | async) === ObstaclePlacedOnTileOption.CustomWeight" 
+                        [checked]="(domUpdates.obstaclePlacedOnTile$ | async) === ObstaclePlacedOnTileOption.CustomWeight" 
                         type="radio" 
                         id="custom-weight" 
                         name="obstacle-placed-on-tile" 
                         [value]="ObstaclePlacedOnTileOption.CustomWeight"
-                        (change)="domUpdates.setObstaclePlacedOnTile$.next(ObstaclePlacedOnTileOption.CustomWeight)"
+                        (change)="domUpdates.obstaclePlacedOnTile$.next(ObstaclePlacedOnTileOption.CustomWeight)"
                     />
                     <label for="custom-weight">Custom Weight</label>
                 </span>
                 <span class="radio-button">
                     <input
-                        [checked]="(domUpdates.setObstaclePlacedOnTile$ | async) === ObstaclePlacedOnTileOption.Barrier" 
+                        [checked]="(domUpdates.obstaclePlacedOnTile$ | async) === ObstaclePlacedOnTileOption.Barrier" 
                         type="radio" 
                         id="barrier" 
                         name="obstacle-placed-on-tile" 
                         [value]="ObstaclePlacedOnTileOption.Barrier"
-                        (change)="domUpdates.setObstaclePlacedOnTile$.next(ObstaclePlacedOnTileOption.Barrier)"
+                        (change)="domUpdates.obstaclePlacedOnTile$.next(ObstaclePlacedOnTileOption.Barrier)"
                     />
                     <label for="barrier">Barrier</label>
                 </span>     
@@ -221,34 +221,34 @@
             <div class="radio-button-grouping">
                 <span class="radio-button">
                     <input 
-                        [checked]="(domUpdates.setTypeOfDataDisplayedOnTile$ | async) === TypeOfDataDisplayedOnTileOption.Weights"
+                        [checked]="(domUpdates.typeOfDataDisplayedOnTile$ | async) === TypeOfDataDisplayedOnTileOption.Weights"
                         type="radio" 
                         id="weights" 
                         name="data-displayed-on-tile" 
                         [value]="TypeOfDataDisplayedOnTileOption.Weights"
-                        (change)="domUpdates.setTypeOfDataDisplayedOnTile$.next(TypeOfDataDisplayedOnTileOption.Weights)"
+                        (change)="domUpdates.typeOfDataDisplayedOnTile$.next(TypeOfDataDisplayedOnTileOption.Weights)"
                     />
                     <label for="weights">Weights</label>
                 </span>
                 <span class="radio-button">
                     <input
-                        [checked]="(domUpdates.setTypeOfDataDisplayedOnTile$ | async) === TypeOfDataDisplayedOnTileOption.PathLengthsFromStart" 
+                        [checked]="(domUpdates.typeOfDataDisplayedOnTile$ | async) === TypeOfDataDisplayedOnTileOption.PathLengthsFromStart" 
                         type="radio" 
                         id="path-lengths-from-start" 
                         name="data-displayed-on-tile" 
                         [value]="TypeOfDataDisplayedOnTileOption.PathLengthsFromStart"
-                        (change)="domUpdates.setTypeOfDataDisplayedOnTile$.next(TypeOfDataDisplayedOnTileOption.PathLengthsFromStart)"
+                        (change)="domUpdates.typeOfDataDisplayedOnTile$.next(TypeOfDataDisplayedOnTileOption.PathLengthsFromStart)"
                     />
                     <label for="path-lengths-from-start">Path Lengths</label>
                 </span>
                 <span class="radio-button">
                     <input
-                        [checked]="(domUpdates.setTypeOfDataDisplayedOnTile$ | async) === TypeOfDataDisplayedOnTileOption.HeuristicDists" 
+                        [checked]="(domUpdates.typeOfDataDisplayedOnTile$ | async) === TypeOfDataDisplayedOnTileOption.HeuristicDists" 
                         type="radio" 
                         id="heuristic-dists" 
                         name="data-displayed-on-tile" 
                         [value]="TypeOfDataDisplayedOnTileOption.HeuristicDists"
-                        (change)="domUpdates.setTypeOfDataDisplayedOnTile$.next(TypeOfDataDisplayedOnTileOption.HeuristicDists)"
+                        (change)="domUpdates.typeOfDataDisplayedOnTile$.next(TypeOfDataDisplayedOnTileOption.HeuristicDists)"
                     />
                     <label for="heuristic-dists">Heuristic Distances</label>
                 </span>     

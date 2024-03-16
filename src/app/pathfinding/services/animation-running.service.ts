@@ -34,7 +34,7 @@ export class AnimationRunningService implements StateService<boolean> {
     );
 
     stream$ = merge(
-        this.domUpdates.setAnimationRunning$,
+        this.domUpdates.animationRunning$,
         this.stopIfAtFinalFrame$,
         this.stopIfNeedToUpdateFrames$
     ).pipe(

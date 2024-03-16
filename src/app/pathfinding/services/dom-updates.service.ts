@@ -12,13 +12,15 @@ import { TileEvent } from '../models/grid/tile-event';
 export class DomUpdatesService {
     newAnimationIndexAction$ = new BehaviorSubject<AnimationIndexAction>({ kind: 'Reset' });
     newPathfindingAlgosAction$ = new BehaviorSubject<PathfindingAlgosAction>({ kind: 'Reset' });
-    setAnimationRunning$ = new BehaviorSubject<boolean>(false);
-    setAnimationDelay$ = new BehaviorSubject<number>(0);
-    setNeighbourVisitOrdering$ = new BehaviorSubject<NeighbourOrdering>(DEFAULT_NEIGHBOUR_VISIT_ORDER);
-    setObstaclePlacedOnTile$ = new BehaviorSubject<ObstaclePlacedOnTileOption>(DEFAULT_OBSTACLE_PLACED_ON_TILE);
-    setMazeGenAlgo$ = new BehaviorSubject<MazeGenAlgoOption>(DEFAULT_MAZE_GEN_ALGO);
-    setTypeOfDataDisplayedOnTile$ = new BehaviorSubject<TypeOfDataDisplayedOnTileOption>(DEFAULT_TYPE_OF_DATA_DISPLAYED_ON_TILE);
-    setTypeOfNeighboursAllowed$ = new BehaviorSubject<TypeOfNeighboursAllowedOption>(DEFAULT_TYPE_OF_NEIGHBOURS_ALLOWED);
+
+    animationRunning$ = new BehaviorSubject<boolean>(false);
+    animationDelay$ = new BehaviorSubject<number>(0);
+    neighbourVisitOrdering$ = new BehaviorSubject<NeighbourOrdering>(DEFAULT_NEIGHBOUR_VISIT_ORDER);
+    obstaclePlacedOnTile$ = new BehaviorSubject<ObstaclePlacedOnTileOption>(DEFAULT_OBSTACLE_PLACED_ON_TILE);
+    mazeGenAlgo$ = new BehaviorSubject<MazeGenAlgoOption>(DEFAULT_MAZE_GEN_ALGO);
+    typeOfDataDisplayedOnTile$ = new BehaviorSubject<TypeOfDataDisplayedOnTileOption>(DEFAULT_TYPE_OF_DATA_DISPLAYED_ON_TILE);
+    typeOfNeighboursAllowed$ = new BehaviorSubject<TypeOfNeighboursAllowedOption>(DEFAULT_TYPE_OF_NEIGHBOURS_ALLOWED);
+
     clearBarrierAndWeightGrids$ = new Subject<void>();
     generateMaze$ = new Subject<void>();
     activateTile$ = new Subject<Pos>();
