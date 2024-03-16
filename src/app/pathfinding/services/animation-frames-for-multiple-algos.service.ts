@@ -42,7 +42,7 @@ export class AnimationFramesForMultipleAlgosService implements StateService<Anim
         return algoToFramesMapping;
     }
 
-    private calculateFrames$ = this.problemStatementChanges.stream$.pipe(
+    private computeFrames$ = this.problemStatementChanges.stream$.pipe(
         switchMap(problemStatement => this.animationIndex.stream$.pipe(
             skip(1),
             filter(animationIndex => animationIndex > 0),
@@ -70,7 +70,7 @@ export class AnimationFramesForMultipleAlgosService implements StateService<Anim
         })
     );
 
-    stream$: Observable<AnimationFramesForMultipleAlgos> = merge(this.calculateFrames$, this.resetFromGridDimensionChanges$).pipe(
+    stream$: Observable<AnimationFramesForMultipleAlgos> = merge(this.computeFrames$, this.resetFromGridDimensionChanges$).pipe(
         shareReplay(1)
     );
 }
