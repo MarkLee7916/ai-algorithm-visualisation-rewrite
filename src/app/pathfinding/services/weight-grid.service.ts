@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@angular/core";
 import { DomUpdatesService } from "./dom-updates.service";
-import { Observable, filter, map, merge, scan, shareReplay, tap, withLatestFrom } from "rxjs";
+import { Observable, filter, map, merge, scan, shareReplay, switchMap, tap, withLatestFrom } from "rxjs";
 import { WeightGridAction } from "../models/actions/actions";
 import { DEFAULT_WEIGHT, WeightGrid, initWeightGrid, setWeightAt, toggleRandomWeightAt } from "../models/grid/weight-grid";
 import { ObstaclePlacedOnTileOption } from "../models/dropdown/dropdown-enums";
@@ -10,6 +10,8 @@ import { goalPos, gridDimensions, startPos, weightGrid } from "../pathfinding.to
 import { StateService } from "./state.service";
 import { Pos, isSamePos } from "../models/grid/pos";
 import { deepCopy } from "../../shared/utils";
+import { getListOfPositionsToActivate } from "../algos/maze-gen-algos";
+import { mazeGenAlgoOptionToImpl } from "../models/dropdown/dropdown-enum-mappings";
 
 @Injectable({
     providedIn: 'root'
@@ -25,11 +27,25 @@ export class WeightGridService implements StateService<WeightGrid> {
         bridgeToOtherStreams.link(this.stream$);
     }
 
-    private clearWeightGrid$: Observable<WeightGridAction> = this.domUpdates.clearBarrierAndWeightGrids$.pipe(
+    private clearWeightGridFromUserInput$: Observable<WeightGridAction> = this.domUpdates.clearBarrierAndWeightGrids$.pipe(
         map(() => ({ kind: 'ResetGrid' }))
     )
 
-    private tileActivation$: Observable<WeightGridAction> = this.domUpdates.activateTile$.pipe(
+    private clearWeightGridToGenerateMaze$: Observable<WeightGridAction> = this.domUpdates.generateMaze$.pipe(
+        map(() => ({ kind: 'ResetGrid' }))
+    )
+
+    private generateMaze$: Observable<Pos> = this.domUpdates.generateMaze$.pipe(
+        withLatestFrom(this.domUpdates.setObstaclePlacedOnTile$, this.domUpdates.setMazeGenAlgo$, this.gridDimensions.stream$),
+        filter(([, dataType, ,]) => dataType === ObstaclePlacedOnTileOption.RandomWeight),
+        switchMap(([, , algo, dimensions]) => {
+            const mazeAlgoImpl = mazeGenAlgoOptionToImpl.get(algo);
+            const maze = mazeAlgoImpl(dimensions.height, dimensions.width);
+            return getListOfPositionsToActivate(maze);
+        })
+    )
+
+    private tileActivation$: Observable<WeightGridAction> = merge(this.domUpdates.activateTile$, this.generateMaze$).pipe(
         withLatestFrom(this.domUpdates.setObstaclePlacedOnTile$, this.startPos.stream$, this.goalPos.stream$),
         filter(([posActivated, dataType, startPos, goalPos]) => !isSamePos(startPos, posActivated) && !isSamePos(goalPos, posActivated) && dataType === ObstaclePlacedOnTileOption.RandomWeight),
         map(([pos, , ,]) => ({ kind: 'ToggleRandomWeightAt', row: pos.row, col: pos.col }))
@@ -40,7 +56,8 @@ export class WeightGridService implements StateService<WeightGrid> {
     )
 
     stream$: Observable<WeightGrid> = merge(
-        this.clearWeightGrid$,
+        this.clearWeightGridFromUserInput$,
+        this.clearWeightGridToGenerateMaze$,
         this.tileActivation$,
         this.adaptToNewGridDimensions$
     ).pipe(

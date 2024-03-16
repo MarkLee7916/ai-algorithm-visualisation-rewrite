@@ -172,8 +172,8 @@
         <div class="sidebar-grouping">
             <h2>Grid Options</h2>
             <div class="sidebar-button-grouping">
-                <button>Generate Maze</button>
-                <button>Clear</button>
+                <button (click)="domUpdates.generateMaze$.next()">Generate Maze</button>
+                <button (click)="domUpdates.clearBarrierAndWeightGrids$.next()">Clear</button>
                 <button>Save</button>
                 <button>Load</button>
             </div>

@@ -20,6 +20,7 @@ export class DomUpdatesService {
     setTypeOfDataDisplayedOnTile$ = new BehaviorSubject<TypeOfDataDisplayedOnTileOption>(DEFAULT_TYPE_OF_DATA_DISPLAYED_ON_TILE);
     setTypeOfNeighboursAllowed$ = new BehaviorSubject<TypeOfNeighboursAllowedOption>(DEFAULT_TYPE_OF_NEIGHBOURS_ALLOWED);
     clearBarrierAndWeightGrids$ = new Subject<void>();
+    generateMaze$ = new Subject<void>();
     activateTile$ = new Subject<Pos>();
     drag$ = new Subject<TileEvent>();
     drop$ = new Subject<TileEvent>();

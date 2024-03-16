@@ -5,11 +5,13 @@ import { barrierGrid, goalPos, gridDimensions, startPos } from "../pathfinding.t
 import { BridgeService } from "./bridge";
 import { DomUpdatesService } from "./dom-updates.service";
 import { BarrierGridAction } from "../models/actions/actions";
-import { Observable, filter, map, merge, scan, shareReplay, tap, withLatestFrom } from "rxjs";
+import { Observable, filter, map, merge, scan, shareReplay, switchMap, withLatestFrom } from "rxjs";
 import { ObstaclePlacedOnTileOption } from "../models/dropdown/dropdown-enums";
 import { StateService } from "./state.service";
 import { Pos, isSamePos } from "../models/grid/pos";
 import { deepCopy } from "../../shared/utils";
+import { mazeGenAlgoOptionToImpl } from "../models/dropdown/dropdown-enum-mappings";
+import { getListOfPositionsToActivate } from "../algos/maze-gen-algos";
 
 @Injectable({
     providedIn: 'root'
@@ -25,11 +27,25 @@ export class BarrierGridService implements StateService<BarrierGrid> {
         bridgeToOtherStreams.link(this.stream$);
     }
 
-    private clearBarrierGrid$: Observable<BarrierGridAction> = this.domUpdates.clearBarrierAndWeightGrids$.pipe(
+    private clearBarrierGridFromUserInput$: Observable<BarrierGridAction> = this.domUpdates.clearBarrierAndWeightGrids$.pipe(
         map(() => ({ kind: 'ResetGrid' }))
     )
 
-    private tileActivation$: Observable<BarrierGridAction> = this.domUpdates.activateTile$.pipe(
+    private clearBarrierGridToGenerateMaze$: Observable<BarrierGridAction> = this.domUpdates.generateMaze$.pipe(
+        map(() => ({ kind: 'ResetGrid' }))
+    )
+
+    private generateMaze$: Observable<Pos> = this.domUpdates.generateMaze$.pipe(
+        withLatestFrom(this.domUpdates.setObstaclePlacedOnTile$, this.domUpdates.setMazeGenAlgo$, this.gridDimensions.stream$),
+        filter(([, dataType, ,]) => dataType === ObstaclePlacedOnTileOption.Barrier),
+        switchMap(([, , algo, dimensions]) => {
+            const mazeAlgoImpl = mazeGenAlgoOptionToImpl.get(algo);
+            const maze = mazeAlgoImpl(dimensions.height, dimensions.width);
+            return getListOfPositionsToActivate(maze);
+        })
+    )
+
+    private tileActivation$: Observable<BarrierGridAction> = merge(this.domUpdates.activateTile$, this.generateMaze$).pipe(
         withLatestFrom(this.domUpdates.setObstaclePlacedOnTile$, this.startPos.stream$, this.goalPos.stream$),
         filter(([posActivated, dataType, startPos, goalPos]) => !isSamePos(startPos, posActivated) && !isSamePos(goalPos, posActivated) && dataType === ObstaclePlacedOnTileOption.Barrier),
         map(([posActivated, , ,]) => ({ kind: 'ToggleBarrierAt', row: posActivated.row, col: posActivated.col }))
@@ -40,7 +56,8 @@ export class BarrierGridService implements StateService<BarrierGrid> {
     )
 
     stream$: Observable<BarrierGrid> = merge(
-        this.clearBarrierGrid$,
+        this.clearBarrierGridFromUserInput$,
+        this.clearBarrierGridToGenerateMaze$,
         this.tileActivation$,
         this.adaptToNewGridDimensions$
     ).pipe(
