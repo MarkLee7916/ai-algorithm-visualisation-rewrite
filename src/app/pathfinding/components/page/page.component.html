@@ -66,8 +66,9 @@
         </div>
 
         <div class="grids-container">
-            <div *ngFor="let algo of (pathfindingAlgos.stream$ | async)!">
-                <app-grid    
+            <div *ngFor="let algo of (pathfindingAlgos.stream$ | async)!; index as id">
+                <app-grid
+                    [id]="id"    
                     [weightGrid]="(weightGrid.stream$ | async)!" 
                     [barrierGrid]="(barrierGrid.stream$ | async)!" 
                     [startPos]="(startPos.stream$ | async)!" 

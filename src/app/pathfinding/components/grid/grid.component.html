@@ -1,5 +1,17 @@
 
 <div class="grid-container">
+    <div class="algo-menu">
+        <select class="algo-dropdown" name="algo-dropdown">
+            <option value="option1">Dijsktra's</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+        </select>
+        <button class="remove-btn">❌</button>
+        <div class="checkbox-container">
+            <label for="use-bidirectional-{{id}}">Bidirectional</label>
+            <input type="checkbox" id="use-bidirectional-{{id}}" name="use-bidirectional-{{id}}">
+        </div>
+    </div>
     <div class="grid" cellspacing="0" cellpadding="0">
         <div class="row" *ngFor="let row of range(0, gridDimensions.height);">
             <div *ngFor="let col of range(0, gridDimensions.width);">
