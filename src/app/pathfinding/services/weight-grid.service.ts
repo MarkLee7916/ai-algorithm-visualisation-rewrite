@@ -36,9 +36,9 @@ export class WeightGridService implements StateService<WeightGrid> {
     )
 
     private generateMaze$: Observable<Pos> = this.domUpdates.generateMaze$.pipe(
-        withLatestFrom(this.domUpdates.obstaclePlacedOnTile$, this.domUpdates.mazeGenAlgo$, this.gridDimensions.stream$),
-        filter(([, dataType, ,]) => dataType === ObstaclePlacedOnTileOption.RandomWeight),
-        switchMap(([, , algo, dimensions]) => {
+        withLatestFrom(this.domUpdates.obstaclePlacedOnTile$, this.gridDimensions.stream$),
+        filter(([, dataType,]) => dataType === ObstaclePlacedOnTileOption.RandomWeight),
+        switchMap(([algo, , dimensions]) => {
             const mazeAlgoImpl = mazeGenAlgoOptionToImpl.get(algo);
             const maze = mazeAlgoImpl(dimensions.height, dimensions.width);
             return getListOfPositionsToActivate(maze);
