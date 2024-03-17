@@ -8,8 +8,8 @@
         </select>
         <button *ngIf="showRemoveBtn" class="remove-btn" (click)="remove.emit()">❌</button>
         <div class="checkbox-container">
-            <label for="use-bidirectional-{{id}}">Bidirectional</label>
             <input type="checkbox" id="use-bidirectional-{{id}}" name="use-bidirectional-{{id}}">
+            <label for="use-bidirectional-{{id}}">Bidirectional</label>
         </div>
     </div>
     <div class="grid" cellspacing="0" cellpadding="0">
