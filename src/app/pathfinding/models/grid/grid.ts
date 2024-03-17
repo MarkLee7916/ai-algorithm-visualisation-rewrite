@@ -7,7 +7,7 @@ export type GridDimensions = {
 }
 
 export function calculateGridDimensionsFromScreenDimensions(numberOfGrids: number) {
-    const baseModifier = 36 * Math.min(2, numberOfGrids);
+    const baseModifier = 45 * Math.min(2, numberOfGrids);
     const heightModifier = numberOfGrids === 2 ? baseModifier * 0.75 : baseModifier;
     const widthModifier = baseModifier * 0.9;
 
