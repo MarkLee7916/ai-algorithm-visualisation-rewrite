@@ -6,7 +6,7 @@
             <option value="option2">Option 2</option>
             <option value="option3">Option 3</option>
         </select>
-        <button class="remove-btn">❌</button>
+        <button *ngIf="showRemoveBtn" class="remove-btn" (click)="remove.emit()">❌</button>
         <div class="checkbox-container">
             <label for="use-bidirectional-{{id}}">Bidirectional</label>
             <input type="checkbox" id="use-bidirectional-{{id}}" name="use-bidirectional-{{id}}">

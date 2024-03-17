@@ -29,11 +29,11 @@ export class PathfindingAlgosService implements StateService<PathfindingAlgoOpti
                 return [DEFAULT_PATHFINDING_ALGO]
             } else if (action.kind === 'Remove') {
                 const selectedAlgosBeforeItemToRemove = selectedAlgos.slice(0, action.index);
-                const selectedAlgosAfterItemToRemove = selectedAlgos.slice(action.index, selectedAlgos.length);
+                const selectedAlgosAfterItemToRemove = selectedAlgos.slice(action.index + 1, selectedAlgos.length);
                 return selectedAlgosBeforeItemToRemove.concat(selectedAlgosAfterItemToRemove);
             } else if (action.kind === 'Set') {
                 const selectedAlgosBeforeItemToSet = selectedAlgos.slice(0, action.index);
-                const selectedAlgosAfterItemToSet = selectedAlgos.slice(action.index, selectedAlgos.length);
+                const selectedAlgosAfterItemToSet = selectedAlgos.slice(action.index + 1, selectedAlgos.length);
                 return selectedAlgosBeforeItemToSet.concat(action.algo, selectedAlgosAfterItemToSet);
             } else {
                 throw new Error('Unexpected action kind');

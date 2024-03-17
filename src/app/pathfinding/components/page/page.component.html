@@ -68,11 +68,12 @@
         <div class="grids-container">
             <div *ngFor="let algo of (pathfindingAlgos.stream$ | async)!; index as id">
                 <app-grid
-                    [id]="id"    
+                    [id]="id"
+                    [showRemoveBtn]="(pathfindingAlgos.stream$ | async)!.length > 1"    
                     [weightGrid]="(weightGrid.stream$ | async)!" 
                     [barrierGrid]="(barrierGrid.stream$ | async)!" 
                     [startPos]="(startPos.stream$ | async)!" 
-                    [goalPos]="(goalPos.stream$ | async)!" 
+                    [goalPos]="(goalPos.stream$ | async)!"
                     [typeOfDataDisplayedOnTile]="(domUpdates.typeOfDataDisplayedOnTile$ | async)!" 
                     [willDisplayTooltipOnMouseOver]="false" 
                     [animationFrame]="(currentAnimationFrameForMultipleAlgos.stream$ | async)!.get(algo)!" 
@@ -80,7 +81,8 @@
                     [gridDimensions]="(gridDimensions.stream$ | async)!"
                     (activate)="domUpdates.activateAtPos$.next($event)"
                     (drag)="domUpdates.drag$.next($event)" 
-                    (drop)="domUpdates.drop$.next($event)" 
+                    (drop)="domUpdates.drop$.next($event)"
+                    (remove)="domUpdates.newPathfindingAlgosAction$.next({ kind: 'Remove', index: id })"
                 >
                 </app-grid>
             </div>

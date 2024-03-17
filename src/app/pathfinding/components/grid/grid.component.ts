@@ -28,10 +28,12 @@ export class GridComponent {
     @Input() heuristicDistFromGoalGrid!: HeuristicDistFromGoalGrid;
     @Input() gridDimensions!: GridDimensions;
     @Input() id!: number;
+    @Input() showRemoveBtn!: boolean;
 
     @Output() drag = new EventEmitter<TileEvent>();
     @Output() drop = new EventEmitter<TileEvent>();
     @Output() activate = new EventEmitter<Pos>();
+    @Output() remove = new EventEmitter<void>();
 
     range = range;
     isSamePos = isSamePos;
