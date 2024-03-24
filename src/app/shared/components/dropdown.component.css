@@ -1,0 +1,22 @@
+.dropdown-button {
+    display: block;
+    background-color: white;
+}
+
+.dropdown-button:hover {
+    cursor: pointer;
+    background-color: #282828;
+    color: white;
+}
+
+.dropdown-options {
+    position: absolute;
+}
+
+.dropdown-wrapper {
+    text-align: center;
+}
+
+.dropdown-label {
+    font-size: 16px;
+}

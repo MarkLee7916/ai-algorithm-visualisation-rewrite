@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, Input, EventEmitter, Output } from 
 import { WeightGrid, weightAt } from "../../models/grid/weight-grid";
 import { BarrierGrid, hasBarrierAt } from "../../models/grid/barrier-grid";
 import { Pos, isSamePos } from "../../models/grid/pos";
-import { TypeOfDataDisplayedOnTileOption } from "../../models/dropdown/dropdown-enums";
+import { PathfindingAlgoOption, TypeOfDataDisplayedOnTileOption, isPathfindingAlgoOption } from "../../models/dropdown/dropdown-enums";
 import { AnimationFrame } from "../../models/animation/animation-frame";
 import { GridDimensions } from "../../models/grid/grid";
 import { pathLengthAt } from "../../models/grid/path-length-grid";
@@ -29,11 +29,13 @@ export class GridComponent {
     @Input() gridDimensions!: GridDimensions;
     @Input() id!: number;
     @Input() showRemoveBtn!: boolean;
+    @Input() algo!: PathfindingAlgoOption;
 
     @Output() drag = new EventEmitter<TileEvent>();
     @Output() drop = new EventEmitter<TileEvent>();
     @Output() activate = new EventEmitter<Pos>();
     @Output() remove = new EventEmitter<void>();
+    @Output() selectAlgo = new EventEmitter<PathfindingAlgoOption>();
 
     range = range;
     isSamePos = isSamePos;
@@ -42,4 +44,13 @@ export class GridComponent {
     weightAt = weightAt;
     hasBarrierAt = hasBarrierAt;
     distAt = distAt;
+    algoOptions = Object.values(PathfindingAlgoOption);
+
+    handleSelectAlgo(algo: string) {
+        if (isPathfindingAlgoOption(algo)) {
+            this.selectAlgo.emit(algo);
+        } else {
+            throw 'Undefined algo selected';
+        }
+    }
 }

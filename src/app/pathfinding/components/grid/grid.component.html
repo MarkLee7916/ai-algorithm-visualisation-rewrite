@@ -1,11 +1,12 @@
 
 <div class="grid-container">
     <div class="algo-menu">
-        <select class="algo-dropdown" name="algo-dropdown">
-            <option value="option1">Dijsktra's</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
-        </select>
+        <app-dropdown 
+            [currentSelection]="algo"
+            [options]="algoOptions"
+            (selectionChanged)="handleSelectAlgo($event)"
+        >
+        </app-dropdown>
         <button *ngIf="showRemoveBtn" class="remove-btn" (click)="remove.emit()">❌</button>
         <div class="checkbox-container">
             <input type="checkbox" id="use-bidirectional-{{id}}" name="use-bidirectional-{{id}}">

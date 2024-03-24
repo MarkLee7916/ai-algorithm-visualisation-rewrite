@@ -79,10 +79,12 @@
                     [animationFrame]="(currentAnimationFrameForMultipleAlgos.stream$ | async)!.get(algo)!" 
                     [heuristicDistFromGoalGrid]="(heuristicDistGrid.stream$ | async)!"
                     [gridDimensions]="(gridDimensions.stream$ | async)!"
+                    [algo]="algo"
                     (activate)="domUpdates.activateAtPos$.next($event)"
                     (drag)="domUpdates.drag$.next($event)" 
                     (drop)="domUpdates.drop$.next($event)"
                     (remove)="domUpdates.newPathfindingAlgosAction$.next({ kind: 'Remove', index: id })"
+                    (selectAlgo)="domUpdates.newPathfindingAlgosAction$.next({ kind: 'Set', index: id, algo: $event })"
                 >
                 </app-grid>
             </div>

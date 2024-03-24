@@ -1,0 +1,17 @@
+<div class="dropdown-wrapper">
+  <p *ngIf="label !== undefined" class="dropdown-label">{{ label }}</p>
+  <button class="dropdown-button" [style.width.px]="maxWidth" (click)="toggleDropdown()">
+    {{ currentSelection + (isDropdownDisplayed ? " ▲" : " ▼") }}
+  </button>
+
+  <div class="dropdown-options" [style.visibility]="isDropdownDisplayed ? 'visible' : 'hidden'">
+    <button
+      *ngFor="let option of options"
+      [style.width.px]="maxWidth"
+      class="dropdown-button"
+      (click)="handleSelection(option)"
+    >
+      {{ option }}
+    </button>
+  </div>
+</div>

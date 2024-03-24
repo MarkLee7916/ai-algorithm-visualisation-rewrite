@@ -17,6 +17,7 @@ import { GridComponent } from "./components/grid/grid.component";
 import { HeuristicDistFromGoalGrid } from "./models/grid/heuristic-dist-from-goal-grid";
 import { PathfindingAlgoOption } from "./models/dropdown/dropdown-enums";
 import { FormatPathLengthPipe } from "./pipes/format-path-length.pipe";
+import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
   declarations: [PageComponent, GridComponent, TileComponent, FormatPathLengthPipe],
@@ -24,6 +25,7 @@ import { FormatPathLengthPipe } from "./pipes/format-path-length.pipe";
     CommonModule,
     BrowserModule,
     PathfindingRoutingModule,
+    SharedModule
   ],
   providers: [
     { provide: animate, useClass: BridgeService<AnimationIndexAction> },

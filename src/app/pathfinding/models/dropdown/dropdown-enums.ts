@@ -40,3 +40,7 @@ export const DEFAULT_PATHFINDING_ALGO = PathfindingAlgoOption.BFS;
 export const DEFAULT_TYPE_OF_NEIGHBOURS_ALLOWED = TypeOfNeighboursAllowedOption.NonDiagonals;
 
 export const DEFAULT_TYPE_OF_DATA_DISPLAYED_ON_TILE = TypeOfDataDisplayedOnTileOption.Weights;
+
+export function isPathfindingAlgoOption(algo: string): algo is PathfindingAlgoOption {
+    return Object.values(PathfindingAlgoOption).map(option => option.toString()).includes(algo);
+}
