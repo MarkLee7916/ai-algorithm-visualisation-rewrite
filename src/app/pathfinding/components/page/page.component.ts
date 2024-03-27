@@ -83,6 +83,13 @@ export class PageComponent {
 
         this.domUpdates.newAnimationIndexAction$.next({ kind: 'SetValue', valueToSetTo });
     }
+
+    updateAnimationDelayFromRange(event: Event) {
+        const rangeElement = event.target as HTMLInputElement;
+        const valueToSetTo = parseInt(rangeElement.value, 10);
+
+        this.domUpdates.animationDelay$.next(valueToSetTo);
+    }
 }
 
 

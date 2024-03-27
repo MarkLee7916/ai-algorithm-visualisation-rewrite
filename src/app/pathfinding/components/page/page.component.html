@@ -14,9 +14,16 @@
     <div class="content-container">
         <div class="animation-menu">
             <div class="range-container">
-                <p>Set Animation Delay</p>
-                <input type="range" class="range"/>
-                <p>1000ms</p>
+                <p>Animation Delay</p>
+                <input 
+                    type="range" 
+                    class="range" 
+                    [value]="(domUpdates.animationDelay$ | async)!" 
+                    min="0"
+                    [max]="1000"
+                    (input)="updateAnimationDelayFromRange($event)"
+                />
+                <p>{{(domUpdates.animationDelay$ | async)!}}ms</p>
             </div>
 
             <div class="media-control-container">
