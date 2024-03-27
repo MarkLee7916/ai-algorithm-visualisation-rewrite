@@ -1,4 +1,4 @@
-import { Observable, combineLatest, debounceTime, fromEvent, map, of, shareReplay, startWith, tap } from "rxjs";
+import { Observable, combineLatest, debounceTime, distinctUntilChanged, fromEvent, map, of, shareReplay, startWith, tap } from "rxjs";
 import { GridDimensions, calculateGridDimensionsFromScreenDimensions } from "../models/grid/grid";
 import { Inject, Injectable } from "@angular/core";
 import { BridgeService } from "./bridge";
@@ -25,8 +25,13 @@ export class GridDimensionsService implements StateService<GridDimensions> {
         startWith(null)
     );
 
-    stream$: Observable<GridDimensions> = combineLatest([this.windowResize$, this.pathfindingAlgos.stream$]).pipe(
-        map(([, algos]) => calculateGridDimensionsFromScreenDimensions(algos.length)),
+    private numberOfPathfindingAlgosChanged$ = this.pathfindingAlgos.stream$.pipe(
+        map(algos => algos.length),
+        distinctUntilChanged()
+    );
+
+    stream$: Observable<GridDimensions> = combineLatest([this.windowResize$, this.numberOfPathfindingAlgosChanged$]).pipe(
+        map(([, numberOfAlgos]) => calculateGridDimensionsFromScreenDimensions(numberOfAlgos)),
         shareReplay(1)
     );
 }

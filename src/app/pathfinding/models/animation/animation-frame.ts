@@ -3,6 +3,7 @@ import { AnimationFrameGrid, initAnimationFrameGrid } from "../grid/animation-fr
 import { deepCopy } from "../../../shared/utils";
 import { PathfindingAlgoOption } from "../dropdown/dropdown-enums";
 import { UncheckedObjMap } from "../../../shared/models/uncheckedObjMap";
+import { GridDimensions } from "../grid/grid";
 
 export type AnimationFramesForMultipleAlgos = {
     lengthOfFramesForEachAlgo: number,
@@ -23,6 +24,20 @@ export type AnimationFrame = {
     countOfTilesVisited: number;
     finalPathLength: number;
 };
+
+export function getDefaultAlgoToAnimationFramesMapping(dimensions: GridDimensions) {
+    const { height, width } = dimensions;
+    const blankFrame = initBlankAnimationFrame(height, width);
+    const algoToFramesMapping = new UncheckedObjMap<PathfindingAlgoOption, AnimationFramesForSingleAlgo>([]);
+    const algos = Object.values(PathfindingAlgoOption);
+
+    algos.forEach(algo => {
+        const frames = [deepCopy(blankFrame), deepCopy(blankFrame), deepCopy(blankFrame)]
+        algoToFramesMapping.set(algo, frames);
+    });
+
+    return algoToFramesMapping;
+}
 
 export function buildAlgoToCurrentFrameMapping(algoToFramesMapping: AlgoToFramesMapping, index: number) {
     const mapping = new UncheckedObjMap<PathfindingAlgoOption, AnimationFrame>([]);

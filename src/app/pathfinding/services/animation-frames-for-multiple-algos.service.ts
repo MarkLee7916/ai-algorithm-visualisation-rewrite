@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@angular/core";
 import { Observable, switchMap, filter, map, take, tap, startWith, skip, merge, shareReplay, withLatestFrom } from "rxjs";
-import { AnimationFrame, AnimationFramesForMultipleAlgos, buildAnimationFramesForMultipleAlgos, initBlankAnimationFrame, AnimationFramesForSingleAlgo } from "../models/animation/animation-frame";
+import { AnimationFrame, AnimationFramesForMultipleAlgos, buildAnimationFramesForMultipleAlgos, initBlankAnimationFrame, AnimationFramesForSingleAlgo, getDefaultAlgoToAnimationFramesMapping } from "../models/animation/animation-frame";
 import { BridgeService } from "./bridge";
 import { problemStatementChanges, animationIndex, animationFramesForMultipleAlgos, gridDimensions, pathfindingAlgos } from "../pathfinding.tokens";
 import { ProblemStatement } from "../models/problem-statement/problem-statement";
@@ -31,7 +31,7 @@ export class AnimationFramesForMultipleAlgosService implements StateService<Anim
         const [neighbourOrdering, typeOfNeighboursAllowed, pathfindingAlgos, weightGrid, barrierGrid, startPos, goalPos, gridDimensions] = problemStatement;
         const filterNeighboursFunction = typeOfNeighboursAllowedOptionToImpl.get(typeOfNeighboursAllowed);
         const { height, width } = gridDimensions;
-        const algoToFramesMapping = new UncheckedObjMap<PathfindingAlgoOption, AnimationFramesForSingleAlgo>([]);
+        const algoToFramesMapping = getDefaultAlgoToAnimationFramesMapping(gridDimensions);
 
         pathfindingAlgos.forEach(algo => {
             const algoImpl = pathfindingAlgoOptionToImpl.get(algo);
@@ -55,19 +55,7 @@ export class AnimationFramesForMultipleAlgosService implements StateService<Anim
     );
 
     private resetFromGridDimensionChanges$: Observable<AnimationFramesForMultipleAlgos> = this.gridDimensions.stream$.pipe(
-        withLatestFrom(this.pathfindingAlgos.stream$),
-        map(([dimensions, pathfindingAlgos]) => {
-            const { height, width } = dimensions;
-            const blankFrame = initBlankAnimationFrame(height, width);
-            const algoToFramesMapping = new UncheckedObjMap<PathfindingAlgoOption, AnimationFramesForSingleAlgo>([]);
-
-            pathfindingAlgos.forEach(algo => {
-                const frames = [deepCopy(blankFrame), deepCopy(blankFrame), deepCopy(blankFrame)]
-                algoToFramesMapping.set(algo, frames);
-            });
-
-            return buildAnimationFramesForMultipleAlgos(algoToFramesMapping);
-        })
+        map(dimensions => buildAnimationFramesForMultipleAlgos(getDefaultAlgoToAnimationFramesMapping(dimensions)))
     );
 
     stream$: Observable<AnimationFramesForMultipleAlgos> = merge(this.computeFrames$, this.resetFromGridDimensionChanges$).pipe(
