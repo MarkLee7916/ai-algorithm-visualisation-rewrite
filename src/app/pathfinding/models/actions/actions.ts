@@ -34,6 +34,7 @@ export type GoalPosAction =
 
 export type PathfindingAlgosAction =
     { kind: 'Reset' } |
+    { kind: 'Initialise' } |
     { kind: 'Add' } |
     { kind: 'Set', index: number, algo: PathfindingAlgoOption } |
     { kind: 'Remove', index: number }

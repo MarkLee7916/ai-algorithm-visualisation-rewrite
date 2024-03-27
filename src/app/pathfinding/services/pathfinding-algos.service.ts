@@ -1,10 +1,11 @@
 import { Inject, Injectable } from "@angular/core";
-import { shareReplay, scan } from "rxjs";
+import { shareReplay, scan, startWith } from "rxjs";
 import { StateService } from "./state.service";
 import { pathfindingAlgos } from "../pathfinding.tokens";
 import { BridgeService } from "./bridge";
 import { DomUpdatesService } from "./dom-updates.service";
 import { DEFAULT_PATHFINDING_ALGO, PathfindingAlgoOption } from "../models/dropdown/dropdown-enums";
+import { PathfindingAlgosAction } from "../models/actions/actions";
 
 @Injectable({
     providedIn: 'root',
@@ -19,9 +20,14 @@ export class PathfindingAlgosService implements StateService<PathfindingAlgoOpti
 
     readonly MAX_NUMBER_OF_ALGOS = 4;
 
+    readonly INITIALISE: PathfindingAlgosAction = { kind: 'Initialise' };
+
     stream$ = this.domUpdates.newPathfindingAlgosAction$.pipe(
+        startWith(this.INITIALISE),
         scan((selectedAlgos, action) => {
-            if (action.kind === 'Add') {
+            if (action.kind === 'Initialise') {
+                return selectedAlgos;
+            } else if (action.kind === 'Add') {
                 const availableAlgos = Object.values(PathfindingAlgoOption) as PathfindingAlgoOption[];
                 const firstAvailableAlgo = availableAlgos.find(algo => !selectedAlgos.includes(algo));
                 return selectedAlgos.concat(firstAvailableAlgo ? firstAvailableAlgo : DEFAULT_PATHFINDING_ALGO);

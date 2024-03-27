@@ -10,10 +10,6 @@ import { TileEvent } from '../models/grid/tile-event';
     providedIn: 'root'
 })
 export class DomUpdatesService {
-    // TODO: these should probably be regular Subjects
-    newAnimationIndexAction$ = new BehaviorSubject<AnimationIndexAction>({ kind: 'Reset' });
-    newPathfindingAlgosAction$ = new BehaviorSubject<PathfindingAlgosAction>({ kind: 'Reset' });
-
     animationRunning$ = new BehaviorSubject<boolean>(false);
     animationDelay$ = new BehaviorSubject<number>(0);
     neighbourVisitOrdering$ = new BehaviorSubject<NeighbourOrdering>(DEFAULT_NEIGHBOUR_VISIT_ORDER);
@@ -21,6 +17,8 @@ export class DomUpdatesService {
     typeOfDataDisplayedOnTile$ = new BehaviorSubject<TypeOfDataDisplayedOnTileOption>(DEFAULT_TYPE_OF_DATA_DISPLAYED_ON_TILE);
     typeOfNeighboursAllowed$ = new BehaviorSubject<TypeOfNeighboursAllowedOption>(DEFAULT_TYPE_OF_NEIGHBOURS_ALLOWED);
 
+    newPathfindingAlgosAction$ = new Subject<PathfindingAlgosAction>();
+    newAnimationIndexAction$ = new Subject<AnimationIndexAction>();
     clearBarrierAndWeightGrids$ = new Subject<void>();
     generateMaze$ = new Subject<MazeGenAlgoOption>();
     activateAtPos$ = new Subject<Pos>();
