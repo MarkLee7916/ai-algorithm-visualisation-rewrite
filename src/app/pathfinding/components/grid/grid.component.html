@@ -33,6 +33,13 @@
                         (activate)="activate.emit(pos)" 
                     >
                     </app-tile>
+
+                    <app-custom-weight-input 
+                        *ngIf="isPosToOpenCustomWeightInputAt(pos)"
+                        (submit)="addCustomWeightAt.emit({weight: $event, row, col})"
+                        (closeWithoutSubmitting)="closeCustomWeightInput.emit()"
+                    >
+                    </app-custom-weight-input>
                 </ng-container>
             </div>
         </div>

@@ -45,6 +45,10 @@ export class WeightGridService implements StateService<WeightGrid> {
         })
     )
 
+    private addCustomWeightAt$: Observable<WeightGridAction> = this.domUpdates.addCustomWeightAt$.pipe(
+        map(({ row, col, weight }) => ({ kind: 'AddCustomWeightAt', row, col, weight }))
+    )
+
     private posActivation$: Observable<WeightGridAction> = merge(this.domUpdates.activateAtPos$, this.generateMaze$).pipe(
         withLatestFrom(this.domUpdates.obstaclePlacedOnTile$, this.startPos.stream$, this.goalPos.stream$),
         filter(([posActivated, dataType, startPos, goalPos]) => !isSamePos(startPos, posActivated) && !isSamePos(goalPos, posActivated) && dataType === ObstaclePlacedOnTileOption.RandomWeight),
@@ -59,10 +63,11 @@ export class WeightGridService implements StateService<WeightGrid> {
         this.clearWeightGridFromUserInput$,
         this.clearWeightGridToGenerateMaze$,
         this.posActivation$,
-        this.adaptToNewGridDimensions$
+        this.adaptToNewGridDimensions$,
+        this.addCustomWeightAt$
     ).pipe(
         scan((currentGrid, action) => {
-            if (action.kind === 'AddWeightAt') {
+            if (action.kind === 'AddCustomWeightAt') {
                 const copy = deepCopy(currentGrid);
                 setWeightAt(copy, action.row, action.col, action.weight);
                 return copy;

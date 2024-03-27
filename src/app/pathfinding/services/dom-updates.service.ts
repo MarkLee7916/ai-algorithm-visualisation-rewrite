@@ -5,6 +5,7 @@ import { PathfindingAlgoOption, ObstaclePlacedOnTileOption, MazeGenAlgoOption, T
 import { NeighbourOrdering, DEFAULT_NEIGHBOUR_VISIT_ORDER } from '../models/grid/neighbours';
 import { Pos } from '../models/grid/pos';
 import { TileEvent } from '../models/grid/tile-event';
+import { CustomWeight } from '../models/grid/custom-weight';
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +18,8 @@ export class DomUpdatesService {
     typeOfDataDisplayedOnTile$ = new BehaviorSubject<TypeOfDataDisplayedOnTileOption>(DEFAULT_TYPE_OF_DATA_DISPLAYED_ON_TILE);
     typeOfNeighboursAllowed$ = new BehaviorSubject<TypeOfNeighboursAllowedOption>(DEFAULT_TYPE_OF_NEIGHBOURS_ALLOWED);
 
+    closeCustomWeightInput$ = new Subject<void>();
+    addCustomWeightAt$ = new Subject<CustomWeight>();
     newPathfindingAlgosAction$ = new Subject<PathfindingAlgosAction>();
     newAnimationIndexAction$ = new Subject<AnimationIndexAction>();
     clearBarrierAndWeightGrids$ = new Subject<void>();

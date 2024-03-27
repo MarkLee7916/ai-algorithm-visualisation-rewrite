@@ -20,6 +20,7 @@ import { ProblemStatement } from "../../models/problem-statement/problem-stateme
 import { GridDimensions } from "../../models/grid/grid";
 import { AnimationFramesForMultipleAlgos } from "../../models/animation/animation-frame";
 import { MazeGenAlgoOption, ObstaclePlacedOnTileOption, TypeOfDataDisplayedOnTileOption, TypeOfNeighboursAllowedOption } from "../../models/dropdown/dropdown-enums";
+import { PosToOpenCustomWeightInputAtService } from "../../services/custom-weight.service";
 
 @Component({
     selector: 'app-page',
@@ -35,6 +36,7 @@ export class PageComponent {
         public startPos: StartPosService,
         public goalPos: GoalPosService,
         public currentAnimationFrameForMultipleAlgos: CurrentAnimationFrameForMultipleAlgosService,
+        public posToOpenCustomWeightInputAt: PosToOpenCustomWeightInputAtService,
         public domUpdates: DomUpdatesService,
         public animate: AnimateService,
         public animationFramesForMultipleAlgos: AnimationFramesForMultipleAlgosService,

@@ -12,7 +12,7 @@ export type AnimationIndexAction =
     { kind: 'ResetIfIndexAt', indexToResetAt: number }
 
 export type WeightGridAction =
-    { kind: 'AddWeightAt', row: number, col: number, weight: number } |
+    { kind: 'AddCustomWeightAt', row: number, col: number, weight: number } |
     { kind: 'ToggleRandomWeightAt', row: number, col: number } |
     { kind: 'AdaptToNewDimensions', height: number, width: number } |
     { kind: 'ResetGrid' } |

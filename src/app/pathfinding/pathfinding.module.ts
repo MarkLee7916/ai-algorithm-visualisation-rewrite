@@ -18,9 +18,10 @@ import { HeuristicDistFromGoalGrid } from "./models/grid/heuristic-dist-from-goa
 import { PathfindingAlgoOption } from "./models/dropdown/dropdown-enums";
 import { FormatPathLengthPipe } from "./pipes/format-path-length.pipe";
 import { SharedModule } from "../shared/shared.module";
+import { CustomWeightInputComponent } from "./components/custom-weight-input/custom-weight-input.component";
 
 @NgModule({
-  declarations: [PageComponent, GridComponent, TileComponent, FormatPathLengthPipe],
+  declarations: [PageComponent, GridComponent, TileComponent, FormatPathLengthPipe, CustomWeightInputComponent],
   imports: [
     CommonModule,
     BrowserModule,

@@ -10,6 +10,7 @@ import { frameAt } from "../../models/grid/animation-frame-grid";
 import { HeuristicDistFromGoalGrid, distAt } from "../../models/grid/heuristic-dist-from-goal-grid";
 import { TileEvent } from "../../models/grid/tile-event";
 import { range } from "../../../shared/utils";
+import { CustomWeight } from "../../models/grid/custom-weight";
 
 @Component({
     selector: 'app-grid',
@@ -30,12 +31,15 @@ export class GridComponent {
     @Input() id!: number;
     @Input() showRemoveBtn!: boolean;
     @Input() algo!: PathfindingAlgoOption;
+    @Input() posToOpenCustomWeightInputAt!: Pos | null;
 
     @Output() drag = new EventEmitter<TileEvent>();
     @Output() drop = new EventEmitter<TileEvent>();
     @Output() activate = new EventEmitter<Pos>();
+    @Output() addCustomWeightAt = new EventEmitter<CustomWeight>();
     @Output() remove = new EventEmitter<void>();
     @Output() selectAlgo = new EventEmitter<PathfindingAlgoOption>();
+    @Output() closeCustomWeightInput = new EventEmitter<void>();
 
     range = range;
     isSamePos = isSamePos;
@@ -52,5 +56,9 @@ export class GridComponent {
         } else {
             throw 'Undefined algo selected';
         }
+    }
+
+    isPosToOpenCustomWeightInputAt(pos: Pos) {
+        return this.posToOpenCustomWeightInputAt && isSamePos(pos, this.posToOpenCustomWeightInputAt);
     }
 }

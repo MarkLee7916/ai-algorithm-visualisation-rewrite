@@ -76,6 +76,7 @@
             <div *ngFor="let algo of (pathfindingAlgos.stream$ | async)!; index as id">
                 <app-grid
                     [id]="id"
+                    [posToOpenCustomWeightInputAt]="(posToOpenCustomWeightInputAt.stream$ | async)!"
                     [showRemoveBtn]="(pathfindingAlgos.stream$ | async)!.length > 1"    
                     [weightGrid]="(weightGrid.stream$ | async)!" 
                     [barrierGrid]="(barrierGrid.stream$ | async)!" 
@@ -92,6 +93,8 @@
                     (drop)="domUpdates.drop$.next($event)"
                     (remove)="domUpdates.newPathfindingAlgosAction$.next({ kind: 'Remove', index: id })"
                     (selectAlgo)="domUpdates.newPathfindingAlgosAction$.next({ kind: 'Set', index: id, algo: $event })"
+                    (addCustomWeightAt)="domUpdates.addCustomWeightAt$.next($event)"
+                    (closeCustomWeightInput)="domUpdates.closeCustomWeightInput$.next()"
                 >
                 </app-grid>
             </div>

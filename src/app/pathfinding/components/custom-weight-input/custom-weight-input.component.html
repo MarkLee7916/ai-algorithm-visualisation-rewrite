@@ -1,0 +1,21 @@
+<div class="custom-weight-container">
+  <input
+    class="enter-custom-weight"
+    type="text"
+    #customWeight
+    (keyup.enter)="handleSubmit(customWeight.value)"
+  />
+  <p class="custom-weight-error-msg" [style.visibility]="hasUserEnteredInvalidInput ? 'visible' : 'hidden'"
+  >
+    Must be a positive number!
+  </p>
+  <div class="custom-weight-button-container">
+    <button class="custom-weight-button add-custom-weight" (click)="handleSubmit(customWeight.value)">
+        Add
+    </button>
+
+    <button class="custom-weight-button close-without-submitting" (click)="handleCloseWithoutSubmitting()">
+        Close
+    </button>
+  </div>
+</div>
